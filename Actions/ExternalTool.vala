@@ -16,44 +16,34 @@
  */
  
 using GLib;
-using Gtk;
 
 namespace IfThenElse
 {
-	
-	
-
-static int main(string[] argv)
-{
-		Gtk.init(ref argv);
+	public class ExternalToolAction: BaseAction, Base
+	{
+		public string cmd {get; set; default = "";}
 		
-		stdout.printf("Starting program\n");
-		
-		stdout.printf("Adding new chain\n");
-		GLib.debug("Adding new chain\n");
-		
-		// Register the types.
-		var a = typeof(ExternalToolTrigger);
-		a = typeof(TrueCheck);
-		a = typeof(DebugAction);
-		a = typeof(Chain);
-		a = typeof(ExternalToolAction);
-
-		var builder = new Gtk.Builder();
-		for(int i =1; i < argv.length; i++)
+		public ExternalToolAction(string cmd)
 		{
-			unowned string file = argv[i];
+			this.cmd = cmd;
+		}
+		
+		public void Activate()
+		{
+			//stdout.printf("Activates: %s\n", message);
+			//GLib.debug("Activates "+message);
 			try{
-				builder.add_from_file(file);
-			}catch(GLib.Error e) {
-				GLib.error("Failed to load builder file: %s,%s\n",
-						file, e.message);
+				GLib.Process.spawn_command_line_async(cmd);
+			} catch(GLib.SpawnError e) {
+					GLib.error("Failed to spawn external program: %s\n",
+						e.message);
 			}
 		}
-
-		// Run program.
-		Gtk.main();
-		builder= null;
-		return 0;
-}	
+		public void Deactivate()
+		{
+			//stdout.printf("Deactivates: %s\n", message);
+			//GLib.debug("Deactivates "+message);
+		}
+	}
 }
+

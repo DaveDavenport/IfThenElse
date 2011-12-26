@@ -1,0 +1,22 @@
+<interface>
+	<object class="IfThenElseChain" id="mpc_chain">
+		<child type="trigger">
+			<object class="IfThenElseExternalToolTrigger" id="mpc_trigger">
+				<property name="cmd">mpc idle player</property>
+			</object>
+		</child>
+		<child type="if">
+			<object class="IfThenElseTrueCheck" id="mpc_check"/>
+		</child>
+		<child type="then">
+			<object class="IfThenElseExternalToolAction" id="mpc_activate_action">
+				<property name="cmd">Scripts/mpc-notify.sh</property>
+			</object>
+		</child>
+		<child type="else">
+			<object class="IfThenElseDebugAction" id="mpc_deactivate_action">
+				<property name="message">test 1</property>
+			</object>
+		</child>
+	</object>
+</interface>

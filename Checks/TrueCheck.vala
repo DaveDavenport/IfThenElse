@@ -16,44 +16,22 @@
  */
  
 using GLib;
-using Gtk;
+
 
 namespace IfThenElse
 {
-	
-	
-
-static int main(string[] argv)
-{
-		Gtk.init(ref argv);
-		
-		stdout.printf("Starting program\n");
-		
-		stdout.printf("Adding new chain\n");
-		GLib.debug("Adding new chain\n");
-		
-		// Register the types.
-		var a = typeof(ExternalToolTrigger);
-		a = typeof(TrueCheck);
-		a = typeof(DebugAction);
-		a = typeof(Chain);
-		a = typeof(ExternalToolAction);
-
-		var builder = new Gtk.Builder();
-		for(int i =1; i < argv.length; i++)
+	/**
+	 * This check class alternates between true/false. 
+	 * This is usefull purely for testing.
+	 */
+	public class TrueCheck : BaseCheck, Base
+	{
+		public TrueCheck()
 		{
-			unowned string file = argv[i];
-			try{
-				builder.add_from_file(file);
-			}catch(GLib.Error e) {
-				GLib.error("Failed to load builder file: %s,%s\n",
-						file, e.message);
-			}
 		}
-
-		// Run program.
-		Gtk.main();
-		builder= null;
-		return 0;
-}	
+		public BaseCheck.StateType check()
+		{
+			return StateType.TRUE;
+		}
+	}
 }
