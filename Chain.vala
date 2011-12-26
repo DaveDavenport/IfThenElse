@@ -27,15 +27,7 @@ namespace IfThenElse
 		// Then/Else actions.
 		private BaseAction?  else_stmt 	  = null;
 		private BaseAction?  then_stmt 	  = null;
-		
-		public BaseTrigger trigger { 
-			get{ return trigger_stmtm;}
-			set{  
-				stdout.printf("Setting trigger: %p\n", value);
-				trigger_stmtm = value as BaseTrigger;
-				trigger_stmtm.action = this;
-			}
-		}
+
 		/**
 		 * GtkBuilder function.
 		 */

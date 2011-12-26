@@ -27,14 +27,17 @@ static int main(string[] argv)
 		
 		// Register the types.
 		var a = typeof(Chain);
+		
 		// Checks
 		a = typeof(TrueCheck);
 		a = typeof(AlternateCheck);
 		a = typeof(ExternalToolCheck);
+		
 		// Actions.
 		a = typeof(DebugAction);
 		a = typeof(ExternalToolAction);
 		a = typeof(StatusIconAction);
+		
 		// Triggers
 		a = typeof(ExternalToolTrigger);
 		a = typeof(TimerTrigger);

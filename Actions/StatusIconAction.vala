@@ -24,18 +24,23 @@ namespace IfThenElse
 		private Gtk.StatusIcon status_icon = new Gtk.StatusIcon();
 		public string icon_name {
 			set {
-				status_icon.icon_name = value;
+				status_icon.set_from_icon_name(value);
 			}
 		}
 		public string stock {
 			set {
-				status_icon.stock = value;
+				status_icon.set_from_stock(value);
 			}
 		}
 
 		construct{
 			stdout.printf("Deactivate\n");
 			status_icon.visible = false;
+		}
+		~StatusIconAction()
+		{
+			stdout.printf("Destroy\n");
+			status_icon = null;
 		}
 		public StatusIconAction ()
 		{

@@ -1,2 +1,2 @@
-* Write Check that checks output.
 * Write libnotify action
+* Catch ctrl-C to shutdown.

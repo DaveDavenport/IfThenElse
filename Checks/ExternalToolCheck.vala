@@ -45,7 +45,7 @@ namespace IfThenElse
 							out output, null, out exit_value);
 				if(output_compare == null)
 				{
-					if(exit_value == 0){
+					if(exit_value > 1){
 						return StateType.TRUE;
 					}else if (exit_value < 0) {
 						return StateType.FALSE;
