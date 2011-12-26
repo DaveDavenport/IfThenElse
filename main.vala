@@ -26,11 +26,19 @@ static int main(string[] argv)
 		Gtk.init(ref argv);
 		
 		// Register the types.
-		var a = typeof(ExternalToolTrigger);
+		var a = typeof(Chain);
+		// Checks
 		a = typeof(TrueCheck);
+		a = typeof(AlternateCheck);
+		// Actions.
 		a = typeof(DebugAction);
-		a = typeof(Chain);
 		a = typeof(ExternalToolAction);
+		// Triggers
+		a = typeof(ExternalToolTrigger);
+		a = typeof(TimerTrigger);
+		
+		
+		
 
 		// Load the files passed on the commandline.
 		var builder = new Gtk.Builder();

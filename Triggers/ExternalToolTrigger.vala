@@ -60,7 +60,6 @@ namespace IfThenElse
 				{
 					GLib.error("Failed to spawn child process: %s",
 								e.message);
-					return null;
 				}
 			}
 		}
