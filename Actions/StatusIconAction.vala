@@ -23,12 +23,20 @@ namespace IfThenElse
 	{
 		private bool active = false;
 		private Gtk.StatusIcon status_icon = new Gtk.StatusIcon();
+
+		/**
+		 * Set icon from icon_name on status_icon.
+		 */
 		public string icon_name {
 			set {
 				status_icon.set_from_icon_name(value);
 				status_icon.set_visible(active);
 			}
 		}
+
+		/**
+		 * Set icon from stock on status_icon.
+		 */
 		public string stock {
 			set {
 				status_icon.set_from_stock(value);
@@ -40,21 +48,25 @@ namespace IfThenElse
 			stdout.printf("Deactivate\n");
 			status_icon.set_visible(false);
 		}
+
 		~StatusIconAction()
 		{
 			stdout.printf("Destroy StatusIconAction\n");
 			status_icon = null;
 		}
+
 		public StatusIconAction ()
 		{
 		}
 		
+
 		public void Activate()
 		{
 			active = true;
 			stdout.printf("Activate\n");
 			status_icon.set_visible(active);
 		}
+
 		public void Deactivate()
 		{
 			active = false;

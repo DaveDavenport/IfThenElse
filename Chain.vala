@@ -46,7 +46,7 @@ namespace IfThenElse
 				then_stmt = child as BaseAction;
 			}
 		}
-		
+
 		/**
 		 * Destructor
 		 */
@@ -73,7 +73,7 @@ namespace IfThenElse
 				trigger.action = this;
 			}
 		}
-		
+
 		/**
 		 * Handle activation. In this case, we call the check,
 		 * see if it changed.
@@ -100,7 +100,7 @@ namespace IfThenElse
 					then_stmt.Deactivate();
 			}
 		}
-		
+
 		/**
 		 *  Not used here 
 		 */
