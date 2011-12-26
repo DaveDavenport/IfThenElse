@@ -46,6 +46,17 @@ namespace IfThenElse
 				then_stmt = child as BaseAction;
 			}
 		}
+		
+		/**
+		 * Destructor
+		 */
+		~Chain()
+		{
+			stdout.printf("Destroy chain\n");
+		}
+		construct{
+			stdout.printf("Create chain\n");
+		}
 		/**
 		 * Construct a chain
 		 */	

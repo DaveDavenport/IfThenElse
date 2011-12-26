@@ -20,51 +20,54 @@ using Gtk;
 
 namespace IfThenElse
 {
+	static int main(string[] argv)
+	{
+			Gtk.init(ref argv);
 
-static int main(string[] argv)
-{
-		Gtk.init(ref argv);
-		
-		// Register the types.
-		var a = typeof(Chain);
-		
-		// Checks
-		a = typeof(TrueCheck);
-		a = typeof(AlternateCheck);
-		a = typeof(ExternalToolCheck);
-		
-		// Actions.
-		a = typeof(DebugAction);
-		a = typeof(ExternalToolAction);
-		a = typeof(StatusIconAction);
-		
-		// Triggers
-		a = typeof(ExternalToolTrigger);
-		a = typeof(TimerTrigger);
+			// Register the types.
+			var a = typeof(Chain);
 
+			// Checks
+			a = typeof(TrueCheck);
+			a = typeof(AlternateCheck);
+			a = typeof(ExternalToolCheck);
+
+			// Actions.
+			a = typeof(DebugAction);
+			a = typeof(ExternalToolAction);
+			a = typeof(StatusIconAction);
+			
+			// Triggers
+			a = typeof(ExternalToolTrigger);
+			a = typeof(TimerTrigger);
 
 
 
-		// Load the files passed on the commandline.
-		var builder = new Gtk.Builder();
-		for(int i =1; i < argv.length; i++)
-		{
-			unowned string file = argv[i];
-			stdout.printf("Load file: %s\n", file);
-			try{
-				builder.add_from_file(file);
-			}catch(GLib.Error e) {
-				GLib.error("Failed to load builder file: %s,%s\n",
-						file, e.message);
+
+			// Load the files passed on the commandline.
+			var builder = new Gtk.Builder();
+			for(int i =1; i < argv.length; i++)
+			{
+				unowned string file = argv[i];
+				stdout.printf("Load file: %s\n", file);
+				try{
+					builder.add_from_file(file);
+				}catch(GLib.Error e) {
+					GLib.error("Failed to load builder file: %s,%s\n",
+							file, e.message);
+				}
 			}
-		}
 
+			// Catch Control C
+			GLib.Process.signal(ProcessSignal.INT, Gtk.main_quit);
 
-		// Run program.
-		stdout.printf("Start....\n");
-		Gtk.main();
-		// Destroy
-		builder= null;
-		return 0;
-}	
+			// Run program.
+			stdout.printf("Start....\n");
+			Gtk.main();
+			stdout.printf("\nQuit....\n");
+
+			// Destroy
+			builder = null;
+			return 0;
+	}
 }

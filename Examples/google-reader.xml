@@ -5,7 +5,7 @@
 		-->
 		<child type="trigger">
 			<object class="IfThenElseTimerTrigger" id="google_reader_trigger">
-				<property name="timeout">300</property>
+				<property name="timeout">5</property>
 			</object>
 		</child>
 		<!--

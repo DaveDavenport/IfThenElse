@@ -19,7 +19,8 @@ namespace IfThenElse
 {
 	public class BaseTrigger: Base
 	{
-		public BaseAction action {get;set;default = null;}
+		// Make this unowned so we don't get circular dependency.
+		public unowned BaseAction action {get;set;default = null;}
 		
 		public void fire()
 		{
