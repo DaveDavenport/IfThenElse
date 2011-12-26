@@ -36,9 +36,9 @@ static int main(string[] argv)
 		// Triggers
 		a = typeof(ExternalToolTrigger);
 		a = typeof(TimerTrigger);
-		
-		
-		
+
+
+
 
 		// Load the files passed on the commandline.
 		var builder = new Gtk.Builder();
@@ -53,8 +53,8 @@ static int main(string[] argv)
 						file, e.message);
 			}
 		}
-	
-		
+
+
 		// Run program.
 		stdout.printf("Start....\n");
 		Gtk.main();

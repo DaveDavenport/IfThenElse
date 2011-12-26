@@ -1,0 +1,40 @@
+IfThenElse
+==========
+
+This is a small ifthenelse program.
+It executes one or multiple chains.
+
+A chain is defined like this:
+
+1 Trigger:   Wait until a certain events happens.
+2 Check:     Do a check.
+  TRUE:      Execute Then Action
+  FALSE:     Execute Else Action.
+  NO_CHANGE: Do nothing.
+3. return to 1.
+
+A chain is an action. So it is possible to nest the loops.
+(beside the trigger).
+
+An example chain (very simple):
+~~~~~
+<interface>
+	<object class="IfThenElseChain" id="mpc_chain">
+		<child type="trigger">
+			<object class="IfThenElseExternalToolTrigger" id="mpc_trigger">
+				<property name="cmd">mpc idle player</property>
+			</object>
+		</child>
+		<child type="if">
+			<object class="IfThenElseTrueCheck" id="mpc_check"/>
+		</child>
+		<child type="then">
+			<object class="IfThenElseExternalToolAction" id="mpc_activate_action">
+				<property name="cmd">Scripts/mpc-notify.sh</property>
+			</object>
+		</child>
+	</object>
+</interface>
+~~~~~
+
+This calls "mpc idle", if it returns. It calls Scripts/mpc-notify.sh.
