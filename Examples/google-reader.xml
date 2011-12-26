@@ -26,7 +26,7 @@
 					Check google reader.
 				-->
 				<child type="if">
-					<object class="IfThenElseExternalToolCheck" id="mpc_check">
+					<object class="IfThenElseExternalToolCheck" id="google_reader_check">
 						<property name="cmd">Scripts/google-reader-check.sh</property>
 					</object>
 				</child>
@@ -34,7 +34,7 @@
 					If google reader checks.
 				-->
 				<child type="then">
-					<object class="IfThenElseStatusIconAction" id="mpc_activate_action">
+					<object class="IfThenElseStatusIconAction" id="google_reader_activate_action">
 							<property name="icon-name">internet-news-reader</property>
 					</object>
 				</child>
