@@ -13,10 +13,5 @@
 				<property name="cmd">Scripts/mpc-notify.sh</property>
 			</object>
 		</child>
-		<child type="else">
-			<object class="IfThenElseDebugAction" id="mpc_deactivate_action">
-				<property name="message">test 1</property>
-			</object>
-		</child>
 	</object>
 </interface>

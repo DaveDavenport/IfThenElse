@@ -19,10 +19,13 @@ namespace IfThenElse
 {
 	public class Chain : BaseAction, Base, FixGtk.Buildable
 	{
-		private BaseTrigger trigger_stmtm = null;
-		private BaseCheck   if_stmt 	  = null;
-		private BaseAction  else_stmt 	  = null;
-		private BaseAction  then_stmt 	  = null;
+		private BaseTrigger? trigger_stmtm = null;
+		
+		// Default is the true check.
+		private BaseCheck    if_stmt 	  = new TrueCheck();
+		
+		private BaseAction?  else_stmt 	  = null;
+		private BaseAction?  then_stmt 	  = null;
 		
 		public void add_child (Gtk.Builder builder, GLib.Object child, string? type)
 		{
@@ -69,12 +72,16 @@ namespace IfThenElse
 			if(state == BaseCheck.StateType.TRUE)
 			{
 				// Then statement.
-				then_stmt.Activate();
-				else_stmt.Deactivate();
+				if(then_stmt != null)
+					then_stmt.Activate();
+				if(else_stmt != null)
+					else_stmt.Deactivate();
 			}else{
 				// Else Statement.
-				else_stmt.Activate();
-				then_stmt.Deactivate();
+				if(else_stmt != null)
+					else_stmt.Activate();
+				if(then_stmt != null)
+					then_stmt.Deactivate();
 			}
 		}
 		
@@ -84,8 +91,10 @@ namespace IfThenElse
 		public void Deactivate()
 		{
 			// Deactivate both.
-			then_stmt.Deactivate();
-			else_stmt.Deactivate();
+			if(then_stmt != null)
+				then_stmt.Deactivate();
+			if(else_stmt != null)
+				else_stmt.Deactivate();
 		}
 	}
 }

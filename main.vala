@@ -20,17 +20,10 @@ using Gtk;
 
 namespace IfThenElse
 {
-	
-	
 
 static int main(string[] argv)
 {
 		Gtk.init(ref argv);
-		
-		stdout.printf("Starting program\n");
-		
-		stdout.printf("Adding new chain\n");
-		GLib.debug("Adding new chain\n");
 		
 		// Register the types.
 		var a = typeof(ExternalToolTrigger);
@@ -39,10 +32,12 @@ static int main(string[] argv)
 		a = typeof(Chain);
 		a = typeof(ExternalToolAction);
 
+		// Load the files passed on the commandline.
 		var builder = new Gtk.Builder();
 		for(int i =1; i < argv.length; i++)
 		{
 			unowned string file = argv[i];
+			stdout.printf("Load file: %s\n", file);
 			try{
 				builder.add_from_file(file);
 			}catch(GLib.Error e) {
@@ -50,9 +45,12 @@ static int main(string[] argv)
 						file, e.message);
 			}
 		}
-
+	
+		
 		// Run program.
+		stdout.printf("Start....\n");
 		Gtk.main();
+		// Destroy
 		builder= null;
 		return 0;
 }	
