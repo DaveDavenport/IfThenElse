@@ -43,17 +43,19 @@ namespace IfThenElse
 				string output = null;
 				GLib.Process.spawn_command_line_sync(cmd,
 							out output, null, out exit_value);
+				exit_value = GLib.Process.exit_status(exit_value);
+				stdout.printf("output: %i:%s vs %s\n", exit_value, output, output_compare);
 				if(output_compare == null)
 				{
-					if(exit_value > 1){
+					if(exit_value ==  1){
 						return StateType.TRUE;
-					}else if (exit_value < 0) {
+					}else if (exit_value == 8) {
 						return StateType.FALSE;
 					}else{
 						return StateType.NO_CHANGE;
 					}
 				}else{
-						if(output_compare == output)
+						if(output_compare.strip() == output.strip())
 						{
 							return StateType.TRUE;
 						} else {

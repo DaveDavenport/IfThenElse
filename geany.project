@@ -16,21 +16,29 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=13
+current_page=18
 FILE_NAME_0=0;Vala;0;16;1;1;0;/home/qball/Programming/IfThenElse/BaseClass.vala;0;4
-FILE_NAME_1=0;Vala;0;16;1;1;0;/home/qball/Programming/IfThenElse/Chain.vala;0;4
-FILE_NAME_2=1420;Vala;0;16;1;1;0;/home/qball/Programming/IfThenElse/main.vala;0;4
+FILE_NAME_1=1933;Vala;0;16;1;1;0;/home/qball/Programming/IfThenElse/Chain.vala;0;4
+FILE_NAME_2=1699;Vala;0;16;1;1;0;/home/qball/Programming/IfThenElse/main.vala;0;4
 FILE_NAME_3=0;Vala;0;16;1;1;0;/home/qball/Programming/IfThenElse/Actions/BaseAction.vala;0;4
 FILE_NAME_4=0;Vala;0;16;1;1;0;/home/qball/Programming/IfThenElse/Actions/DebugAction.vala;0;4
 FILE_NAME_5=0;Vala;0;16;1;1;0;/home/qball/Programming/IfThenElse/Actions/ExternalTool.vala;0;4
 FILE_NAME_6=0;Vala;0;16;1;1;0;/home/qball/Programming/IfThenElse/Checks/AlternateCheck.vala;0;4
 FILE_NAME_7=0;Vala;0;16;1;1;0;/home/qball/Programming/IfThenElse/Checks/BaseCheck.vala;0;4
 FILE_NAME_8=0;Vala;0;16;1;1;0;/home/qball/Programming/IfThenElse/Checks/TrueCheck.vala;0;4
-FILE_NAME_9=0;Vala;0;16;1;1;0;/home/qball/Programming/IfThenElse/Triggers/BaseTrigger.vala;0;4
+FILE_NAME_9=802;Vala;0;16;1;1;0;/home/qball/Programming/IfThenElse/Triggers/BaseTrigger.vala;0;4
 FILE_NAME_10=0;Vala;0;16;1;1;0;/home/qball/Programming/IfThenElse/Triggers/ExternalToolTrigger.vala;0;4
 FILE_NAME_11=0;Vala;0;16;1;1;0;/home/qball/Programming/IfThenElse/Triggers/Timer.vala;0;4
-FILE_NAME_12=0;XML;0;16;1;1;0;/home/qball/Programming/IfThenElse/Examples/mpc-example.xml;0;4
-FILE_NAME_13=430;None;0;16;1;1;0;/home/qball/Programming/IfThenElse/README;0;4
+FILE_NAME_12=913;None;0;16;1;1;0;/home/qball/Programming/IfThenElse/README;0;4
+FILE_NAME_13=1050;Vala;0;16;1;1;0;/home/qball/Programming/IfThenElse/Actions/StatusIconAction.vala;0;4
+FILE_NAME_14=0;XML;0;16;1;1;0;/home/qball/Programming/IfThenElse/Examples/mpc-example.xml;0;4
+FILE_NAME_15=24;None;0;16;1;1;0;/home/qball/Programming/IfThenElse/TODO;0;4
+FILE_NAME_16=242;XML;0;16;1;1;0;/home/qball/Programming/IfThenElse/Examples/google-reader.xml;0;4
+FILE_NAME_17=0;Python;0;16;1;1;0;/home/qball/Programming/IfThenElse/Scripts/google-reader.py;0;4
+FILE_NAME_18=187;Sh;0;16;1;1;0;/home/qball/Programming/IfThenElse/Scripts/google-reader-check.sh;0;4
+FILE_NAME_19=0;Sh;0;16;1;1;0;/home/qball/Programming/IfThenElse/Scripts/google-reader-show.sh;0;4
+FILE_NAME_20=0;Sh;0;16;1;1;0;/home/qball/Programming/IfThenElse/Scripts/mpc-notify.sh;0;4
+FILE_NAME_21=934;Vala;0;16;1;1;0;/home/qball/Programming/IfThenElse/Checks/ExternalToolCheck.vala;0;4
 
 [build-menu]
 ValaFT_00_LB=_Compile

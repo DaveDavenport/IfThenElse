@@ -63,14 +63,14 @@ namespace IfThenElse
 		public void Activate()
 		{
 			active = true;
-			stdout.printf("Activate\n");
+			stdout.printf("StatusIcon: Activate\n");
 			status_icon.set_visible(active);
 		}
 
 		public void Deactivate()
 		{
 			active = false;
-			stdout.printf("Deactivate\n");
+			stdout.printf("StatusIcon: Deactivate\n");
 			status_icon.set_visible(active);
 		}
 	}

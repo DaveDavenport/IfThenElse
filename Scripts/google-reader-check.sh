@@ -9,10 +9,10 @@ if [ x"$VALUE" == x"$OLD_VALUE" ]
 then
 	exit 0
 fi
-
-if [ "$VALUE" > 0 ] 
+echo "value: $VALUE"
+if [ $VALUE -gt 0 ] 
 then
 	exit 1;
 else
-	exit -1
+	exit 8;
 fi
