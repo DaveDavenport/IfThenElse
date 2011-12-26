@@ -34,6 +34,7 @@ static int main(string[] argv)
 		// Actions.
 		a = typeof(DebugAction);
 		a = typeof(ExternalToolAction);
+		a = typeof(StatusIconAction);
 		// Triggers
 		a = typeof(ExternalToolTrigger);
 		a = typeof(TimerTrigger);

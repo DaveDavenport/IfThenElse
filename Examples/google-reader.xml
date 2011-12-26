@@ -5,7 +5,7 @@
 		-->
 		<child type="trigger">
 			<object class="IfThenElseTimerTrigger" id="google_reader_trigger">
-				<property name="timeout">12</property>
+				<property name="timeout">300</property>
 			</object>
 		</child>
 		<!--
@@ -34,8 +34,9 @@
 					If google reader checks.
 				-->
 				<child type="then">
-					<object class="IfThenElseExternalToolAction" id="mpc_activate_action">
-						<property name="cmd">Scripts/google-reader-show.sh</property>
+					<object class="IfThenElseStatusIconAction" id="mpc_activate_action">
+							<property name="icon-name">google-reader</property>
+						<!--<property name="cmd">Scripts/google-reader-show.sh</property>-->
 					</object>
 				</child>
 			</object>
