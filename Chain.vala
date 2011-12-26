@@ -24,9 +24,13 @@ namespace IfThenElse
 		// Default is the true check.
 		private BaseCheck    if_stmt 	  = new TrueCheck();
 		
+		// Then/Else actions.
 		private BaseAction?  else_stmt 	  = null;
 		private BaseAction?  then_stmt 	  = null;
 		
+		/**
+		 * GtkBuilder function.
+		 */
 		public void add_child (Gtk.Builder builder, GLib.Object child, string? type)
 		{
 			if(type == null) return;
