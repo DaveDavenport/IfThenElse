@@ -28,6 +28,14 @@ namespace IfThenElse
 		private BaseAction?  else_stmt 	  = null;
 		private BaseAction?  then_stmt 	  = null;
 		
+		public BaseTrigger trigger { 
+			get{ return trigger_stmtm;}
+			set{  
+				stdout.printf("Setting trigger: %p\n", value);
+				trigger_stmtm = value as BaseTrigger;
+				trigger_stmtm.action = this;
+			}
+		}
 		/**
 		 * GtkBuilder function.
 		 */
@@ -69,6 +77,7 @@ namespace IfThenElse
 		 */
 		public void Activate()
 		{
+			stdout.printf("Activate\n");
 			BaseCheck.StateType state = if_stmt.check();
 			// If no change, do nothing.
 			if(state == BaseCheck.StateType.NO_CHANGE)

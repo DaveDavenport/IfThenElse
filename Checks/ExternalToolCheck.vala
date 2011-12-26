@@ -19,39 +19,39 @@ using GLib;
 
 namespace IfThenElse
 {
-	public class TimerTrigger : BaseTrigger
+
+	public class ExternalToolCheck : BaseCheck, Base
 	{
-		private uint handler = 0;
-		private int _timeout = 5;
-		public int timeout {
-			get{
-				return _timeout;
-			}
-			set{
-				_timeout = value;
-				if(handler > 0) {
-					GLib.Source.remove(handler);
-				}
-				handler = GLib.Timeout.add_seconds(_timeout, timer_callback);
-			}
-		}
-		public bool timer_callback()
+		public string cmd {get; set; default = "";}
+		public bool state = false;
+		
+		/**
+		 * Constructor
+		 **/
+		public ExternalToolCheck()
 		{
-				stdout.printf("Timer file\n");
-				this.fire();
-				return true;
+			
+		}
+		/*
+		 * Check function.
+		 */
+		public BaseCheck.StateType check()
+		{
+			try{
+				int exit_value = 1;
+				GLib.Process.spawn_command_line_sync(cmd,
+							null, null, out exit_value);
+				if(exit_value == 0){
+					return StateType.TRUE;
+				}
+			} catch(GLib.SpawnError e) {
+					GLib.error("Failed to spawn external program: %s\n",
+						e.message);
+			}
+			return StateType.NO_CHANGE;
 		}
 		
-		public TimerTrigger(uint timeout)
-		{
-				handler = GLib.Timeout.add_seconds(timeout, timer_callback);
-		}
-		~TimerTrigger()
-		{
-			if(handler > 0){
-				GLib.Source.remove(handler);
-				handler = 0;
-			}
-		}
 	}
+
 }
+

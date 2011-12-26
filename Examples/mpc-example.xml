@@ -2,7 +2,7 @@
 	<object class="IfThenElseChain" id="mpc_chain">
 		<child type="trigger">
 			<object class="IfThenElseExternalToolTrigger" id="mpc_trigger">
-				<property name="cmd">mpc idle player</property>
+				<property name="cmd">mpc -h 192.150.0.106 idle player</property>
 			</object>
 		</child>
 		<child type="if">
@@ -11,6 +11,21 @@
 		<child type="then">
 			<object class="IfThenElseExternalToolAction" id="mpc_activate_action">
 				<property name="cmd">Scripts/mpc-notify.sh</property>
+			</object>
+		</child>
+	</object>
+		<object class="IfThenElseChain" id="mpc_database_chain">
+		<child type="trigger">
+			<object class="IfThenElseExternalToolTrigger" id="mpc_database_trigger">
+				<property name="cmd">mpc -h 192.150.0.106 idle database</property>
+			</object>
+		</child>
+		<child type="if">
+			<object class="IfThenElseTrueCheck" id="mpc_database_check"/>
+		</child>
+		<child type="then">
+			<object class="IfThenElseExternalToolAction" id="mpc_database_activate_action">
+				<property name="cmd">notify-send "MPD: Database has been updated"</property>
 			</object>
 		</child>
 	</object>

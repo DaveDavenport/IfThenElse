@@ -1,0 +1,19 @@
+<interface>
+	<object class="IfThenElseChain" id="google_reader_chain">
+		<child type="trigger">
+			<object class="IfThenElseTimerTrigger" id="google_reader_trigger">
+				<property name="timeout">300</property>
+			</object>
+		</child>
+		<child type="if">
+			<object class="IfThenElseExternalToolCheck" id="mpc_check">
+				<property name="cmd">Scripts/google-reader-check.sh</property>
+			</object>
+		</child>
+		<child type="then">
+			<object class="IfThenElseExternalToolAction" id="mpc_activate_action">
+				<property name="cmd">Scripts/google-reader-show.sh</property>
+			</object>
+		</child>
+	</object>
+</interface>

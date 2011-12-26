@@ -30,6 +30,7 @@ static int main(string[] argv)
 		// Checks
 		a = typeof(TrueCheck);
 		a = typeof(AlternateCheck);
+		a = typeof(ExternalToolCheck);
 		// Actions.
 		a = typeof(DebugAction);
 		a = typeof(ExternalToolAction);
