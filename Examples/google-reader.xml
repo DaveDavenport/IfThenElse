@@ -1,18 +1,43 @@
 <interface>
-	<object class="IfThenElseChain" id="google_reader_chain">
+	<object class="IfThenElseChain" id ="google_reader_network">
+		<!--
+			Trigger every 300 seconds.
+		-->
 		<child type="trigger">
 			<object class="IfThenElseTimerTrigger" id="google_reader_trigger">
-				<property name="timeout">300</property>
+				<property name="timeout">12</property>
 			</object>
 		</child>
+		<!--
+			Network
+		-->
 		<child type="if">
-			<object class="IfThenElseExternalToolCheck" id="mpc_check">
-				<property name="cmd">Scripts/google-reader-check.sh</property>
+			<object class="IfThenElseExternalToolCheck" id="google_reader_network_check">
+					<property name="cmd">nmcli -t -f STATE nm</property>
+					<property name="output_compare">connected</property>
 			</object>
 		</child>
+		<!--
+			If we are connected, do this.
+		-->
 		<child type="then">
-			<object class="IfThenElseExternalToolAction" id="mpc_activate_action">
-				<property name="cmd">Scripts/google-reader-show.sh</property>
+			<object class="IfThenElseChain" id="google_reader_chain">
+				<!-- 
+					Check google reader.
+				-->
+				<child type="if">
+					<object class="IfThenElseExternalToolCheck" id="mpc_check">
+						<property name="cmd">Scripts/google-reader-check.sh</property>
+					</object>
+				</child>
+				<!--
+					If google reader checks.
+				-->
+				<child type="then">
+					<object class="IfThenElseExternalToolAction" id="mpc_activate_action">
+						<property name="cmd">Scripts/google-reader-show.sh</property>
+					</object>
+				</child>
 			</object>
 		</child>
 	</object>

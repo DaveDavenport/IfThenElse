@@ -23,6 +23,7 @@ namespace IfThenElse
 	public class ExternalToolCheck : BaseCheck, Base
 	{
 		public string cmd {get; set; default = "";}
+		public string? output_compare { get; set; default=null;}
 		public bool state = false;
 		
 		/**
@@ -39,10 +40,25 @@ namespace IfThenElse
 		{
 			try{
 				int exit_value = 1;
+				string output = null;
 				GLib.Process.spawn_command_line_sync(cmd,
-							null, null, out exit_value);
-				if(exit_value == 0){
-					return StateType.TRUE;
+							out output, null, out exit_value);
+				if(output_compare == null)
+				{
+					if(exit_value == 0){
+						return StateType.TRUE;
+					}else if (exit_value < 0) {
+						return StateType.FALSE;
+					}else{
+						return StateType.NO_CHANGE;
+					}
+				}else{
+						if(output_compare == output)
+						{
+							return StateType.TRUE;
+						} else {
+							return StateType.FALSE;
+						}
 				}
 			} catch(GLib.SpawnError e) {
 					GLib.error("Failed to spawn external program: %s\n",
