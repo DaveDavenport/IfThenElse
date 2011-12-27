@@ -48,6 +48,18 @@ namespace IfThenElse
 				}
 			}
 		}
+		/**
+		 * Set icon from file on status_icon.
+		 */
+		private string? _file = null;
+		public string file {
+			set {
+				_file = value;
+				if(status_icon != null) {
+					status_icon.set_from_file(value);
+				}
+			}
+		}
 
 
 		~StatusIconAction()
@@ -69,12 +81,15 @@ namespace IfThenElse
 				
 				// Update the icon.
 				if(_icon_name != null) {
-					stdout.printf("Set icon name: %s\n", _icon_name);
+					stdout.printf("Set icon name: '%s'\n", _icon_name);
 					status_icon = new Gtk.StatusIcon.from_icon_name(_icon_name);
 				}
 				else if(_stock != null) {
 					stdout.printf("Set stock: %s\n", _stock);
 					status_icon = new Gtk.StatusIcon.from_stock(_stock);
+				}
+				else if (_file != null) {
+					status_icon = new Gtk.StatusIcon.from_file(_file);
 				}else {
 					status_icon = new Gtk.StatusIcon();
 				}

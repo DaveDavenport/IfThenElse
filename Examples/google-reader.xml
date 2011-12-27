@@ -46,7 +46,7 @@
 									<object class="IfThenElseMultiAction" id="google_reader_then_multi_action">
 										<child>
 											<object class="IfThenElseStatusIconAction" id="google_reader_activate_action">
-													<property name="icon-name">internet-news-reader</property>
+													<property name="file">Images/reader.png</property>
 											</object>
 										</child>
 									</object>
