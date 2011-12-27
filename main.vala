@@ -20,6 +20,12 @@ using Gtk;
 
 namespace IfThenElse
 {
+	string? dot_file = null;
+	const GLib.OptionEntry[] entries = {
+		{"dot", 	'd',	0,	GLib.OptionArg.FILENAME, 	ref dot_file,
+				"Output a flowchart off the if-the-else structure", null},
+		{null}
+	};
 	static int main(string[] argv)
 	{
 			Gtk.init(ref argv);
@@ -43,7 +49,15 @@ namespace IfThenElse
 			a = typeof(TimerTrigger);
 
 
+			// Commandline options parsing.
 
+			GLib.OptionContext og = new GLib.OptionContext("IfThenElse");
+			og.add_main_entries(entries,null);
+			try{
+				og.parse(ref argv);
+			}catch (Error e) {
+				GLib.error("Failed to parse command line options: %s\n", e.message);
+			}
 
 			// Load the files passed on the commandline.
 			var builder = new Gtk.Builder();
@@ -59,6 +73,31 @@ namespace IfThenElse
 				}
 			}
 
+			// Generate a dot file.
+			if(dot_file != null)
+			{
+				FileStream fp = FileStream.open(dot_file, "w");
+				fp.printf("digraph FlowChart {\n");
+				// Iterates over all input files.
+				var objects = builder.get_objects();
+				foreach ( GLib.Object o in objects)
+				{
+					if((o as Base).is_toplevel())
+					{
+						stdout.printf("Object: %s\n", (o as Gtk.Buildable).get_name());
+						// Activate the toplevel one.
+						if(o is BaseAction)
+						{
+							(o as BaseAction).output_dot(fp);
+						}
+					}
+				}
+				fp.printf("}\n");
+				fp = null;
+				return 0;
+			}
+			
+			// Iterates over all input files.
 			var objects = builder.get_objects();
 			foreach ( GLib.Object o in objects)
 			{

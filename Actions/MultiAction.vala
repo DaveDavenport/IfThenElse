@@ -65,16 +65,16 @@ namespace IfThenElse
 		}
 		
 		
-		public void output_dot()
+		public void output_dot(FileStream fp)
 		{
-			stdout.printf("%s [label=\"%s\", shape=oval]\n", 
+			fp.printf("%s [label=\"%s\", shape=oval]\n", 
 					this.get_name(),
 					this.get_name());
 			foreach(unowned BaseAction action in actions)
 			{
-				stdout.printf("%s -> %s\n", this.get_name(), 
+				fp.printf("%s -> %s\n", this.get_name(), 
 						action.get_name());
-				action.output_dot();
+				action.output_dot(fp);
 			}
 		}
 	}

@@ -27,9 +27,9 @@ namespace IfThenElse
 		{
 			GLib.warning("Deactivate action has not been implemented");
 		}
-		public virtual void output_dot()
+		public virtual void output_dot(FileStream fp)
 		{
-			stdout.printf("%s [label=\"%s\", shape=oval]\n", 
+			fp.printf("%s [label=\"%s\", shape=oval]\n", 
 						this.get_name(),
 						this.get_name());
 		}

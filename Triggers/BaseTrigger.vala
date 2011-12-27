@@ -20,7 +20,7 @@ namespace IfThenElse
 	public abstract class BaseTrigger: BaseAction, Base, FixGtk.Buildable
 	{
 		// Make this unowned so we don't get circular dependency.
-		private BaseAction action = null;
+		protected BaseAction action = null;
 		
 		/**
 		 * GtkBuilder function.
@@ -72,13 +72,13 @@ namespace IfThenElse
 			}
 		}
 		
-		public void output_dot()
+		public virtual void output_dot(FileStream fp)
 		{
-			stdout.printf("%s [label=\"%s\", shape=oval]\n", 
+			fp.printf("'%s' [label=\"%s\", shape=oval]\n", 
 						this.get_name(),
 						this.get_name());
-			stdout.printf("%s -> %s\n", this.get_name(), (action as Gtk.Buildable).get_name());
-			this.action.output_dot();
+			fp.printf("%s -> %s\n", this.get_name(), (action as Gtk.Buildable).get_name());
+			this.action.output_dot(fp);
 		}
 	}
 }

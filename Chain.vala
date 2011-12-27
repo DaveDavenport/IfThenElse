@@ -109,22 +109,22 @@ namespace IfThenElse
 				else_stmt.Deactivate();
 		}
 
-		public void output_dot()
+		public void output_dot(FileStream fp)
 		{
-			stdout.printf("%s [label=\"%s\", shape=diamond]\n", 
+			fp.printf("%s [label=\"%s\", shape=diamond]\n", 
 							this.get_name(),
 							this.get_name());
 			if(then_stmt != null)
 			{
-				stdout.printf("%s -> %s [label=\"Yes\"]\n", this.get_name(),
+				fp.printf("%s -> %s [label=\"Yes\"]\n", this.get_name(),
 				(then_stmt as Gtk.Buildable).get_name());
-				then_stmt.output_dot();
+				then_stmt.output_dot(fp);
 			}
 			if (else_stmt != null)
 			{
-				stdout.printf("%s -> %s [label=\"No\"]\n", this.get_name(),
+				fp.printf("%s -> %s [label=\"No\"]\n", this.get_name(),
 				(else_stmt as Gtk.Buildable).get_name());
-				else_stmt.output_dot();
+				else_stmt.output_dot(fp);
 			}
 		}
 	}

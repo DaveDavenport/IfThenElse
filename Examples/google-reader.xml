@@ -3,7 +3,7 @@
 		Trigger every 300 seconds.
 	-->
 	<object class="IfThenElseTimerTrigger" id="google_reader_trigger">
-		<property name="timeout">300</property>
+		<property name="timeout">600</property>
 		<child>
 			<object class="IfThenElseChain" id ="google_reader_network">
 				<!--
@@ -27,30 +27,35 @@
 					If we are connected, do this.
 				-->
 				<child type="then">
-					<object class="IfThenElseChain" id="google_reader_chain">
-						<!-- 
-							Check google reader.
-						-->
-						<child type="if">
-							<object class="IfThenElseExternalToolCheck" id="google_reader_check">
-								<property name="cmd">Scripts/google-reader-check.sh</property>
-							</object>
-						</child>
-						<!--
-							If google reader checks.
-						-->
-						<child type="then">
-							<object class="IfThenElseMultiAction" id="google_reader_then_multi_action">
-								<child>
-									<object class="IfThenElseStatusIconAction" id="google_reader_activate_action">
-											<property name="icon-name">internet-news-reader</property>
+					<object class="IfThenElseTimerTrigger" id="google_reader_chain_trigger">
+						<property name="timeout">150</property>
+						<child>
+							<object class="IfThenElseChain" id="google_reader_chain">
+								<!-- 
+									Check google reader.
+								-->
+								<child type="if">
+									<object class="IfThenElseExternalToolCheck" id="google_reader_check">
+										<property name="cmd">Scripts/google-reader-check.sh</property>
 									</object>
 								</child>
-							</object>
-						</child>
-						<child type="else">
-							<object class="IfThenElseDebugAction" id="google_reader_else_action">
-								<property name="message">No unread messages</property>
+								<!--
+									If google reader checks.
+								-->
+								<child type="then">
+									<object class="IfThenElseMultiAction" id="google_reader_then_multi_action">
+										<child>
+											<object class="IfThenElseStatusIconAction" id="google_reader_activate_action">
+													<property name="icon-name">internet-news-reader</property>
+											</object>
+										</child>
+									</object>
+								</child>
+								<child type="else">
+									<object class="IfThenElseDebugAction" id="google_reader_else_action">
+										<property name="message">No unread messages</property>
+									</object>
+								</child>
 							</object>
 						</child>
 					</object>
