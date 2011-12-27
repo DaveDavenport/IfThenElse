@@ -31,8 +31,8 @@ namespace IfThenElse
 				_timeout = value;
 				if(handler > 0) {
 					GLib.Source.remove(handler);
+					handler = GLib.Timeout.add_seconds(_timeout, timer_callback);
 				}
-				handler = GLib.Timeout.add_seconds(_timeout, timer_callback);
 			}
 		}
 		public bool timer_callback()
@@ -56,6 +56,7 @@ namespace IfThenElse
 		
 		public override void enable_trigger()
 		{
+			timer_callback();
 			if(handler == 0) {
 				handler = GLib.Timeout.add_seconds(timeout, timer_callback);
 			}

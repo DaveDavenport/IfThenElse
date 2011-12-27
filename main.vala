@@ -59,10 +59,20 @@ namespace IfThenElse
 				}
 			}
 
-/*
-			BaseTrigger trig = builder.get_object("google_reader_trigger") as BaseTrigger;
-			trig.output_dot();
-*/
+			var objects = builder.get_objects();
+			foreach ( GLib.Object o in objects)
+			{
+				if((o as Base).is_toplevel())
+				{
+					stdout.printf("Object: %s\n", (o as Gtk.Buildable).get_name());
+					// Activate the toplevel one.
+					if(o is BaseAction)
+					{
+						(o as BaseAction).Activate();
+					}
+				}
+			}
+
 			// Catch Control C
 			GLib.Process.signal(ProcessSignal.INT, Gtk.main_quit);
 

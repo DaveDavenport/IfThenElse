@@ -3,7 +3,7 @@
 		Trigger every 300 seconds.
 	-->
 	<object class="IfThenElseTimerTrigger" id="google_reader_trigger">
-		<property name="timeout">60</property>
+		<property name="timeout">300</property>
 		<child>
 			<object class="IfThenElseChain" id ="google_reader_network">
 				<!--

@@ -31,6 +31,8 @@ namespace IfThenElse
 			{
 				stdout.printf("Adding child to multiaction\n");
 				actions.append(child as BaseAction);
+				// Set parent.
+				(child as Base).parent = this;
 				return;
 			}
 			GLib.error("Trying to add a non BaseAction to MultiAction");

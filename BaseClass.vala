@@ -19,5 +19,18 @@ namespace IfThenElse
 {
 	public abstract class Base: GLib.Object, FixGtk.Buildable
 	{
+		public unowned Base parent = null;
+		
+		/**
+		 * Check if it is a toplevel object.
+		 */
+		public bool has_parent()
+		{
+			return (parent != null);
+		}
+		public bool is_toplevel()
+		{
+			return (parent == null);
+		}
 	}
 }

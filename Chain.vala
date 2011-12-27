@@ -35,10 +35,16 @@ namespace IfThenElse
 			stdout.printf("Adding to chain: %s\n", type);
 			if (type == "if") {
 				if_stmt = child as BaseCheck;
+				// Set parent.
+				(child as Base).parent = this;
 			}else if (type == "else") {
 				else_stmt = child as BaseAction;
+				// Set parent.
+				(child as Base).parent = this;
 			}else if (type == "then") {
 				then_stmt = child as BaseAction;
+				// Set parent.
+				(child as Base).parent = this;
 			}
 		}
 

@@ -35,6 +35,8 @@ namespace IfThenElse
 			{
 				stdout.printf("Adding child to the trigger\n");
 				action = child as BaseAction;
+				// Set parent.
+				(child as Base).parent = this;
 				return;
 			}
 			GLib.error("Trying to add a non BaseAction to Trigger");
