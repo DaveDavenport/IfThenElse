@@ -14,23 +14,23 @@ A chain is defined like this:
 3. return to 1.
 
 A chain is an action. So it is possible to nest the loops.
-(beside the trigger).
+(beside the triggers).
 
 An example chain (very simple):
 ~~~~~
 <interface>
-	<object class="IfThenElseChain" id="mpc_chain">
-		<child type="trigger">
-			<object class="IfThenElseExternalToolTrigger" id="mpc_trigger">
-				<property name="cmd">mpc idle player</property>
-			</object>
-		</child>
-		<child type="if">
-			<object class="IfThenElseTrueCheck" id="mpc_check"/>
-		</child>
-		<child type="then">
-			<object class="IfThenElseExternalToolAction" id="mpc_activate_action">
-				<property name="cmd">Scripts/mpc-notify.sh</property>
+	<object class="IfThenElseExternalToolTrigger" id="mpc_trigger">
+		<property name="cmd">mpc idle player</property>
+		<child>
+			<object class="IfThenElseChain" id="mpc_chain">
+				<child type="if">
+					<object class="IfThenElseTrueCheck" id="mpc_check"/>
+				</child>
+				<child type="then">
+					<object class="IfThenElseExternalToolAction" id="mpc_activate_action">
+						<property name="cmd">Scripts/mpc-notify.sh</property>
+					</object>
+				</child>
 			</object>
 		</child>
 	</object>

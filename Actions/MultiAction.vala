@@ -61,5 +61,19 @@ namespace IfThenElse
 				action.Deactivate();
 			}
 		}
+		
+		
+		public void output_dot()
+		{
+			stdout.printf("%s [label=\"%s\", shape=oval]\n", 
+					this.get_name(),
+					this.get_name());
+			foreach(unowned BaseAction action in actions)
+			{
+				stdout.printf("%s -> %s\n", this.get_name(), 
+						action.get_name());
+				action.output_dot();
+			}
+		}
 	}
 }

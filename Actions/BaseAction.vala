@@ -17,7 +17,7 @@
  
 namespace IfThenElse
 {
-	public interface BaseAction : Base
+	public interface BaseAction : Base, FixGtk.Buildable
 	{
 		public virtual void Activate()
 		{
@@ -26,6 +26,12 @@ namespace IfThenElse
 		public virtual void Deactivate()
 		{
 			GLib.warning("Deactivate action has not been implemented");
+		}
+		public virtual void output_dot()
+		{
+			stdout.printf("%s [label=\"%s\", shape=oval]\n", 
+						this.get_name(),
+						this.get_name());
 		}
 	}
 }

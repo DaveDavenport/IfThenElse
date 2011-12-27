@@ -17,16 +17,44 @@
  
 namespace IfThenElse
 {
-	public class BaseTrigger: Base
+	public class BaseTrigger: Base, FixGtk.Buildable
 	{
 		// Make this unowned so we don't get circular dependency.
-		public unowned BaseAction action {get;set;default = null;}
+		private BaseAction action = null;
+		
+		/**
+		 * GtkBuilder function.
+		 */
+		public void add_child (Gtk.Builder builder, GLib.Object child, string? type)
+		{
+			if(action != null) {
+				GLib.error("You can only add one action to a trigger.\n"+
+							"Use a multiaction to add more items\n");
+			}
+			if(child is BaseAction)
+			{
+				stdout.printf("Adding child to the trigger\n");
+				action = child as BaseAction;
+				return;
+			}
+			GLib.error("Trying to add a non BaseAction to Trigger");
+		}
 		
 		public void fire()
 		{
+			stdout.printf("Fire trigger: %p\n", action);
 			if(action != null) {
 				action.Activate();
 			}
+		}
+		
+		public void output_dot()
+		{
+			stdout.printf("%s [label=\"%s\", shape=oval]\n", 
+						this.get_name(),
+						this.get_name());
+			stdout.printf("%s -> %s\n", this.get_name(), (action as Gtk.Buildable).get_name());
+			this.action.output_dot();
 		}
 	}
 }

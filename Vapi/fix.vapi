@@ -2,7 +2,7 @@ using Gtk;
 
 namespace FixGtk
 {
-	[CCode (cheader_filename = "gtk/gtk.h",cname="GtkBuildable",cprefix="gtk_", type_id="GTK_TYPE_BUILDABLE")]
+	[CCode (cheader_filename = "gtk/gtk.h",cname="GtkBuildable",cprefix="gtk_buildable_", type_id="GTK_TYPE_BUILDABLE")]
 	public interface Buildable {
 		public virtual void add_child (Gtk.Builder builder, GLib.Object child, string? type);
 		public virtual unowned GLib.Object construct_child (Gtk.Builder builder, string name);

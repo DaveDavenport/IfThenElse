@@ -66,13 +66,17 @@ namespace IfThenElse
 			if(status_icon == null)
 			{
 				stdout.printf("StatusIcon: Activate\n");
-				status_icon = new Gtk.StatusIcon();
+				
 				// Update the icon.
 				if(_icon_name != null) {
-					status_icon.icon_name = _icon_name;
+					stdout.printf("Set icon name: %s\n", _icon_name);
+					status_icon = new Gtk.StatusIcon.from_icon_name(_icon_name);
 				}
-				if(_stock != null) {
-					status_icon.stock = _stock;
+				else if(_stock != null) {
+					stdout.printf("Set stock: %s\n", _stock);
+					status_icon = new Gtk.StatusIcon.from_stock(_stock);
+				}else {
+					status_icon = new Gtk.StatusIcon();
 				}
 			}
 		}

@@ -19,8 +19,6 @@ namespace IfThenElse
 {
 	public class Chain : BaseAction, Base, FixGtk.Buildable
 	{
-		private BaseTrigger? trigger_stmtm = null;
-		
 		// Default is the true check.
 		private BaseCheck    if_stmt 	  = new TrueCheck();
 		
@@ -35,10 +33,7 @@ namespace IfThenElse
 		{
 			if(type == null) return;
 			stdout.printf("Adding to chain: %s\n", type);
-			if(type == "trigger") {
-				trigger_stmtm = child as BaseTrigger;
-				trigger_stmtm.action = this;
-			}else if (type == "if") {
+			if (type == "if") {
 				if_stmt = child as BaseCheck;
 			}else if (type == "else") {
 				else_stmt = child as BaseAction;
@@ -60,18 +55,13 @@ namespace IfThenElse
 		/**
 		 * Construct a chain
 		 */	
-		public Chain (BaseTrigger? trigger,
-					  BaseCheck if_s,
+		public Chain (BaseCheck if_s,
 					  BaseAction then_s,
 					  BaseAction else_s)
 		{
-			trigger_stmtm = trigger;
 			if_stmt = if_s;
 			else_stmt = else_s;
 			then_stmt = then_s;
-			if(trigger != null) {
-				trigger.action = this;
-			}
 		}
 
 		/**
@@ -112,6 +102,26 @@ namespace IfThenElse
 			if(else_stmt != null)
 				else_stmt.Deactivate();
 		}
+
+		public void output_dot()
+		{
+			stdout.printf("%s [label=\"%s\", shape=diamond]\n", 
+							this.get_name(),
+							this.get_name());
+			if(then_stmt != null)
+			{
+				stdout.printf("%s -> %s [label=\"Yes\"]\n", this.get_name(),
+				(then_stmt as Gtk.Buildable).get_name());
+				then_stmt.output_dot();
+			}
+			if (else_stmt != null)
+			{
+				stdout.printf("%s -> %s [label=\"No\"]\n", this.get_name(),
+				(else_stmt as Gtk.Buildable).get_name());
+				else_stmt.output_dot();
+			}
+		}
 	}
+
 }
-	
+

@@ -17,7 +17,7 @@
  
 namespace IfThenElse
 {
-	public interface BaseCheck:  Base
+	public interface BaseCheck: Base, FixGtk.Buildable
 	{
 		public enum StateType {
 			NO_CHANGE,

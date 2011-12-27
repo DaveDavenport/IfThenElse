@@ -59,6 +59,10 @@ namespace IfThenElse
 				}
 			}
 
+/*
+			BaseTrigger trig = builder.get_object("google_reader_trigger") as BaseTrigger;
+			trig.output_dot();
+*/
 			// Catch Control C
 			GLib.Process.signal(ProcessSignal.INT, Gtk.main_quit);
 

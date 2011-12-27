@@ -1,1 +1,4 @@
 * Write libnotify action
+* Dot output (partially done)
+* Commandline parsing.
+* Make trigger also an action.
