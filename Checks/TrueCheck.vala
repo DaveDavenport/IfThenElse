@@ -24,12 +24,12 @@ namespace IfThenElse
 	 * This check class alternates between true/false. 
 	 * This is usefull purely for testing.
 	 */
-	public class TrueCheck : BaseCheck, Base
+	public class TrueCheck : BaseCheck
 	{
 		public TrueCheck()
 		{
 		}
-		public BaseCheck.StateType check()
+		public override BaseCheck.StateType check()
 		{
 			return StateType.TRUE;
 		}

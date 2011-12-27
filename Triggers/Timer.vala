@@ -44,7 +44,7 @@ namespace IfThenElse
 		
 		public TimerTrigger(uint timeout)
 		{
-				handler = GLib.Timeout.add_seconds(timeout, timer_callback);
+				
 		}
 		~TimerTrigger()
 		{
@@ -52,6 +52,20 @@ namespace IfThenElse
 				GLib.Source.remove(handler);
 				handler = 0;
 			}
+		}
+		
+		public override void enable_trigger()
+		{
+			if(handler == 0) {
+				handler = GLib.Timeout.add_seconds(timeout, timer_callback);
+			}
+		}
+		public override void disable_trigger()
+		{
+			if(handler > 0) {
+				GLib.Source.remove(handler);
+			}
+			handler = 0;
 		}
 	}
 }

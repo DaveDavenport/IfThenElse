@@ -70,9 +70,25 @@ namespace IfThenElse
 				GLib.error("Failed to create thread: %s", e.message);
 			}
 		}
+		
+		/**
+		 * Constructor
+		 */
 		public ExternalToolTrigger(string command_line)
 		{
 			cmd = command_line;
 		}
+
+		/**
+		 * ToDo: Impement this so we can start/stop this trigger.
+		 */
+		 public override void enable_trigger()
+		 {
+			 
+		 }
+		 public override void disable_trigger()
+		 {
+			 
+		 }
 	}
 }

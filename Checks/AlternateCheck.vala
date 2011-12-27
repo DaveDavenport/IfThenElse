@@ -25,7 +25,7 @@ namespace IfThenElse
 	 * This check class alternates between true/false. 
 	 * This is usefull purely for testing.
 	 */
-	public class AlternateCheck : BaseCheck, Base
+	public class AlternateCheck : BaseCheck
 	{
 		public bool state = false;
 		
@@ -39,7 +39,7 @@ namespace IfThenElse
 		/*
 		 * Check function.
 		 */
-		public BaseCheck.StateType check()
+		public override BaseCheck.StateType check()
 		{
 			state = !state;
 			return state?BaseCheck.StateType.TRUE:BaseCheck.StateType.FALSE;

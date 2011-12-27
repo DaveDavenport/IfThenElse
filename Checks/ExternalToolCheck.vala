@@ -20,7 +20,7 @@ using GLib;
 namespace IfThenElse
 {
 
-	public class ExternalToolCheck : BaseCheck, Base
+	public class ExternalToolCheck : BaseCheck
 	{
 		public string cmd {get; set; default = "";}
 		public string? output_compare { get; set; default=null;}
@@ -36,7 +36,7 @@ namespace IfThenElse
 		/*
 		 * Check function.
 		 */
-		public BaseCheck.StateType check()
+		public override BaseCheck.StateType check()
 		{
 			try{
 				int exit_value = 1;

@@ -92,7 +92,7 @@ namespace IfThenElse
 		}
 
 		/**
-		 *  Not used here 
+		 * If we get deactivated, propagate this to the children.
 		 */
 		public void Deactivate()
 		{

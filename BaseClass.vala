@@ -17,7 +17,7 @@
  
 namespace IfThenElse
 {
-	public class Base: GLib.Object, FixGtk.Buildable
+	public abstract class Base: GLib.Object, FixGtk.Buildable
 	{
 	}
 }

@@ -17,7 +17,7 @@
  
 namespace IfThenElse
 {
-	public class BaseTrigger: Base, FixGtk.Buildable
+	public abstract class BaseTrigger: BaseAction, Base, FixGtk.Buildable
 	{
 		// Make this unowned so we don't get circular dependency.
 		private BaseAction action = null;
@@ -39,7 +39,29 @@ namespace IfThenElse
 			}
 			GLib.error("Trying to add a non BaseAction to Trigger");
 		}
+
+		public abstract void enable_trigger();
+		public abstract void disable_trigger();
+
+
+		/**
+		 * BaseAction implementation.
+		 */
+		public void Activate()
+		{
+			enable_trigger();
+		}
 		
+		public void Deactivate()
+		{
+			if(action != null) {
+				action.Deactivate();
+			}
+			disable_trigger();
+		}
+		/**
+		 * Activate the child
+		 */
 		public void fire()
 		{
 			stdout.printf("Fire trigger: %p\n", action);
