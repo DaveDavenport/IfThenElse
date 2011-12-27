@@ -68,6 +68,19 @@ namespace IfThenElse
 			}
 			return StateType.NO_CHANGE;
 		}
+		/**
+		 * Get a description of this class that can be used in the dot
+		 * diagram.
+		 */
+		public override string get_dot_description()
+		{
+			if(output_compare != null)
+			{
+				return "%s == %s".printf(cmd, output_compare);
+			}else{
+				return cmd;
+			}
+		}
 	}
 }
 

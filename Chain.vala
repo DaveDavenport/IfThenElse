@@ -29,7 +29,9 @@ namespace IfThenElse
 		/**
 		 * GtkBuilder function.
 		 */
-		public void add_child (Gtk.Builder builder, GLib.Object child, string? type)
+		public void add_child (Gtk.Builder builder,
+								GLib.Object child,
+								string? type)
 		{
 			if(type == null) return;
 			stdout.printf("Adding to chain: %s\n", type);
@@ -109,11 +111,24 @@ namespace IfThenElse
 				else_stmt.Deactivate();
 		}
 
+		/**
+		 * Generate dot file for this element.
+		 * Diamond square with a yes and a no out arrow.
+		 */
 		public void output_dot(FileStream fp)
 		{
-			fp.printf("%s [label=\"%s\", shape=diamond]\n", 
-							this.get_name(),
-							this.get_name());
+			if(if_stmt != null)
+			{
+				string dot_desc = if_stmt.get_dot_description();
+				fp.printf("%s [label=\"%s\\n(%s)\", shape=diamond]\n", 
+								this.get_name(),
+								this.get_name(),
+								dot_desc);
+			} else {
+				fp.printf("%s [label=\"%s\", shape=diamond]\n", 
+								this.get_name(),
+								this.get_name());
+			}
 			if(then_stmt != null)
 			{
 				fp.printf("%s -> %s [label=\"Yes\"]\n", this.get_name(),

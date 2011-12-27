@@ -45,6 +45,10 @@ namespace IfThenElse
 			return state?BaseCheck.StateType.TRUE:BaseCheck.StateType.FALSE;
 		}
 		
+		public override string get_dot_description()
+		{
+			return "Alternate between true/false";
+		}
 	}
 
 }

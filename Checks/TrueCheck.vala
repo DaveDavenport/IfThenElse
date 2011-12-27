@@ -33,5 +33,9 @@ namespace IfThenElse
 		{
 			return StateType.TRUE;
 		}
+		public override string get_dot_description()
+		{
+			return "Always True";
+		}
 	}
 }

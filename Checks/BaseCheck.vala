@@ -25,5 +25,6 @@ namespace IfThenElse
 			FALSE
 		}
 		public abstract StateType check();
+		public abstract string get_dot_description();
 	}
 }

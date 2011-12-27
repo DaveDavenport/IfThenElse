@@ -14,7 +14,8 @@ A chain is defined like this:
 3. return to 1.
 
 A chain is an action. So it is possible to nest the loops.
-(beside the triggers).
+In case no Actual check is required, an action can be directly connected
+to a Trigger.
 
 An example chain (very simple):
 ~~~~~
@@ -37,4 +38,23 @@ An example chain (very simple):
 </interface>
 ~~~~~
 
+Same behaviour:
+
+~~~~~
+<interface>
+	<object class="IfThenElseExternalToolTrigger" id="mpc_trigger">
+		<property name="cmd">mpc idle player</property>
+		<child>
+			<object class="IfThenElseExternalToolAction" id="mpc_activate_action">
+				<property name="cmd">Scripts/mpc-notify.sh</property>
+			</object>
+		</child>
+	</object>
+</interface>
+~~~~~
+
 This calls "mpc idle", if it returns. It calls Scripts/mpc-notify.sh.
+
+In the first example you could replace the Truecheck with a check that 
+checks the state off mpd (playing) and only shows a popup when mpd is 
+playing.

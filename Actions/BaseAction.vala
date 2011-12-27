@@ -19,14 +19,31 @@ namespace IfThenElse
 {
 	public interface BaseAction : Base, FixGtk.Buildable
 	{
+		/**
+		 * Activate()
+		 * This activates the Action.
+		 * For Example the trigger calls this on the Action when fired.
+		 * Or the Chain calls this on the active branch.
+		 */
 		public virtual void Activate()
 		{
 			GLib.error("Activate action has not been implemented");
 		}
+
+		/**
+		 * Deactivate()
+		 * 
+		 * This Deactivates the Action. Not all actions have to be 
+		 * deactivatable. This is called for example on an action if 
+		 * The Chain condition changes.
+		 */
 		public virtual void Deactivate()
 		{
 			GLib.warning("Deactivate action has not been implemented");
 		}
+		/**
+		 * Generate dot output for this node
+		 */
 		public virtual void output_dot(FileStream fp)
 		{
 			fp.printf("%s [label=\"%s\", shape=oval]\n", 
