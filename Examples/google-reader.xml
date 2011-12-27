@@ -5,7 +5,7 @@
 		-->
 		<child type="trigger">
 			<object class="IfThenElseTimerTrigger" id="google_reader_trigger">
-				<property name="timeout">60</property>
+				<property name="timeout">300</property>
 			</object>
 		</child>
 		<!--
@@ -34,8 +34,12 @@
 					If google reader checks.
 				-->
 				<child type="then">
-					<object class="IfThenElseStatusIconAction" id="google_reader_activate_action">
-							<property name="icon-name">internet-news-reader</property>
+					<object class="IfThenElseMultiAction" id="google_reader_then_multi_action">
+						<child>
+							<object class="IfThenElseStatusIconAction" id="google_reader_activate_action">
+									<property name="icon-name">internet-news-reader</property>
+							</object>
+						</child>
 					</object>
 				</child>
 			</object>

@@ -68,8 +68,6 @@ namespace IfThenElse
 			}
 			return StateType.NO_CHANGE;
 		}
-		
 	}
-
 }
 

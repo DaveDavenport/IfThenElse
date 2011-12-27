@@ -21,33 +21,34 @@ namespace IfThenElse
 {
 	public class StatusIconAction : BaseAction, Base
 	{
-		private bool active = false;
-		private Gtk.StatusIcon status_icon = new Gtk.StatusIcon();
+		private Gtk.StatusIcon status_icon = null;
 
 		/**
 		 * Set icon from icon_name on status_icon.
 		 */
+		private string? _icon_name = null;
 		public string icon_name {
 			set {
-				status_icon.set_from_icon_name(value);
-				status_icon.set_visible(active);
+				_icon_name = value;
+				if(status_icon != null) {
+					status_icon.set_from_icon_name(value);
+				}
 			}
 		}
 
 		/**
 		 * Set icon from stock on status_icon.
 		 */
+		private string? _stock = null;
 		public string stock {
 			set {
-				status_icon.set_from_stock(value);
-				status_icon.set_visible(active);
+				_stock = value;
+				if(status_icon != null) {
+					status_icon.set_from_stock(value);
+				}
 			}
 		}
 
-		construct{
-			stdout.printf("Deactivate\n");
-			status_icon.set_visible(false);
-		}
 
 		~StatusIconAction()
 		{
@@ -62,16 +63,24 @@ namespace IfThenElse
 
 		public void Activate()
 		{
-			active = true;
-			stdout.printf("StatusIcon: Activate\n");
-			status_icon.set_visible(active);
+			if(status_icon == null)
+			{
+				stdout.printf("StatusIcon: Activate\n");
+				status_icon = new Gtk.StatusIcon();
+				// Update the icon.
+				if(_icon_name != null) {
+					status_icon.icon_name = _icon_name;
+				}
+				if(_stock != null) {
+					status_icon.stock = _stock;
+				}
+			}
 		}
 
 		public void Deactivate()
 		{
-			active = false;
 			stdout.printf("StatusIcon: Deactivate\n");
-			status_icon.set_visible(active);
+			status_icon = null;
 		}
 	}
 }

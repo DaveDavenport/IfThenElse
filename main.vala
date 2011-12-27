@@ -36,6 +36,7 @@ namespace IfThenElse
 			a = typeof(DebugAction);
 			a = typeof(ExternalToolAction);
 			a = typeof(StatusIconAction);
+			a = typeof(MultiAction);
 			
 			// Triggers
 			a = typeof(ExternalToolTrigger);

@@ -2,7 +2,7 @@ PROGRAM=ifthenelse
 SOURCES=$(wildcard *.vala **/*.vala)
 
 VALAC=valac
-VALAC_FLAGS=-g --pkg=glib-2.0 --pkg=gtk+-2.0 --vapidir=./Vapi/ --pkg=fix
+VALAC_FLAGS=-g --pkg=glib-2.0 --pkg=gtk+-3.0 --vapidir=./Vapi/ --pkg=fix
 
 all: $(PROGRAM)
 
