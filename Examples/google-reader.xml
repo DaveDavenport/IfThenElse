@@ -49,6 +49,11 @@
 													<property name="file">Images/reader.png</property>
 											</object>
 										</child>
+										<child>
+											<object class="IfThenElseExternalToolAction" id="goog_reader_activate_then_noti">
+													<property name="cmd">Scripts/google-reader-show.sh</property>
+											</object>
+										</child>
 									</object>
 								</child>
 								<child type="else">
