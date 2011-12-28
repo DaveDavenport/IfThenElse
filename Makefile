@@ -1,14 +1,31 @@
 PROGRAM=ifthenelse
 SOURCES=$(wildcard *.vala **/*.vala)
+PACKAGES=gtk+-3.0 glib-2.0
+EMPTY=
 
+
+
+PACKAGE_CHECK=.pkgcheck
+# VALAC magic.
 VALAC=valac
-VALAC_FLAGS=-g --pkg=glib-2.0 --pkg=gtk+-3.0 --vapidir=./Vapi/ --pkg=fix
+VALAC_PACKAGES=$(foreach PKG, $(PACKAGES), --pkg=$(PKG))
+VALAC_FLAGS=-g $(VALAC_PACKAGES) --vapidir=./Vapi/ --pkg=fix
+
+
+
 
 all: $(PROGRAM)
 
-$(PROGRAM): $(SOURCES)
+# Check pkg-config dependencies.
+$(PACKAGE_CHECK): 
+	$(info == Checking dependencies: $(PACKAGES))
+	@pkg-config --exists $(PACKAGES) &&  touch $@
+
+
+
+$(PROGRAM): $(SOURCES) | $(PACKAGE_CHECK)
 	$(VALAC) -o $@  $^ $(VALAC_FLAGS)
 
 clean:
-	$(info Cleaning)
-	rm $(PROGRAM)
+	$(info == Cleaning)
+	@rm -rf $(PROGRAM) $(PACKAGE_CHECK)
