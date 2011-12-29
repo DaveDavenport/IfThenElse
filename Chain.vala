@@ -40,10 +40,16 @@ namespace IfThenElse
 				// Set parent.
 				(child as Base).parent = this;
 			}else if (type == "else") {
+				if(else_stmt != null){
+					GLib.error("Else statement is allready set");
+				}
 				else_stmt = child as BaseAction;
 				// Set parent.
 				(child as Base).parent = this;
 			}else if (type == "then") {
+				if(then_stmt != null){
+					GLib.error("Then statement is allready set");
+				}
 				then_stmt = child as BaseAction;
 				// Set parent.
 				(child as Base).parent = this;

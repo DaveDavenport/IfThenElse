@@ -1,4 +1,3 @@
 * Write libnotify action
-* Make the if-then-else buildable function check if field is allready set.
 * ADd tooltip to status icon.
 
