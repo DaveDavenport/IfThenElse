@@ -26,13 +26,16 @@ namespace IfThenElse
 		public string? output_compare { get; set; default=null;}
 		public bool state = false;
 		
+		public int true_status {get; set; default = 1;}
+		public int false_status {get; set; default=8;}
+		
 		/**
 		 * Constructor
 		 **/
 		public ExternalToolCheck()
 		{
-			
 		}
+		
 		/*
 		 * Check function.
 		 */
@@ -47,9 +50,9 @@ namespace IfThenElse
 				stdout.printf("output: %i:%s vs %s\n", exit_value, output, output_compare);
 				if(output_compare == null)
 				{
-					if(exit_value ==  1){
+					if(exit_value ==  true_status){
 						return StateType.TRUE;
-					}else if (exit_value == 8) {
+					}else if (exit_value == false_status) {
 						return StateType.FALSE;
 					}else{
 						return StateType.NO_CHANGE;
