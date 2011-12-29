@@ -9,7 +9,7 @@ PACKAGE_CHECK=.pkgcheck
 # VALAC magic.
 VALAC=valac
 VALAC_PACKAGES=$(foreach PKG, $(PACKAGES), --pkg=$(PKG))
-VALAC_FLAGS=-g $(VALAC_PACKAGES) --vapidir=./Vapi/ --pkg=fix
+VALAC_FLAGS=-g $(VALAC_PACKAGES) --vapidir=./Vapi/ --pkg=fix --pkg=posix
 
 
 

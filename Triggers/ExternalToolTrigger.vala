@@ -16,6 +16,7 @@
  */
  
 using GLib;
+using Posix;
 
 namespace IfThenElse
 {
@@ -41,34 +42,12 @@ namespace IfThenElse
 			return false;
 		}
 		
-		private void *thread_func()
-		{
-			while(true)
-			{
-				// Wait till a cmd is set (needed for gtkbuilder)
-				while(cmd == null)
-				{
-					GLib.Thread.usleep((ulong)1000000);
-				}
-				try{
-					int exit_status = 0;
-					GLib.Process.spawn_command_line_sync(cmd,null, null, out exit_status);
-					if(exit_status == 0) {
-						GLib.Idle.add(main_thread_callback);
-					}
-				}catch(GLib.SpawnError e)
-				{
-					GLib.error("Failed to spawn child process: %s",
-								e.message);
-				}
-			}
-		}
+
 		construct{
-			try{
-				Thread.create<void *>(thread_func, false);
-			}catch(GLib.Error e){
-				GLib.error("Failed to create thread: %s", e.message);
-			}
+		}
+		~ExternalToolTrigger()
+		{
+			stop_application();
 		}
 		
 		/**
@@ -76,19 +55,57 @@ namespace IfThenElse
 		 */
 		public ExternalToolTrigger(string command_line)
 		{
+			
 			cmd = command_line;
 		}
 
-		/**
-		 * ToDo: Impement this so we can start/stop this trigger.
-		 */
+
+		private GLib.Pid pid = 0;
+		private void child_watch_called(GLib.Pid p, int status)
+		{
+			GLib.Process.close_pid(pid);
+			GLib.stdout.printf("Child watch called.\n");
+			pid = 0;
+			if(status == 0)
+			{
+				fire();
+				
+				start_application();
+			}
+		}
+		private void start_application()
+		{
+			if(pid == 0)
+			{
+				string[] argv;
+				GLib.stdout.printf("Start application\n");
+				GLib.Shell.parse_argv(cmd, out argv);
+
+				foreach (var s in argv)
+				{
+					GLib.stdout.printf("argv: %s\n", s);
+				}
+				GLib.Process.spawn_async(null, argv, null, SpawnFlags.SEARCH_PATH|SpawnFlags.DO_NOT_REAP_CHILD, null, out pid);
+				
+				GLib.ChildWatch.add(pid, child_watch_called);
+			}
+		}
+		private void stop_application()
+		{
+			if(pid > 0)
+			{
+				GLib.stdout.printf("Killing pid: %i\n", (int)pid);
+				Posix.kill((pid_t)pid, 1);
+			}
+		}
+
 		 public override void enable_trigger()
 		 {
-			 
+			 start_application();
 		 }
 		 public override void disable_trigger()
 		 {
-			 
+			stop_application();
 		 }
 	}
 }

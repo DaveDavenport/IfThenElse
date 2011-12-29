@@ -1,5 +1,4 @@
 * Write libnotify action
-* Make trigger also an action. (partially done, update the external tool trigger).
 * Make the if-then-else buildable function check if field is allready set.
 * ADd tooltip to status icon.
 

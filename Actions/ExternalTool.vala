@@ -16,33 +16,64 @@
  */
  
 using GLib;
+using Posix;
 
 namespace IfThenElse
 {
 	public class ExternalToolAction: BaseAction, Base
 	{
 		public string cmd {get; set; default = "";}
+		public bool kill_child {get; set; default = false;}
 		
 		public ExternalToolAction(string cmd)
 		{
 			this.cmd = cmd;
 		}
+				private GLib.Pid pid = 0;
+		private void child_watch_called(GLib.Pid p, int status)
+		{
+			GLib.Process.close_pid(p);
+			GLib.stdout.printf("Child watch called.\n");
+			pid = 0;
+		}
+		private void start_application()
+		{
+			if(kill_child)
+			{
+				stop_application();
+				pid = 0;
+			}
+			if(pid == 0)
+			{
+				string[] argv;
+				GLib.stdout.printf("Start application\n");
+				GLib.Shell.parse_argv(cmd, out argv);
+
+				foreach (var s in argv)
+				{
+					GLib.stdout.printf("argv: %s\n", s);
+				}
+				GLib.Process.spawn_async(null, argv, null, SpawnFlags.SEARCH_PATH|SpawnFlags.DO_NOT_REAP_CHILD, null, out pid);
+				
+				GLib.ChildWatch.add(pid, child_watch_called);
+			}
+		}
+		private void stop_application()
+		{
+			if(pid > 0)
+			{
+				GLib.stdout.printf("Killing pid: %i\n", (int)pid);
+				Posix.kill((pid_t)pid, 1);
+			}
+		}
 		
 		public void Activate()
 		{
-			//stdout.printf("Activates: %s\n", message);
-			//GLib.debug("Activates "+message);
-			try{
-				GLib.Process.spawn_command_line_async(cmd);
-			} catch(GLib.SpawnError e) {
-					GLib.error("Failed to spawn external program: %s\n",
-						e.message);
-			}
+			start_application();
 		}
 		public void Deactivate()
 		{
-			//stdout.printf("Deactivates: %s\n", message);
-			//GLib.debug("Deactivates "+message);
+			stop_application();
 		}
 	}
 }

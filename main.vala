@@ -131,6 +131,19 @@ namespace IfThenElse
 			Gtk.main();
 			stdout.printf("\nQuit....\n");
 
+			// Iterates over all input files.
+			objects = builder.get_objects();
+			foreach ( GLib.Object o in objects)
+			{
+				if((o as Base).is_toplevel())
+				{
+					// Activate the toplevel one.
+					if(o is BaseAction)
+					{
+						(o as BaseAction).Deactivate();
+					}
+				}
+			}
 			// Destroy
 			builder = null;
 			return 0;
