@@ -19,6 +19,7 @@ using GLib;
 
 namespace IfThenElse
 {
+#if ENABLE_GTK_TOOLS
 	public class StatusIconAction : BaseAction, Base
 	{
 		private Gtk.StatusIcon status_icon = null;
@@ -102,6 +103,8 @@ namespace IfThenElse
 			status_icon = null;
 		}
 	}
+// ENABLE_GTK_TOOLS
+#endif 
 }
 
 

@@ -10,6 +10,7 @@ PACKAGE_CHECK=.pkgcheck
 VALAC=valac
 VALAC_PACKAGES=$(foreach PKG, $(PACKAGES), --pkg=$(PKG))
 VALAC_FLAGS=-g $(VALAC_PACKAGES) --vapidir=./Vapi/ --pkg=fix --pkg=posix
+VALAC_FLAGS+= -D ENABLE_GTK_TOOLS
 
 
 
