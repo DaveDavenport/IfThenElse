@@ -28,7 +28,8 @@ namespace IfThenElse
 		
 		public int true_status {get; set; default = 1;}
 		public int false_status {get; set; default=8;}
-		
+		public bool compare_old_state {get;set;default=false;}
+		private int old_state = -99999;
 		/**
 		 * Constructor
 		 **/
@@ -50,6 +51,14 @@ namespace IfThenElse
 				stdout.printf("output: %i:%s vs %s\n", exit_value, output, output_compare);
 				if(output_compare == null)
 				{
+					if(compare_old_state)
+					{
+						if(old_state == exit_value)
+						{
+							return StateType.NO_CHANGE;
+						}
+						old_state = exit_value;
+					}
 					if(exit_value ==  true_status){
 						return StateType.TRUE;
 					}else if (exit_value == false_status) {
