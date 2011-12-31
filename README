@@ -23,10 +23,7 @@ An example chain (very simple):
 	<object class="IfThenElseExternalToolTrigger" id="mpc_trigger">
 		<property name="cmd">mpc idle player</property>
 		<child>
-			<object class="IfThenElseChain" id="mpc_chain">
-				<child type="if">
-					<object class="IfThenElseTrueCheck" id="mpc_check"/>
-				</child>
+			<object class="IfThenElseTrueCheck" id="mpc_check"/>
 				<child type="then">
 					<object class="IfThenElseExternalToolAction" id="mpc_activate_action">
 						<property name="cmd">Scripts/mpc-notify.sh</property>
