@@ -78,7 +78,7 @@ namespace IfThenElse
 					GLib.error("Failed to spawn external program: %s\n",
 						e.message);
 			}
-			return StateType.NO_CHANGE;
+			//return StateType.NO_CHANGE;
 		}
 		/**
 		 * Get a description of this class that can be used in the dot

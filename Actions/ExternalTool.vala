@@ -47,15 +47,19 @@ namespace IfThenElse
 			{
 				string[] argv;
 				GLib.stdout.printf("Start application\n");
-				GLib.Shell.parse_argv(cmd, out argv);
+				try {
+					GLib.Shell.parse_argv(cmd, out argv);
 
-				foreach (var s in argv)
-				{
-					GLib.stdout.printf("argv: %s\n", s);
+					foreach (var s in argv)
+					{
+						GLib.stdout.printf("argv: %s\n", s);
+					}
+					GLib.Process.spawn_async(null, argv, null, SpawnFlags.SEARCH_PATH|SpawnFlags.DO_NOT_REAP_CHILD, null, out pid);
+
+					GLib.ChildWatch.add(pid, child_watch_called);
+				} catch (Error e) {
+					GLib.warning("Failed to start application: %s", e.message);
 				}
-				GLib.Process.spawn_async(null, argv, null, SpawnFlags.SEARCH_PATH|SpawnFlags.DO_NOT_REAP_CHILD, null, out pid);
-				
-				GLib.ChildWatch.add(pid, child_watch_called);
 			}
 		}
 		private void stop_application()
