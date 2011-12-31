@@ -5,16 +5,12 @@
 	<object class="IfThenElseTimerTrigger" id="google_reader_trigger">
 		<property name="timeout">600</property>
 		<child>
-			<object class="IfThenElseChain" id ="google_reader_network">
-				<!--
-					Network
-				-->
-				<child type="if">
-					<object class="IfThenElseExternalToolCheck" id="google_reader_network_check">
-							<property name="cmd">nmcli -t -f STATE nm</property>
-							<property name="output_compare">connected</property>
-					</object>
-				</child>
+			<!--
+				Network
+			-->
+			<object class="IfThenElseExternalToolCheck" id="google_reader_network_check">
+				<property name="cmd">nmcli -t -f STATE nm</property>
+				<property name="output_compare">connected</property>
 				<!-- 
 					If we are not connected
 				-->
@@ -30,15 +26,11 @@
 					<object class="IfThenElseTimerTrigger" id="google_reader_chain_trigger">
 						<property name="timeout">150</property>
 						<child>
-							<object class="IfThenElseChain" id="google_reader_chain">
 								<!-- 
 									Check google reader.
 								-->
-								<child type="if">
-									<object class="IfThenElseExternalToolCheck" id="google_reader_check">
-										<property name="cmd">Scripts/google-reader-check.sh</property>
-									</object>
-								</child>
+							<object class="IfThenElseExternalToolCheck" id="google_reader_check">
+								<property name="cmd">Scripts/google-reader-check.sh</property>
 								<!--
 									If google reader checks.
 								-->

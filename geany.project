@@ -16,30 +16,9 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=2
-FILE_NAME_0=993;Vala;0;16;1;1;0;/home/qball/Programming/IfThenElse/BaseClass.vala;0;4
-FILE_NAME_1=3340;Vala;0;16;1;1;0;/home/qball/Programming/IfThenElse/Chain.vala;0;4
-FILE_NAME_2=2458;Vala;0;16;1;1;0;/home/qball/Programming/IfThenElse/main.vala;0;4
-FILE_NAME_3=1553;Vala;0;16;1;1;0;/home/qball/Programming/IfThenElse/Actions/BaseAction.vala;0;4
-FILE_NAME_4=888;Vala;0;16;1;1;0;/home/qball/Programming/IfThenElse/Actions/DebugAction.vala;0;4
-FILE_NAME_5=1173;Vala;0;16;1;1;0;/home/qball/Programming/IfThenElse/Actions/ExternalTool.vala;0;4
-FILE_NAME_6=1286;Vala;0;16;1;1;0;/home/qball/Programming/IfThenElse/Checks/AlternateCheck.vala;0;4
-FILE_NAME_7=911;Vala;0;16;1;1;0;/home/qball/Programming/IfThenElse/Checks/BaseCheck.vala;0;4
-FILE_NAME_8=991;Vala;0;16;1;1;0;/home/qball/Programming/IfThenElse/Checks/TrueCheck.vala;0;4
-FILE_NAME_9=1730;Vala;0;16;1;1;0;/home/qball/Programming/IfThenElse/Triggers/BaseTrigger.vala;0;4
-FILE_NAME_10=2097;Vala;0;16;1;1;0;/home/qball/Programming/IfThenElse/Triggers/ExternalToolTrigger.vala;0;4
-FILE_NAME_11=1784;Vala;0;16;1;1;0;/home/qball/Programming/IfThenElse/Triggers/Timer.vala;0;4
-FILE_NAME_12=927;None;0;16;1;1;0;/home/qball/Programming/IfThenElse/test.dot;0;4
-FILE_NAME_13=1801;XML;0;16;1;1;0;/home/qball/Programming/IfThenElse/Examples/google-reader.xml;0;4
-FILE_NAME_14=56;None;0;16;1;1;0;/home/qball/Programming/IfThenElse/TODO;0;4
-FILE_NAME_15=1863;Vala;0;16;1;1;0;/home/qball/Programming/IfThenElse/Checks/ExternalToolCheck.vala;0;4
-FILE_NAME_16=37223;Vala;0;16;1;1;0;/usr/share/vala-0.16/vapi/glib-2.0.vapi;0;4
-FILE_NAME_17=1883;Vala;0;16;1;1;0;/home/qball/Programming/IfThenElse/Actions/MultiAction.vala;0;4
-FILE_NAME_18=741;Vala;0;16;1;1;0;/home/qball/Programming/IfThenElse/Actions/StatusIconAction.vala;0;4
-FILE_NAME_19=1222;Vala;0;16;1;1;0;/home/qball/Programming/SSHConf/sshconf.vala;0;4
-FILE_NAME_20=4047;Vala;0;16;1;1;0;/home/qball/Programming/EvO/test.vala;0;4
-FILE_NAME_21=940;None;0;16;1;1;0;/home/qball/Programming/IfThenElse/README;0;4
-FILE_NAME_22=307;Make;0;16;1;1;0;/home/qball/Programming/IfThenElse/Makefile;0;4
+current_page=1
+FILE_NAME_0=2510;Vala;0;16;1;1;0;/home/qball/Programming/IfThenElse/main.vala;0;4
+FILE_NAME_1=3116;XML;0;16;1;1;0;/home/qball/Programming/IfThenElse/Examples/Domotica.xml;0;4
 
 [build-menu]
 ValaFT_00_LB=_Compile

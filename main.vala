@@ -58,10 +58,8 @@ namespace IfThenElse
 			Gtk.init(ref argv);
 
 			// Register the types.
-			var a = typeof(Chain);
-
 			// Checks
-			a = typeof(TrueCheck);
+			var a = typeof(TrueCheck);
 			a = typeof(AlternateCheck);
 			a = typeof(ExternalToolCheck);
 

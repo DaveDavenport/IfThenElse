@@ -3,17 +3,9 @@
 		<property name="cmd">mpc -h 192.150.0.106 idle player</property>
 
 		<child>
-			<object class="IfThenElseChain" id="mpc_chain">
-
-				<child type="if">
-					<object class="IfThenElseTrueCheck" id="mpc_check"/>
-				</child>
-				<child type="then">
-					<object class="IfThenElseExternalToolAction" id="mpc_activate_action">
-						<property name="cmd">zenity --warning --text=\"owh\"</property>
-						<property name="kill_child">true</property>
-					</object>
-				</child>
+			<object class="IfThenElseExternalToolAction" id="mpc_activate_action">
+				<property name="cmd">zenity --warning --text=\"owh\"</property>
+				<property name="kill_child">true</property>
 			</object>
 		</child>
 	</object>

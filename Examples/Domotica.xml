@@ -4,15 +4,11 @@
 		<child>
 			<object class="IfThenElseMultiAction" id="main_multiplier">
 				<child>
-					<object class="IfThenElseChain" id="lights_chain">
-						<child type="if">
-							<object class="IfThenElseExternalToolCheck" id="check_light">
-								<property name="cmd">./Scripts/domotica_check_light.sh</property>
-								<property name="true_status">1</property>
-								<property name="false_status">0</property>
-								<property name="compare_old_state">true</property>
-							 </object>
-						</child>
+				<object class="IfThenElseExternalToolCheck" id="check_light">
+					<property name="cmd">./Scripts/domotica_check_light.sh</property>
+					<property name="true_status">1</property>
+					<property name="false_status">0</property>
+					<property name="compare_old_state">true</property>
 						<child type="then">
 							<object class="IfThenElseMultiAction" id="multiplier">
 								<child>
@@ -54,19 +50,25 @@
 					</object>
 				</child>
 				<child>
-					<object class="IfThenElseChain" id="movie_chain">
-						<child type="if">
-							<object class="IfThenElseExternalToolCheck" id="check_movie">
-								<property name="cmd">./Scripts/check_movie.sh</property>
-								<property name="true_status">1</property>
-								<property name="false_status">0</property>
-								<property name="compare_old_state">true</property>
-							 </object>
-						</child>
+					<object class="IfThenElseExternalToolCheck" id="check_movie">
+						<property name="cmd">./Scripts/check_movie.sh</property>
+						<property name="true_status">1</property>
+						<property name="false_status">0</property>
+						<property name="compare_old_state">true</property>
 						<child type="then">
-							<object class="IfThenElseExternalToolAction" id="movie_on_action">
-								<property name="cmd">gajim-remote change_status away "watching movie"</property>
-								<property name="kill_child">false</property>
+							<object class="IfThenElseMultiAction" id="movies_on_multi">
+								<child>
+									<object class="IfThenElseExternalToolAction" id="movie_on_action">
+										<property name="cmd">gajim-remote change_status away "watching movie"</property>
+										<property name="kill_child">false</property>
+									</object>
+								</child>
+								<child>
+									<object class="IfThenElseExternalToolAction" id="movie_on_action2">
+										<property name="cmd">mpc -h 192.150.0.106 pause</property>
+										<property name="kill_child">false</property>
+									</object>
+								</child>
 							</object>
 						</child>
 						<child type="else">
