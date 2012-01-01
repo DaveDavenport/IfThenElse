@@ -62,6 +62,7 @@ namespace IfThenElse
 			var a = typeof(TrueCheck);
 			a = typeof(AlternateCheck);
 			a = typeof(ExternalToolCheck);
+			a = typeof(TimeCheck);
 
 			// Actions.
 			a = typeof(DebugAction);
@@ -77,7 +78,6 @@ namespace IfThenElse
 
 
 			// Commandline options parsing.
-
 			GLib.OptionContext og = new GLib.OptionContext("IfThenElse");
 			og.add_main_entries(entries,null);
 			try{
