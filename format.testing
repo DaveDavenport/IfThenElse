@@ -1,0 +1,19 @@
+[Check]
+Type=ExternalToolCheck
+Cmd=check_lights.sh
+
+[Trigger]
+Type=TimerTrigger
+
+[Action1]
+Type=ExternalToolAction
+Cmd=mpc play
+
+[Action2]
+Type=ExternalToolAction
+Cmd=mpc pause
+
+Trigger->Check
+Check[True]-->Action1
+Check[False]-->Action1
+

@@ -16,9 +16,14 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
-current_page=1
-FILE_NAME_0=2510;Vala;0;16;1;1;0;/home/qball/Programming/IfThenElse/main.vala;0;4
+current_page=6
+FILE_NAME_0=2038;Vala;0;16;1;1;0;/home/qball/Programming/IfThenElse/main.vala;0;4
 FILE_NAME_1=3116;XML;0;16;1;1;0;/home/qball/Programming/IfThenElse/Examples/Domotica.xml;0;4
+FILE_NAME_2=684;Vala;0;16;1;1;0;/home/qball/Programming/IfThenElse/Checks/ExternalToolCheck.vala;0;4
+FILE_NAME_3=802;Vala;0;16;1;1;0;/home/qball/Programming/IfThenElse/Checks/BaseCheck.vala;0;4
+FILE_NAME_4=0;Vala;0;16;1;1;0;/home/qball/Programming/IfThenElse/Checks/TrueCheck.vala;0;4
+FILE_NAME_5=1130;Vala;0;16;1;1;0;/home/qball/Programming/IfThenElse/Checks/TimeCheck.vala;0;4
+FILE_NAME_6=669;XML;0;16;1;1;0;/home/qball/Programming/IfThenElse/Examples/movies-control.xml;0;4
 
 [build-menu]
 ValaFT_00_LB=_Compile
