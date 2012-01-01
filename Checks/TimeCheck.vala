@@ -26,9 +26,9 @@ namespace IfThenElse
 	 */
 	public class TimeCheck : BaseCheck
 	{
-		public uint hour {get; set; default = 8;}
-		public uint minute { get; set; default = 0;}
-		public bool prev_state = false;
+		public uint hour		{get; set; default = 8;}
+		public uint minute		{get; set; default = 0;}
+		private bool prev_state = false;
 		
 		// TimeCheck
 		public TimeCheck()
