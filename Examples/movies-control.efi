@@ -1,0 +1,61 @@
+[LightsTimer]
+type=TimerTrigger
+timeout=5
+action=CheckMovie
+
+[CheckMovie]
+type=ExternalToolCheck
+cmd=./Scripts/check_movie.sh
+true_status=1
+false_status=0
+compare_old_state=true
+then_action=LightsOnMulti
+else_action=LightsOffMulti
+
+[LightsOnMulti]
+type=MultiAction
+action=LightsOnAction;LightsOnAction1;LightsOnAction2;LightsOnAction3;LightsOnAction4
+
+[LightsOnAction]
+type=ExternalToolAction
+kill_child=false
+cmd=mpc -h 192.150.0.103 pause
+
+[LightsOnAction1]
+type=ExternalToolAction
+kill_child=false
+cmd=irsend SEND_ONCE NAD_SR6 Disc
+
+[LightsOnAction2]
+type=ExternalToolAction
+kill_child=false
+cmd=switch_lights.sh A2 off
+
+[LightsOnAction3]
+type=ExternalToolAction
+kill_child=false
+cmd=switch_lights.sh A3 off
+
+[LightsOnAction4]
+type=ExternalToolAction
+kill_child=false
+cmd=gajim-remote change_status away "Watching Movie"
+
+[LightsOffMulti]
+type=MultiAction
+action=LightsOffAction;LightsOffAction1;LightsOffAction2
+
+[LightsOffAction]
+type=ExternalToolAction
+kill_child=false
+cmd=gajim-remote change_status status online 
+
+[LightsOffAction1]
+type=ExternalToolAction
+kill_child=false
+cmd=switch_lights.sh A2 on
+
+[LightsOffAction2]
+type=ExternalToolAction
+kill_child=false
+cmd=irsend SEND_ONCE NAD_SR6 Video-1
