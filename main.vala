@@ -19,6 +19,8 @@ using GLib;
 
 namespace IfThenElse
 {
+	private unowned string[] g_argv;
+	private Parser parser = null;
 	private GLib.MainLoop  loop = null;
 	string? dot_file = null;
 	const GLib.OptionEntry[] entries = {
@@ -30,6 +32,25 @@ namespace IfThenElse
 	private void quit_program()
 	{
 		if(loop != null) loop.quit();
+	}
+
+	private void reload()
+	{
+		parser = null;
+		parser = new IfThenElse.Parser();
+		// Load the files passed on the commandline.
+		for(int i =1; i < g_argv.length; i++)
+		{
+			unowned string file = g_argv[i];
+			stdout.printf("Load file: %s\n", file);
+			try{
+				parser.add_from_file(file);
+			}catch(GLib.Error e) {
+				GLib.error("Failed to load builder file: %s, %s\n",
+						file, e.message);
+			}
+		}
+
 	}
 
 	// This generates a dot file for the given obect structure
@@ -90,22 +111,10 @@ namespace IfThenElse
 				GLib.error("Failed to parse command line options: %s\n", 
 							e.message);
 			}
+			g_argv = argv;
 
-			var parser = new IfThenElse.Parser();
+			reload();
 
-
-			// Load the files passed on the commandline.
-			for(int i =1; i < argv.length; i++)
-			{
-				unowned string file = argv[i];
-				stdout.printf("Load file: %s\n", file);
-				try{
-					parser.add_from_file(file);
-				}catch(GLib.Error e) {
-					GLib.error("Failed to load builder file: %s, %s\n",
-							file, e.message);
-				}
-			}
 
 			// Generate a dot file.
 			if(dot_file != null)
@@ -131,8 +140,12 @@ namespace IfThenElse
 			}
 			// Create main loop.
 			loop = new GLib.MainLoop();
+
 			// Catch Control C
 			GLib.Process.signal(ProcessSignal.INT, quit_program);
+
+			// Reload configuration on signal.
+			GLib.Process.signal(ProcessSignal.USR1, reload);
 
 			// Run program.
 			stdout.printf("Start....\n");
