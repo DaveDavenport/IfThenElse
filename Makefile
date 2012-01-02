@@ -2,6 +2,7 @@ PROGRAM=ifthenelse
 SOURCES=$(wildcard *.vala **/*.vala)
 PACKAGES=glib-2.0
 EMPTY=
+PREFIX=~/.local/
 
 
 
@@ -29,3 +30,6 @@ $(PROGRAM): $(SOURCES) | $(PACKAGE_CHECK)
 clean:
 	$(info == Cleaning)
 	@rm -rf $(PROGRAM) $(PACKAGE_CHECK)
+
+install:
+	install $(PROGRAM) $(PREFIX)/bin/
