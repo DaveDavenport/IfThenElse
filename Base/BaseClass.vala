@@ -22,7 +22,10 @@ namespace IfThenElse
 		public string name {get;set;default="n/a";}
 		public unowned Base parent = null;
 
-		
+		~Base()
+		{
+			stdout.printf("Destroying: %s\n", this.name);
+		}	
 		/**
 		 * Check if it is a toplevel object.
 		 */

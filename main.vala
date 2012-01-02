@@ -102,7 +102,7 @@ namespace IfThenElse
 				try{
 					parser.add_from_file(file);
 				}catch(GLib.Error e) {
-					GLib.error("Failed to load builder file: %s,%s\n",
+					GLib.error("Failed to load builder file: %s, %s\n",
 							file, e.message);
 				}
 			}

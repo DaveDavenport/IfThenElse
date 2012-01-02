@@ -69,8 +69,14 @@ namespace IfThenElse
 				}else{
 						if(output_compare.strip() == output.strip())
 						{
+							if(compare_old_state && old_state == (int)StateType.TRUE)
+								return StateType.NO_CHANGE;
+							old_state = StateType.TRUE;
 							return StateType.TRUE;
 						} else {
+							if(compare_old_state && old_state == (int)StateType.FALSE)
+								return StateType.NO_CHANGE;
+							old_state = StateType.FALSE;
 							return StateType.FALSE;
 						}
 				}
