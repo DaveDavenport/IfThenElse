@@ -4,12 +4,17 @@ namespace IfThenElse
 {
 
 	errordomain ParserError {
+		// Errors that occured during creation off a node.
 		NODE_CREATION,
-			NODE_SET_PROPERTY
+		// Errors that occured during the setting of a property.
+		NODE_SET_PROPERTY
 	}
-	class Parser : GLib.Object
+
+	class Parser
 	{
-		private GLib.HashTable<string, GLib.Object> objects = new HashTable<string, GLib.Object>(str_hash,str_equal);
+		// List with key, object. This to 'emulate' gtkbuilder.
+		private GLib.HashTable<string, GLib.Object> objects = 
+			new HashTable<string, GLib.Object>(str_hash,str_equal);
 		/**
 		 * Constructor
 		 */
@@ -18,9 +23,18 @@ namespace IfThenElse
 
 		}
 		/**
+		 * Deconstructor
+		 */
+		~Parser()
+		{
+			stdout.printf("Destroying parser\n");
+		}
+
+		/**
 		 * Load classes from key file
 		 */
-		private void load_classes(string prefix, GLib.KeyFile kf) throws GLib.KeyFileError, ParserError
+		private void load_classes(string prefix, GLib.KeyFile kf) 
+			throws GLib.KeyFileError, ParserError
 		{
 			// Create all instances.
 			foreach(string group in kf.get_groups())
@@ -35,11 +49,14 @@ namespace IfThenElse
 					// Should never trigger on one file as groups are merged.
 					throw new ParserError.NODE_CREATION("Node %s allready exists.", group);
 				}
+
+				// Create the object.
 				GLib.Object object = GLib.Object.new(tp,null);
 				object.set("name", prefix+group);
 				objects.insert(prefix+group, object);
 			}
 
+			// Loading properties.
 			foreach(string group in kf.get_groups())
 			{
 				GLib.Object object = objects[prefix+group];
@@ -99,7 +116,7 @@ namespace IfThenElse
 					else if (ps.value_type == typeof(bool)) {
 						bool temp = kf.get_boolean(group,prop);
 						object.set(prop, temp);
-					}else {
+					} else {
 						throw new ParserError.NODE_SET_PROPERTY("Unknown property type: %s::%s(%s)", group,
 								prop, ps.value_type.name());
 					}
