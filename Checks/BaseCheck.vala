@@ -17,7 +17,7 @@
  
 namespace IfThenElse
 {
-	public abstract class BaseCheck: BaseAction,Base, FixGtk.Buildable
+	public abstract class BaseCheck: BaseAction,Base
 	{
 		// Then/Else actions.
 		private BaseAction?  else_stmt 	  = null;
@@ -34,10 +34,8 @@ namespace IfThenElse
 
 
 		/**
-		 * GtkBuilder function.
 		 */
-		public void add_child (Gtk.Builder builder,
-								GLib.Object child,
+		public void add_child (GLib.Object child,
 								string? type)
 		{
 			if(type == null) return;
@@ -106,19 +104,19 @@ namespace IfThenElse
 		{
 			string dot_desc = this.get_dot_description();
 			fp.printf("%s [label=\"%s\\n(%s)\", shape=diamond]\n", 
-					this.get_name(),
-					this.get_name(),
+					this.name,
+					this.name,
 								dot_desc);
 			if(then_stmt != null)
 			{
-				fp.printf("%s -> %s [label=\"Yes\"]\n", this.get_name(),
-				(then_stmt as Gtk.Buildable).get_name());
+				fp.printf("%s -> %s [label=\"Yes\"]\n", this.name,
+						then_stmt.name);
 				then_stmt.output_dot(fp);
 			}
 			if (else_stmt != null)
 			{
-				fp.printf("%s -> %s [label=\"No\"]\n", this.get_name(),
-				(else_stmt as Gtk.Buildable).get_name());
+				fp.printf("%s -> %s [label=\"No\"]\n", this.name,
+						else_stmt.name);
 				else_stmt.output_dot(fp);
 			}
 		}

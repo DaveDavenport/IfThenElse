@@ -16,10 +16,10 @@
  */
  
 using GLib;
-using Gtk;
 
 namespace IfThenElse
 {
+	private GLib.MainLoop  loop = null;
 	string? dot_file = null;
 	const GLib.OptionEntry[] entries = {
 		{"dot", 	'd',	0,	GLib.OptionArg.FILENAME, 	ref dot_file,
@@ -27,9 +27,14 @@ namespace IfThenElse
 		{null}
 	};
 
+	private void quit_program()
+	{
+		if(loop != null) loop.quit();
+	}
+
 	// This generates a dot file for the given obect structure
 	// (builder).
-	static void generate_dot_file(Gtk.Builder builder)
+	static void generate_dot_file(Parser builder)
 	{
 		FileStream fp = FileStream.open(dot_file, "w");
 		// Print header.
@@ -55,7 +60,6 @@ namespace IfThenElse
 	
 	static int main(string[] argv)
 	{
-			Gtk.init(ref argv);
 
 			// Register the types.
 			// Checks
@@ -87,14 +91,16 @@ namespace IfThenElse
 							e.message);
 			}
 
+			var parser = new IfThenElse.Parser();
+
+
 			// Load the files passed on the commandline.
-			var builder = new Gtk.Builder();
 			for(int i =1; i < argv.length; i++)
 			{
 				unowned string file = argv[i];
 				stdout.printf("Load file: %s\n", file);
 				try{
-					builder.add_from_file(file);
+					parser.add_from_file(file);
 				}catch(GLib.Error e) {
 					GLib.error("Failed to load builder file: %s,%s\n",
 							file, e.message);
@@ -104,13 +110,13 @@ namespace IfThenElse
 			// Generate a dot file.
 			if(dot_file != null)
 			{
-				generate_dot_file(builder);
+				generate_dot_file(parser);
 				// Exit succesfull
 				return 0;
 			}
 			
 			// Iterates over all input files.
-			var objects = builder.get_objects();
+			var objects = parser.get_objects();
 			foreach ( GLib.Object o in objects)
 			{
 				if((o as Base).is_toplevel())
@@ -118,21 +124,23 @@ namespace IfThenElse
 					// Activate the toplevel one.
 					if(o is BaseAction)
 					{
+						stdout.printf("==== Starting: %s\n", (o as BaseAction).name);
 						(o as BaseAction).Activate();
 					}
 				}
 			}
-
+			// Create main loop.
+			loop = new GLib.MainLoop();
 			// Catch Control C
-			GLib.Process.signal(ProcessSignal.INT, Gtk.main_quit);
+			GLib.Process.signal(ProcessSignal.INT, quit_program);
 
 			// Run program.
 			stdout.printf("Start....\n");
-			Gtk.main();
+			loop.run();
 			stdout.printf("\nQuit....\n");
 
 			// Iterates over all input files.
-			objects = builder.get_objects();
+			objects = parser.get_objects();
 			foreach ( GLib.Object o in objects)
 			{
 				if((o as Base).is_toplevel())
@@ -145,7 +153,7 @@ namespace IfThenElse
 				}
 			}
 			// Destroy
-			builder = null;
+			parser = null;
 			return 0;
 	}
 }

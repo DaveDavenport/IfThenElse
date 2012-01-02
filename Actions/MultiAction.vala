@@ -18,14 +18,14 @@
 using GLib;
 namespace IfThenElse
 {
-	public class MultiAction : BaseAction, Base, FixGtk.Buildable
+	public class MultiAction : BaseAction, Base
 	{
 		private List <BaseAction> actions;
 
 		/**
 		 * GtkBuilder function.
 		 */
-		public void add_child (Gtk.Builder builder, GLib.Object child, string? type)
+		public void add_child (GLib.Object child, string? type)
 		{
 			if(child is BaseAction)
 			{
@@ -68,12 +68,12 @@ namespace IfThenElse
 		public void output_dot(FileStream fp)
 		{
 			fp.printf("%s [label=\"%s\", shape=oval]\n", 
-					this.get_name(),
-					this.get_name());
+					this.name,
+					this.name);
 			foreach(unowned BaseAction action in actions)
 			{
-				fp.printf("%s -> %s\n", this.get_name(), 
-						action.get_name());
+				fp.printf("%s -> %s\n", this.name, 
+						action.name);
 				action.output_dot(fp);
 			}
 		}

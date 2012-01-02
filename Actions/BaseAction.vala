@@ -17,8 +17,13 @@
  
 namespace IfThenElse
 {
-	public interface BaseAction : Base, FixGtk.Buildable
+	public interface BaseAction : Base
 	{
+
+		public virtual void add_child(GLib.Object obj, string? type)
+		{
+
+		}
 		/**
 		 * Activate()
 		 * This activates the Action.
@@ -47,8 +52,8 @@ namespace IfThenElse
 		public virtual void output_dot(FileStream fp)
 		{
 			fp.printf("%s [label=\"%s\", shape=oval]\n", 
-						this.get_name(),
-						this.get_name());
+						this.name,
+						this.name);
 		}
 	}
 }

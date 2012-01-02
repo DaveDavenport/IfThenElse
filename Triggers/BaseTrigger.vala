@@ -17,7 +17,7 @@
  
 namespace IfThenElse
 {
-	public abstract class BaseTrigger: BaseAction, Base, FixGtk.Buildable
+	public abstract class BaseTrigger: BaseAction, Base
 	{
 		// Make this unowned so we don't get circular dependency.
 		protected BaseAction action = null;
@@ -25,7 +25,7 @@ namespace IfThenElse
 		/**
 		 * GtkBuilder function.
 		 */
-		public void add_child (Gtk.Builder builder, GLib.Object child, string? type)
+		public void add_child (GLib.Object child, string? type)
 		{
 			if(action != null) {
 				GLib.error("You can only add one action to a trigger.\n"+
@@ -75,9 +75,9 @@ namespace IfThenElse
 		public virtual void output_dot(FileStream fp)
 		{
 			fp.printf("'%s' [label=\"%s\", shape=oval]\n", 
-						this.get_name(),
-						this.get_name());
-			fp.printf("%s -> %s\n", this.get_name(), (action as Gtk.Buildable).get_name());
+						this.name,
+						this.name);
+			fp.printf("%s -> %s\n", this.name, action.name);
 			this.action.output_dot(fp);
 		}
 	}

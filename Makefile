@@ -1,6 +1,6 @@
 PROGRAM=ifthenelse
 SOURCES=$(wildcard *.vala **/*.vala)
-PACKAGES=gtk+-3.0 glib-2.0
+PACKAGES=glib-2.0
 EMPTY=
 
 
@@ -9,8 +9,7 @@ PACKAGE_CHECK=.pkgcheck
 # VALAC magic.
 VALAC=valac
 VALAC_PACKAGES=$(foreach PKG, $(PACKAGES), --pkg=$(PKG))
-VALAC_FLAGS=-g $(VALAC_PACKAGES) --vapidir=./Vapi/ --pkg=fix --pkg=posix
-VALAC_FLAGS+= -D ENABLE_GTK_TOOLS
+VALAC_FLAGS=-g $(VALAC_PACKAGES) --vapidir=./Vapi/ --pkg=posix
 
 
 

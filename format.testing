@@ -1,19 +1,24 @@
 [Check]
-Type=ExternalToolCheck
-Cmd=check_lights.sh
+type=ExternalToolCheck
+cmd=Scripts/check_movie.sh
+# Properties
+true_status=1
+false_status=0
+compare_old_state=true
+#Children
+childthen=Action2
+childelse=Action1
 
 [Trigger]
-Type=TimerTrigger
+type=TimerTrigger
+timeout=5
+child=Check
 
 [Action1]
-Type=ExternalToolAction
-Cmd=mpc play
+type=ExternalToolAction
+cmd=mpc play
 
 [Action2]
-Type=ExternalToolAction
-Cmd=mpc pause
-
-Trigger->Check
-Check[True]-->Action1
-Check[False]-->Action1
+type=ExternalToolAction
+cmd=mpc pause
 

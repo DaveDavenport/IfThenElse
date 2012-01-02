@@ -72,10 +72,10 @@ namespace IfThenElse
 		public override void output_dot(FileStream fp)
 		{
 			fp.printf("%s [label=\"%s\\nTimeout Trigger: %.2f seconds\", shape=oval]\n", 
-						this.get_name(),
-						this.get_name(),
+						this.name,
+						this.name,
 						this.timeout);
-			fp.printf("%s -> %s\n", this.get_name(), (action as Gtk.Buildable).get_name());
+			fp.printf("%s -> %s\n", this.name, action.name);
 			this.action.output_dot(fp);
 		}
 	}
