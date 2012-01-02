@@ -20,10 +20,6 @@ namespace IfThenElse
 	public interface BaseAction : Base
 	{
 
-		public virtual void add_child(GLib.Object obj, string? type)
-		{
-
-		}
 		/**
 		 * Activate()
 		 * This activates the Action.

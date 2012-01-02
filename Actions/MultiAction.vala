@@ -21,21 +21,11 @@ namespace IfThenElse
 	public class MultiAction : BaseAction, Base
 	{
 		private List <BaseAction> actions;
-
-		/**
-		 * GtkBuilder function.
-		 */
-		public void add_child (GLib.Object child, string? type)
-		{
-			if(child is BaseAction)
-			{
-				stdout.printf("Adding child to multiaction\n");
-				actions.append(child as BaseAction);
-				// Set parent.
-				(child as Base).parent = this;
-				return;
+		public BaseAction action {
+			set{
+				actions.append(value as BaseAction);
+				(value as Base).parent = this;
 			}
-			GLib.error("Trying to add a non BaseAction to MultiAction");
 		}
 
 		/**

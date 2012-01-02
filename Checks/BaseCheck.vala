@@ -20,8 +20,26 @@ namespace IfThenElse
 	public abstract class BaseCheck: BaseAction,Base
 	{
 		// Then/Else actions.
-		private BaseAction?  else_stmt 	  = null;
-		private BaseAction?  then_stmt 	  = null;
+		private BaseAction? _else_action = null;
+		private BaseAction? _then_action = null;
+		public BaseAction?  else_action { 
+				get { 
+					return _else_action;
+				}
+				set {
+					_else_action = value;
+					(_else_action as Base).parent = this;
+				}
+		}
+		public BaseAction?  then_action {
+				get { 
+					return _then_action;
+				}
+				set {
+					_then_action = value;
+					(_then_action as Base).parent = this;
+				}
+		}
 
 		public enum StateType {
 			NO_CHANGE,
@@ -33,29 +51,6 @@ namespace IfThenElse
 
 
 
-		/**
-		 */
-		public void add_child (GLib.Object child,
-								string? type)
-		{
-			if(type == null) return;
-			stdout.printf("Adding to chain: %s\n", type);
-			if (type == "else") {
-				if(else_stmt != null){
-					GLib.error("Else statement is allready set");
-				}
-				else_stmt = child as BaseAction;
-				// Set parent.
-				(child as Base).parent = this;
-			}else if (type == "then") {
-				if(then_stmt != null){
-					GLib.error("Then statement is allready set");
-				}
-				then_stmt = child as BaseAction;
-				// Set parent.
-				(child as Base).parent = this;
-			}
-		}
 
 		/**
 		 * Handle activation. In this case, we call the check,
@@ -71,16 +66,16 @@ namespace IfThenElse
 			if(state == BaseCheck.StateType.TRUE)
 			{
 				// Then statement.
-				if(then_stmt != null)
-					then_stmt.Activate();
-				if(else_stmt != null)
-					else_stmt.Deactivate();
+				if(_then_action != null)
+					_then_action.Activate();
+				if(_else_action != null)
+					_else_action.Deactivate();
 			}else{
 				// Else Statement.
-				if(else_stmt != null)
-					else_stmt.Activate();
-				if(then_stmt != null)
-					then_stmt.Deactivate();
+				if(_else_action != null)
+					_else_action.Activate();
+				if(_then_action != null)
+					_then_action.Deactivate();
 			}
 		}
 
@@ -90,10 +85,10 @@ namespace IfThenElse
 		public void Deactivate()
 		{
 			// Deactivate both.
-			if(then_stmt != null)
-				then_stmt.Deactivate();
-			if(else_stmt != null)
-				else_stmt.Deactivate();
+			if(_then_action != null)
+				_then_action.Deactivate();
+			if(_else_action != null)
+				_else_action.Deactivate();
 		}
 
 		/**
@@ -107,17 +102,17 @@ namespace IfThenElse
 					this.name,
 					this.name,
 								dot_desc);
-			if(then_stmt != null)
+			if(_then_action != null)
 			{
 				fp.printf("%s -> %s [label=\"Yes\"]\n", this.name,
-						then_stmt.name);
-				then_stmt.output_dot(fp);
+						_then_action.name);
+				_then_action.output_dot(fp);
 			}
-			if (else_stmt != null)
+			if (_else_action != null)
 			{
 				fp.printf("%s -> %s [label=\"No\"]\n", this.name,
-						else_stmt.name);
-				else_stmt.output_dot(fp);
+						_else_action.name);
+				_else_action.output_dot(fp);
 			}
 		}
 	}

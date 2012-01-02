@@ -1,3 +1,9 @@
+[Trigger]
+type=TimerTrigger
+timeout=5
+action=Check
+
+
 [Check]
 type=ExternalToolCheck
 cmd=Scripts/check_movie.sh
@@ -6,17 +12,21 @@ true_status=1
 false_status=0
 compare_old_state=true
 #Children
-childthen=Action2
-childelse=Action1
+else_action=Action2
+then_action=MultiAction
 
-[Trigger]
-type=TimerTrigger
-timeout=5
-child=Check
+
+[MultiAction]
+type=MultiAction
+action=Action1;Action3
 
 [Action1]
 type=ExternalToolAction
 cmd=mpc play
+
+[Action3]
+type=ExternalToolAction
+cmd=echo testing
 
 [Action2]
 type=ExternalToolAction

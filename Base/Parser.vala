@@ -73,23 +73,6 @@ namespace IfThenElse
 					if(prop == "type") continue;
 
 					stdout.printf("Setting property: %s\n", prop);
-					// Special type
-					if(prop.length >= 5 && prop.substring(0,5) == "child")
-					{
-						string? key = null;
-						if(prop.length > 5) {
-							key = prop.substring(5, (long)prop.length-5);
-						}
-						string entry = kf.get_string(group, prop);
-						stdout.printf("\tAdd child %s\n", entry);
-						GLib.Object child_obj = objects[prefix+entry];
-						if(child_obj == null) {
-							throw new ParserError.NODE_SET_PROPERTY("Unknown node: %s", entry);
-						}
-						(object as BaseAction).add_child(child_obj, key);
-
-						continue;
-					}
 
 					// Load property
 					unowned ParamSpec? ps = object.get_class().find_property(prop);
@@ -116,7 +99,21 @@ namespace IfThenElse
 					else if (ps.value_type == typeof(bool)) {
 						bool temp = kf.get_boolean(group,prop);
 						object.set(prop, temp);
-					} else {
+					}
+					// Type is BaseAction
+					else if (ps.value_type == typeof(BaseAction)) {
+						string[] names = kf.get_string_list(group,prop);
+						foreach(string name in names)
+						{
+							GLib.Object child_obj = objects[prefix+name];
+							if(child_obj == null) {
+								throw new ParserError.NODE_SET_PROPERTY("Unknown node: %s", name);
+							}
+							object.set(prop,child_obj);
+						}
+					}
+					// Unknown type.
+					else {
 						throw new ParserError.NODE_SET_PROPERTY("Unknown property type: %s::%s(%s)", group,
 								prop, ps.value_type.name());
 					}

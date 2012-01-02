@@ -19,27 +19,16 @@ namespace IfThenElse
 {
 	public abstract class BaseTrigger: BaseAction, Base
 	{
+		private BaseAction _action = null;
 		// Make this unowned so we don't get circular dependency.
-		protected BaseAction action = null;
-		
-		/**
-		 * GtkBuilder function.
-		 */
-		public void add_child (GLib.Object child, string? type)
-		{
-			if(action != null) {
-				GLib.error("You can only add one action to a trigger.\n"+
-							"Use a multiaction to add more items\n");
+		public BaseAction action {
+			get {
+				return _action;
 			}
-			if(child is BaseAction)
-			{
-				stdout.printf("Adding child to the trigger\n");
-				action = child as BaseAction;
-				// Set parent.
-				(child as Base).parent = this;
-				return;
+			set {
+				_action = value;
+				(_action as Base).parent = this;
 			}
-			GLib.error("Trying to add a non BaseAction to Trigger");
 		}
 
 		public abstract void enable_trigger();
@@ -56,8 +45,8 @@ namespace IfThenElse
 		
 		public void Deactivate()
 		{
-			if(action != null) {
-				action.Deactivate();
+			if(_action != null) {
+				_action.Deactivate();
 			}
 			disable_trigger();
 		}
@@ -66,9 +55,9 @@ namespace IfThenElse
 		 */
 		public void fire()
 		{
-			stdout.printf("Fire trigger: %p\n", action);
-			if(action != null) {
-				action.Activate();
+			stdout.printf("Fire trigger: %p\n", _action);
+			if(_action != null) {
+				_action.Activate();
 			}
 		}
 		
@@ -77,8 +66,8 @@ namespace IfThenElse
 			fp.printf("'%s' [label=\"%s\", shape=oval]\n", 
 						this.name,
 						this.name);
-			fp.printf("%s -> %s\n", this.name, action.name);
-			this.action.output_dot(fp);
+			fp.printf("%s -> %s\n", this.name, _action.name);
+			this._action.output_dot(fp);
 		}
 	}
 }
