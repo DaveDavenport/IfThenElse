@@ -205,6 +205,7 @@ namespace IfThenElse
 			if(dot_file != null)
 			{
 				generate_dot_file(parser);
+				parser = null;
 				// Exit succesfull
 				return 0;
 			}
