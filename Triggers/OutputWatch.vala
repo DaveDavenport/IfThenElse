@@ -98,7 +98,7 @@ namespace IfThenElse
 					GLib.ChildWatch.add(pid, child_watch_called);
 					// Put a watch on the output.
 					var io = new IOChannel.unix_new(standard_output);
-					io.add_watch(IOCondition.IN, output_data_cb);
+					output_watch = io.add_watch(IOCondition.IN, output_data_cb);
 				} catch (Error e) {
 					GLib.warning("Failed to start application: %s", e.message);
 				}
