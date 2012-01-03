@@ -92,9 +92,6 @@ namespace IfThenElse
 			// Actions.
 			a = typeof(DebugAction);
 			a = typeof(ExternalToolAction);
-#if ENABLE_GTK_TOOLS
-			a = typeof(StatusIconAction);
-#endif
 			a = typeof(MultiAction);
 			
 			// Triggers
