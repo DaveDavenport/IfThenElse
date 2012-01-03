@@ -15,60 +15,61 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
  
+using GLib;
 namespace IfThenElse
 {
-	public abstract class BaseTrigger: BaseAction, Base
+	public class Combine : BaseAction, Base
 	{
 		private BaseAction _action = null;
-		// Make this unowned so we don't get circular dependency.
-		public BaseAction action {
+		public BaseAction action { 
 			get {
 				return _action;
 			}
 			set {
+				if(_action != null) GLib.error("%s: action is allready set", this.name);
 				_action = value;
-				(_action as Base).parent = this;
+				(_action).parent = this;
 			}
 		}
 
-		public abstract void enable_trigger();
-		public abstract void disable_trigger();
-
+		// We allow multiple parents.
+		private List <unowned Base> parents;
+		public override unowned Base? parent {
+			set{
+				parents.append(value as BaseAction);
+			}
+			get {
+				if(parents.length() > 0) return parents.data;
+				return null;
+			}
+		}
 
 		/**
-		 * BaseAction implementation.
+		 * Activate()
+		 * 
+		 * Propagate this to the children.
 		 */
 		public void Activate()
 		{
-			enable_trigger();
+			action.Activate();
 		}
-		
+
+		/**
+		 * Deactivate()
+		 * 
+		 * Propagate this to the children.
+		 */
 		public void Deactivate()
 		{
-			stdout.printf("%s: Deactivate\n", this.name);
-			if(_action != null) {
-				_action.Deactivate();
-			}
-			disable_trigger();
-		}
-		/**
-		 * Activate the child
-		 */
-		public void fire()
-		{
-			stdout.printf("Fire trigger: %p\n", _action);
-			if(_action != null) {
-				_action.Activate();
-			}
+			action.Deactivate();
 		}
 		
-		public virtual void output_dot(FileStream fp)
+		
+		public void output_dot(FileStream fp)
 		{
-			fp.printf("'%s' [label=\"%s\", shape=oval]\n", 
-						this.name,
-						this.name);
-			fp.printf("%s -> %s\n", this.name, _action.name);
-			this._action.output_dot(fp);
+			fp.printf("%s [label=\"%s\", shape=oval]\n", 
+					this.name,
+					this.name);
 		}
 	}
 }

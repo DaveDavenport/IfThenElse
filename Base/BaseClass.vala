@@ -19,8 +19,22 @@ namespace IfThenElse
 {
 	public abstract class Base: GLib.Object
 	{
+		private unowned Base? _parent = null;
+		// Accessors
+		// Parent object. This accepts one and only one parent.
+		// Can be overriden if you want different behaviour
+		public virtual unowned Base? parent
+		{
+			get {
+				return _parent;
+			}
+			set {
+				if(_parent != null) GLib.error("%s: parent is allready set", this.name);
+				_parent = value;
+			}
+
+		} 
 		public string name {get;set;default="n/a";}
-		public unowned Base parent = null;
 
 		~Base()
 		{

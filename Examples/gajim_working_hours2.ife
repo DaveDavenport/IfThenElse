@@ -28,6 +28,10 @@ then-action=MultiDisable
 else-action=MultiAway
 
 [MultiDisable]
+type=Combine
+action=MultiDisableReal
+
+[MultiDisableReal]
 type=MultiAction
 action=DisableGajim;DisableMpc
 

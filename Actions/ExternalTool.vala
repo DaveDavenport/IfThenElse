@@ -67,7 +67,7 @@ namespace IfThenElse
 		{
 			if(pid > 0)
 			{
-				GLib.stdout.printf("Killing pid: %i\n", (int)pid);
+				GLib.stdout.printf("%s: Killing pid: %i\n",this.name, (int)pid);
 				Posix.kill((pid_t)pid, 1);
 			}
 		}
@@ -78,6 +78,7 @@ namespace IfThenElse
 		}
 		public void Deactivate()
 		{
+			GLib.stdout.printf("%s: Deactivate\n", this.name);
 			stop_application();
 		}
 	}

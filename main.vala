@@ -48,6 +48,7 @@ namespace IfThenElse
 				// Activate the toplevel one.
 				if(o is BaseAction)
 				{
+					stdout.printf("==== Starting : %s\n", (o as Base).name);
 					(o as BaseAction).Activate();
 				}
 			}
@@ -181,6 +182,8 @@ namespace IfThenElse
 			// Triggers
 			a = typeof(ExternalToolTrigger);
 			a = typeof(TimerTrigger);
+			// other
+			a = typeof(Combine);
 
 
 			// Commandline options parsing.

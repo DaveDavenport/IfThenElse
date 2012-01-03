@@ -35,7 +35,7 @@ namespace IfThenElse
 		 */
 		public void Activate()
 		{
-			foreach(unowned BaseAction action in actions)
+			foreach(BaseAction action in actions)
 			{
 				action.Activate();
 			}
@@ -48,7 +48,8 @@ namespace IfThenElse
 		 */
 		public void Deactivate()
 		{
-			foreach(unowned BaseAction action in actions)
+			stdout.printf("%s: Deactivate\n", this.name);
+			foreach(BaseAction action in actions)
 			{
 				action.Deactivate();
 			}

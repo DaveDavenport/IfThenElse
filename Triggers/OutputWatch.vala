@@ -60,14 +60,19 @@ namespace IfThenElse
 
 		private GLib.Pid pid = 0;
 		private uint output_watch = 0;
+		private uint pid_watch = 0;
 		private void child_watch_called(GLib.Pid p, int status)
 		{
 			GLib.Process.close_pid(p);
-			GLib.stdout.printf("Child watch called.\n");
+			GLib.stdout.printf("Child watch called: %i.\n", (int)p);
 			pid = 0;
 			if(output_watch > 0){
 				GLib.Source.remove(output_watch);
 				output_watch = 0;
+			}
+			if(pid_watch > 0){
+				GLib.Source.remove(pid_watch);
+				pid_watch = 0;
 			}
 		}
 
@@ -95,7 +100,7 @@ namespace IfThenElse
 							SpawnFlags.SEARCH_PATH|SpawnFlags.DO_NOT_REAP_CHILD, null, 
 							out pid,null,  out standard_output, null);
 
-					GLib.ChildWatch.add(pid, child_watch_called);
+					pid_watch = GLib.ChildWatch.add(pid, child_watch_called);
 					// Put a watch on the output.
 					var io = new IOChannel.unix_new(standard_output);
 					output_watch = io.add_watch(IOCondition.IN, output_data_cb);
@@ -108,8 +113,10 @@ namespace IfThenElse
 		{
 			if(pid > 0)
 			{
-				GLib.stdout.printf("Killing pid: %i\n", (int)pid);
+				GLib.stdout.printf("%s: Killing pid: %i\n",this.name, (int)pid);
 				Posix.kill((pid_t)pid, 1);
+				// Disconnect all signals. 
+				child_watch_called(pid, 1);
 			}
 		}
 
