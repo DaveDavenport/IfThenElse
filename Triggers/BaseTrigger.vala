@@ -64,10 +64,10 @@ namespace IfThenElse
 		
 		public virtual void output_dot(FileStream fp)
 		{
-			fp.printf("'%s' [label=\"%s\", shape=oval]\n", 
+			fp.printf("\"%s\" [label=\"%s\", shape=oval]\n", 
 						this.name,
 						this.name);
-			fp.printf("%s -> %s\n", this.name, _action.name);
+			fp.printf("\"%s\" -> \"%s\"\n", this.name, _action.name);
 			this._action.output_dot(fp);
 		}
 	}

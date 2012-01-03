@@ -58,12 +58,12 @@ namespace IfThenElse
 		
 		public void output_dot(FileStream fp)
 		{
-			fp.printf("%s [label=\"%s\", shape=oval]\n", 
+			fp.printf("\"%s\" [label=\"%s\", shape=oval]\n", 
 					this.name,
 					this.name);
 			foreach(unowned BaseAction action in actions)
 			{
-				fp.printf("%s -> %s\n", this.name, 
+				fp.printf("\"%s\" -> \"%s\"\n", this.name, 
 						action.name);
 				action.output_dot(fp);
 			}

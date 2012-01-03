@@ -99,19 +99,19 @@ namespace IfThenElse
 		public void output_dot(FileStream fp)
 		{
 			string dot_desc = this.get_dot_description();
-			fp.printf("%s [label=\"%s\\n(%s)\", shape=diamond]\n", 
+			fp.printf("\"%s\" [label=\"%s\\n(%s)\", shape=diamond]\n", 
 					this.name,
 					this.name,
 								dot_desc);
 			if(_then_action != null)
 			{
-				fp.printf("%s -> %s [label=\"Yes\"]\n", this.name,
+				fp.printf("\"%s\" -> \"%s\" [label=\"Yes\"]\n", this.name,
 						_then_action.name);
 				_then_action.output_dot(fp);
 			}
 			if (_else_action != null)
 			{
-				fp.printf("%s -> %s [label=\"No\"]\n", this.name,
+				fp.printf("\"%s\" -> \"%s\" [label=\"No\"]\n", this.name,
 						_else_action.name);
 				_else_action.output_dot(fp);
 			}

@@ -63,13 +63,5 @@ namespace IfThenElse
 		{
 			action.Deactivate();
 		}
-		
-		
-		public void output_dot(FileStream fp)
-		{
-			fp.printf("%s [label=\"%s\", shape=oval]\n", 
-					this.name,
-					this.name);
-		}
 	}
 }
