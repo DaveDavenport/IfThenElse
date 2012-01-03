@@ -34,6 +34,9 @@ namespace IfThenElse
 		if(loop != null) loop.quit();
 	}
 
+	/**
+	 * Construct the parser, load all files.
+	 */
 	private void reload()
 	{
 		parser = null;
@@ -88,6 +91,7 @@ namespace IfThenElse
 			a = typeof(AlternateCheck);
 			a = typeof(ExternalToolCheck);
 			a = typeof(TimeCheck);
+			a = typeof(OutputWatch);
 
 			// Actions.
 			a = typeof(DebugAction);
@@ -110,6 +114,7 @@ namespace IfThenElse
 			}
 			g_argv = argv;
 
+			// Load the setup file.
 			reload();
 
 
