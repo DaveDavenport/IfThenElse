@@ -56,7 +56,6 @@ namespace IfThenElse
 		
 		public override void enable_trigger()
 		{
-			timer_callback();
 			if(handler == 0) {
 				handler = GLib.Timeout.add_seconds(timeout, timer_callback);
 			}

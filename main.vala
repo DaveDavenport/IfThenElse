@@ -182,8 +182,9 @@ namespace IfThenElse
 			// Triggers
 			a = typeof(ExternalToolTrigger);
 			a = typeof(TimerTrigger);
+			a = typeof(InitTrigger);
 			// other
-			a = typeof(Combine);
+			a = typeof(MultiCombine);
 
 
 			// Commandline options parsing.

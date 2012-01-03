@@ -28,7 +28,7 @@ then-action=MultiDisable
 else-action=MultiAway
 
 [MultiDisable]
-type=Combine
+type=MultiCombine
 action=MultiDisableReal
 
 [MultiDisableReal]

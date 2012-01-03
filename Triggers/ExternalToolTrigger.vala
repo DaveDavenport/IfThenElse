@@ -36,8 +36,6 @@ namespace IfThenElse
 			}
 		}
 		
-		construct{
-		}
 		~ExternalToolTrigger()
 		{
 			stop_application();
@@ -62,7 +60,6 @@ namespace IfThenElse
 			if(status == 0)
 			{
 				fire();
-				
 				start_application();
 			}
 		}

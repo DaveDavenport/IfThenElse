@@ -18,7 +18,7 @@
 using GLib;
 namespace IfThenElse
 {
-	public class Combine : BaseAction, Base
+	public class MultiCombine : BaseAction, Base
 	{
 		private BaseAction _action = null;
 		public BaseAction action { 
