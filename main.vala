@@ -34,10 +34,91 @@ namespace IfThenElse
 		if(loop != null) loop.quit();
 	}
 
+
+	private void start()
+	{
+		if(parser == null) return;
+
+		// Iterates over all input files.
+		var objects = parser.get_objects();
+		foreach ( GLib.Object o in objects)
+		{
+			if((o as Base).is_toplevel())
+			{
+				// Activate the toplevel one.
+				if(o is BaseAction)
+				{
+					(o as BaseAction).Activate();
+				}
+			}
+		}
+		stdout.printf("================ Started all ================\n");
+	}
+	private void stop()
+	{
+		if(parser == null) return;
+
+		// Iterates over all input files.
+		var objects = parser.get_objects();
+		foreach ( GLib.Object o in objects)
+		{
+			if((o as Base).is_toplevel())
+			{
+				// Activate the toplevel one.
+				if(o is BaseAction)
+				{
+					(o as BaseAction).Deactivate();
+				}
+			}
+		}
+		stdout.printf("================ Stopped all ================\n");
+	}
+
+	private void reload_files()
+	{
+		stdout.printf("================ Reload all  ================\n");
+		stop();
+		load();
+		start();
+	}
+
+	/**
+	 * This handles sigaction.
+	 * USR1 == RELOAD
+	 * TERM/INT == QUIT
+	 * Other == Give message
+	 */
+	static void signal_handler (int signo) 
+	{
+		if(signo == Posix.SIGUSR1) {
+			reload_files();
+			return;
+		}
+
+		switch (signo) {
+			case Posix.SIGTERM:
+			case Posix.SIGINT:
+				quit_program();
+
+				if (strsignal (signo) != null) {
+					print ("\n");
+					print ("Received signal:%d->'%s'\n", signo, strsignal (signo));
+				}
+				break;
+			default:
+				if (strsignal (signo) != null) {
+					print ("\n");
+					print ("Received signal:%d->'%s'\n", signo, strsignal (signo));
+				}
+				break;
+		}
+
+
+	}
 	/**
 	 * Construct the parser, load all files.
 	 */
-	private void reload()
+	private void load()
 	{
 		parser = null;
 		parser = new IfThenElse.Parser();
@@ -53,7 +134,6 @@ namespace IfThenElse
 						file, e.message);
 			}
 		}
-
 	}
 
 	// This generates a dot file for the given obect structure
@@ -115,8 +195,7 @@ namespace IfThenElse
 			g_argv = argv;
 
 			// Load the setup file.
-			reload();
-
+			load();
 
 			// Generate a dot file.
 			if(dot_file != null)
@@ -126,47 +205,34 @@ namespace IfThenElse
 				return 0;
 			}
 			
-			// Iterates over all input files.
-			var objects = parser.get_objects();
-			foreach ( GLib.Object o in objects)
-			{
-				if((o as Base).is_toplevel())
-				{
-					// Activate the toplevel one.
-					if(o is BaseAction)
-					{
-						stdout.printf("==== Starting: %s\n", (o as BaseAction).name);
-						(o as BaseAction).Activate();
-					}
-				}
-			}
 			// Create main loop.
 			loop = new GLib.MainLoop();
 
-			// Catch Control C
-			GLib.Process.signal(ProcessSignal.INT, quit_program);
+			/**
+			 * Handle signals
+			 */
+			var empty_mask = Posix.sigset_t ();
+			Posix.sigemptyset (empty_mask);
 
-			// Reload configuration on signal.
-			GLib.Process.signal(ProcessSignal.USR1, reload);
+			var act = Posix.sigaction_t ();
+			act.sa_handler = signal_handler;
+			act.sa_mask = empty_mask;
+			act.sa_flags = 0;
+
+			Posix.sigaction (Posix.SIGTERM, act, null);
+			Posix.sigaction (Posix.SIGINT, act, null);
+			Posix.sigaction (Posix.SIGHUP, act, null);
+			Posix.sigaction (Posix.SIGUSR1, act, null);
+
 
 			// Run program.
 			stdout.printf("Start....\n");
+			start();
+			stdout.printf("Run loop...\n");
 			loop.run();
 			stdout.printf("\nQuit....\n");
 
-			// Iterates over all input files.
-			objects = parser.get_objects();
-			foreach ( GLib.Object o in objects)
-			{
-				if((o as Base).is_toplevel())
-				{
-					// Activate the toplevel one.
-					if(o is BaseAction)
-					{
-						(o as BaseAction).Deactivate();
-					}
-				}
-			}
+			stop();
 			// Destroy
 			parser = null;
 			return 0;
