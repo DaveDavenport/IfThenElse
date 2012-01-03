@@ -38,6 +38,7 @@ namespace IfThenElse
 		}
 		private void start_application()
 		{
+			GLib.stdout.printf("%s: %s", this.name, "start application");
 			if(kill_child)
 			{
 				stop_application();

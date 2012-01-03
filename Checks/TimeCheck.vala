@@ -29,6 +29,7 @@ namespace IfThenElse
 		public uint hour		{get; set; default = 8;}
 		public uint minute		{get; set; default = 0;}
 		private bool prev_state = false;
+		private bool init = true;
 		
 		// TimeCheck
 		public TimeCheck()
@@ -43,12 +44,14 @@ namespace IfThenElse
 			if((now.hour == hour && now.minute >= minute) || 
 					(now.hour > hour))
 			{
-				if(prev_state) return StateType.NO_CHANGE;
+				if(prev_state && !init) return StateType.NO_CHANGE;
+				init = false;
 				prev_state = true;
 				return StateType.TRUE;
 			}
-			if(!prev_state) return StateType.NO_CHANGE;
-			
+			if(!prev_state && !init) return StateType.NO_CHANGE;
+			init = false;
+			prev_state = false;
 			return StateType.FALSE;
 		}
 
