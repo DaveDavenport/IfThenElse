@@ -3,9 +3,39 @@ type=OutputWatch
 kill_child = true
 cmd=dbus-monitor interface=org.gnome.ScreenSaver
 fire_regex=.*member=ActiveChanged.*
-action=Action
+action=CheckScreenSaver
 
-[Action]
+[CheckScreenSaver]
+type=ExternalToolCheck
+cmd=gnome-screensaver-command -q
+output-compare=The screensaver is inactive
+compare-old-state=true
+then-action=EnableGajim
+else-action=WorkHourCheck1
+
+[WorkHourCheck1]
+type=TimeCheck
+hour=8
+minute=30
+then-action=WorkHourCheck2
+else-action=DisableGajim
+
+[WorkHourCheck2]
+type=TimeCheck
+hour=17
+minute=30
+then-action=DisableGajim
+else-action=AwayGajim
+
+[DisableGajim]
 type=ExternalToolAction
-cmd=echo wee screensaver changed.
+cmd=gajim-remote change_status offline
 
+[AwayGajim]
+type=ExternalToolAction
+cmd=gajim-remote change_status away "Leave a message after the beep" 
+
+
+[EnableGajim]
+type=ExternalToolAction
+cmd=gajim-remote change_status online 
