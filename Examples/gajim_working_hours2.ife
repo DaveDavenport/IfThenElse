@@ -18,14 +18,30 @@ type=TimeCheck
 hour=8
 minute=30
 then-action=WorkHourCheck2
-else-action=DisableGajim
+else-action=MultiDisable
 
 [WorkHourCheck2]
 type=TimeCheck
 hour=17
 minute=30
-then-action=DisableGajim
-else-action=AwayGajim
+then-action=MultiDisable
+else-action=MultiAway
+
+[MultiDisable]
+type=MultiAction
+action=DisableGajim;DisableMpc
+
+[MultiAway]
+type=MultiAction
+action=AwayGajim;PauseMpc
+
+[PauseMpc]
+type=ExternalToolAction
+cmd = mpc pause
+
+[DisableMpc]
+type=ExternalToolAction
+cmd = mpc stop 
 
 [DisableGajim]
 type=ExternalToolAction
