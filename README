@@ -1,57 +1,98 @@
-IfThenElse
-==========
+IfThenElse is a simple program used to glue small unix tools to getter with the ultimate goal to automate some tedious tasks.
 
-This is a small ifthenelse program.
-It executes one or multiple chains.
+The structure off an IfThenElse chain is as follow: Trigger -> Check -> [Then] Action1 | [Else] Action2
 
-A chain is defined like this:
+For example a chain could be:
 
-1 Trigger:   Wait until a certain events happens.
-2 Check:     Do a check.
-  TRUE:      Execute Then Action
-  FALSE:     Execute Else Action.
-  NO_CHANGE: Do nothing.
-3. return to 1.
+    Trigger: Every minute
+    Check: Is a Movie Playing
+    Then: Turn off the light
+    Else: Turn on the light
 
-A chain is an action. So it is possible to nest the loops.
-In case no Actual check is required, an action can be directly connected
-to a Trigger.
+This should result the light turning off when starting the movie, and on when the movie is finished.
 
-An example chain (very simple):
-~~~~~
-<interface>
-	<object class="IfThenElseExternalToolTrigger" id="mpc_trigger">
-		<property name="cmd">mpc idle player</property>
-		<child>
-			<object class="IfThenElseTrueCheck" id="mpc_check"/>
-				<child type="then">
-					<object class="IfThenElseExternalToolAction" id="mpc_activate_action">
-						<property name="cmd">Scripts/mpc-notify.sh</property>
-					</object>
-				</child>
-			</object>
-		</child>
-	</object>
-</interface>
-~~~~~
+Each IfThenElse chain is an action in itself and can be chained up.
 
-Same behaviour:
+File format
 
-~~~~~
-<interface>
-	<object class="IfThenElseExternalToolTrigger" id="mpc_trigger">
-		<property name="cmd">mpc idle player</property>
-		<child>
-			<object class="IfThenElseExternalToolAction" id="mpc_activate_action">
-				<property name="cmd">Scripts/mpc-notify.sh</property>
-			</object>
-		</child>
-	</object>
-</interface>
-~~~~~
+A chain is described in it own file using the ini format. The above example would look like:
 
-This calls "mpc idle", if it returns. It calls Scripts/mpc-notify.sh.
 
-In the first example you could replace the Truecheck with a check that 
-checks the state off mpd (playing) and only shows a popup when mpd is 
-playing.
+[Trigger]
+type=TimerTrigger
+timeout=60
+action=Check
+
+[Check]
+type=ExternalToolCheck
+cmd=check_movies.sh
+true_status=1
+false_status=0
+compare_old_state=true
+then_action=Then
+else_action=Else
+
+[Then]
+type=ExternalToolAction
+cmd=switch_off_lights.sh
+
+[Else]
+type=ExternalToolAction
+cmd=switch_on_lights.sh 
+
+            
+
+As you can see all it does is to tie external tools together. If you want to use multiple triggers, or drive multiple actions you have to use the MultiCombine node in between to combine the different inputs, or the MultiAction to drive multiple actions.
+
+So say that we want to turn_off the lights and put gajim in offline mode:
+
+
+[Trigger]
+type=TimerTrigger
+timeout=60
+action=Check
+
+[Check]
+type=ExternalToolCheck
+cmd=check_movies.sh
+true_status=1
+false_status=0
+compare_old_state=true
+then_action=ThenMulti
+else_action=Else
+
+[ThenMulti]
+type=MultiAction
+action=Then1;Then2
+
+[Then1]
+type=ExternalToolAction
+cmd=switch_off_lights.sh
+
+[Then2]
+type=ExternalToolAction
+cmd=gajim-remote change_status offline
+
+[Else]
+type=ExternalToolAction
+cmd=switch_on_lights.sh 
+
+            
+
+This way, it is easy to make complex chains.
+
+Using the program
+
+Run the program:
+
+
+ifthenelse <list of input files>
+
+If you want to generate a dot graph:
+
+
+ifthenelse -d output.dot <list of intput files>
+
+To stop the program send it a TERM/HUP/INT signal (e.g. press ctrl-c)
+
+To force it to reload the input files send it a USR1 signal.

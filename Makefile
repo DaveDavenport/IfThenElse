@@ -36,4 +36,4 @@ install:
 
 
 doc:
-	valadoc --driver 0.16.x -b ../  --verbose --force $(SOURCES) --pkg=posix -o ./Documentation/html --package-name=$(PROGRAM)
+	valadoc --private --driver 0.16.x -b ../  --verbose --force $(SOURCES) --pkg=posix -o ./Documentation/html --package-name=$(PROGRAM)

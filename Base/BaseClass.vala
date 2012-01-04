@@ -17,6 +17,12 @@
  
 namespace IfThenElse
 {
+	/**
+	 * The base class used in IfThenElse. Each class should be derived from this.
+	 *
+	 * This class provides some basic functionality needed by everybody. 
+	 * E.g. name and parent property. A has_parent and is_toplevel check.
+	 */
 	public abstract class Base: GLib.Object
 	{
 		/// A pointer to the parent. This is the internal default storage.

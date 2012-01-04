@@ -17,12 +17,26 @@
  
 namespace IfThenElse
 {
+	/**
+	 * Base interface each 'Action' class should implement.
+	 *
+	 * In the current design each class that should be part of the 
+	 * descission tree should implement this. Or should inherit from a 
+	 * base class that implements this interface.
+	 * 
+	 * Activate() gets called when a certain branch in the descission tree
+	 * is activated. 
+	 * Deactivate() gets called when a certain branch in the tree gets
+	 * deactivated.
+	 */
 	public interface BaseAction : Base
 	{
 
 		/**
-		 * Activate()
 		 * This activates the Action.
+		 * 
+		 * A class that can have children nodes should propagate this 
+		 * to its children.
 		 * For Example the trigger calls this on the Action when fired.
 		 * Or the Chain calls this on the active branch.
 		 */
@@ -32,9 +46,11 @@ namespace IfThenElse
 		}
 
 		/**
-		 * Deactivate()
-		 * 
-		 * This Deactivates the Action. Not all actions have to be 
+		 * This Deactivates the Action.
+		 *
+		 * A class that can have children nodes should propagate this 
+		 * to its children.
+		 * ot all actions have to be 
 		 * deactivatable. This is called for example on an action if 
 		 * The Chain condition changes.
 		 */
@@ -44,6 +60,9 @@ namespace IfThenElse
 		}
 		/**
 		 * Generate dot output for this node
+		 * 
+		 * A class implementing this interface that has children nodes should propagate this 
+		 * to its children.
 		 */
 		public virtual void output_dot(FileStream fp)
 		{
