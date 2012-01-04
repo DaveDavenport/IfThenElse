@@ -33,3 +33,7 @@ clean:
 
 install:
 	install $(PROGRAM) $(PREFIX)/bin/
+
+
+doc:
+	valadoc --driver 0.16.x -b ../  --verbose --force $(SOURCES) --pkg=posix -o ./Documentation/html --package-name=$(PROGRAM)

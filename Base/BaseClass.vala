@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2011-2012  Martijn Koedam <qball@gmpclient.org>
  * 
  * This program is free software; you can redistribute it and/or
@@ -19,10 +19,13 @@ namespace IfThenElse
 {
 	public abstract class Base: GLib.Object
 	{
+		/// A pointer to the parent. This is the internal default storage.
+		/// Use the parent <accessor> 
 		private unowned Base? _parent = null;
-		// Accessors
-		// Parent object. This accepts one and only one parent.
-		// Can be overriden if you want different behaviour
+
+		/// Accessors
+		/// Parent object. This accepts one and only one parent.
+		/// Can be overriden if you want different behaviour
 		public virtual unowned Base? parent
 		{
 			get {

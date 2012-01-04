@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2011-2012  Martijn Koedam <qball@gmpclient.org>
  * 
  * This program is free software; you can redistribute it and/or
