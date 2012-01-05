@@ -119,6 +119,10 @@ using GLib;
  * ifthenelse -d output.dot <list of intput files>
  * }}}
  *
+ * If you want to background IfThenElse. 
+ * {{{
+ * ifthenelse -b <list of intput files>
+ * }}}
  * 
  * To stop the program send it a TERM/HUP/INT signal (e.g. press ctrl-c)
  *
@@ -132,10 +136,13 @@ namespace IfThenElse
 	private unowned string[] g_argv;
 	private Parser parser = null;
 	private GLib.MainLoop  loop = null;
+	private bool daemonize = false;
 	string? dot_file = null;
 	const GLib.OptionEntry[] entries = {
 		{"dot", 	'd',	0,	GLib.OptionArg.FILENAME, 	ref dot_file,
 				"Output a flowchart off the if-the-else structure", null},
+		{"background",	'b', 0, GLib.OptionArg.NONE,		out daemonize,
+				"Daemonize the program", null},	
 		{null}
 	};
 
@@ -271,7 +278,22 @@ namespace IfThenElse
 		fp.printf("}\n");
 		fp = null;
 	}
-	
+
+	/**
+	 * Background ifthenelse.
+	 */
+	static void background()
+	{
+		// Duplicate and exit the parent.
+		var pid = Posix.fork();
+		if(pid < 0){
+			GLib.error("Failed to fork to the background");
+		}
+		if(pid > 0) {
+			// Main thread.
+			Posix.exit(0);
+		}
+	}	
 	
 	static int main(string[] argv)
 	{
@@ -320,6 +342,10 @@ namespace IfThenElse
 				return 0;
 			}
 			
+
+			if(daemonize) {
+				background();
+			}
 			// Create main loop.
 			loop = new GLib.MainLoop();
 
