@@ -1,0 +1,4 @@
+[Time]
+type=ClockTrigger
+hour=8
+minute=51

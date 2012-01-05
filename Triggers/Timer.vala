@@ -35,9 +35,9 @@ namespace IfThenElse
 				}
 			}
 		}
-		public bool timer_callback()
+		private bool timer_callback()
 		{
-				stdout.printf("Timer file\n");
+				stdout.printf("Timer fire\n");
 				this.fire();
 				return true;
 		}

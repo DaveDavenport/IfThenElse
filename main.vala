@@ -292,6 +292,7 @@ namespace IfThenElse
 			a = typeof(ExternalToolTrigger);
 			a = typeof(TimerTrigger);
 			a = typeof(InitTrigger);
+			a = typeof(ClockTrigger);
 			// other
 			a = typeof(MultiCombine);
 
