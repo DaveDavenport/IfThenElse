@@ -17,6 +17,9 @@
  
 namespace IfThenElse
 {
+	/**
+	 * Abstract class for Checks: Each check should inherit from.
+	 */
 	public abstract class BaseCheck: BaseAction,Base
 	{
 		// Then/Else actions.

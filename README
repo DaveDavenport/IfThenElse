@@ -1,3 +1,5 @@
+Description:
+
 IfThenElse is a simple program used to glue small unix tools to getter with the ultimate goal to automate some tedious tasks.
 
 The structure off an IfThenElse chain is as follow: Trigger -> Check -> [Then] Action1 | [Else] Action2
@@ -92,6 +94,13 @@ If you want to generate a dot graph:
 
 
 ifthenelse -d output.dot <list of intput files>
+
+If you want to background IfThenElse.
+
+
+ifthenelse -b <list of intput files>
+
+If a directory is passed it will, recursively, scan that directory for .ife files.
 
 To stop the program send it a TERM/HUP/INT signal (e.g. press ctrl-c)
 

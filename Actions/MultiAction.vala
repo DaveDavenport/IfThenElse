@@ -18,6 +18,19 @@
 using GLib;
 namespace IfThenElse
 {
+	/**
+	 * Allow you to activate multiple branches from the same input.
+	 *
+	 * If you want to trigger Action1 and Action2 by one Trigger.
+	 * {{{
+	 * [Trigger]
+	 * ....
+	 * action=Multi
+	 *
+	 * [Multi]
+	 * action=Action1;Action2
+	 * }}}
+	 */
 	public class MultiAction : BaseAction, Base
 	{
 		private List <BaseAction> actions;

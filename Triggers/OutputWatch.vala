@@ -20,18 +20,48 @@ using Posix;
 
 namespace IfThenElse
 {
+	/**
+	 * An OutputWatch trigger: Watches the output off a program and triggers
+	 * when a certain condition is met. 
+	 *
+	 * This trigger fires when a program outputs a certain string. 
+	 *
+	 * The timer trigger supports being started and stopped and can be placed
+	 * anywhere in the chain.
+	 *
+	 * =Example=
+	 *
+	 * So if you want a certain branch (MainBranch) to fire when mpc idle
+	 * return player. 
+	 * 
+	 * Add an element like:
+	 * {{{
+	 * [MpcIdleWatch]
+	 * type=OutputWatch
+	 * cmd=mpc idleloop player 
+	 * fire_regex=.*player$
+	 * action=MainBranch
+	 * }}}
+	 *
+	 * To fire when a tool returns, e.g. inotifywatch use {@link ExternalToolTrigger}
+	 *
+	 */
 	public class OutputWatch: BaseTrigger
 	{
+		/**
+		 * The commando to execute.
+		 */
 		public string cmd {get; set; default = "";}
+
+		/**
+		 * Kill the program when the node gets deactivated. 
+		 */
 		public bool kill_child {get; set; default = true;}
+
+		/**
+ 		 * The regex that match  the output that triggers a fire
+		 */
 		public string fire_regex {get; set; default = ".*";}
-
-		public OutputWatch(string cmd)
-		{
-			this.cmd = cmd;
-		}
-
-
 
 
 		/**

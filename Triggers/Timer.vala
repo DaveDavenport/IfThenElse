@@ -67,23 +67,21 @@ namespace IfThenElse
 				}
 			}
 		}
+		/**
+		 * Timer callback.
+		 */
 		private bool timer_callback()
 		{
 				stdout.printf("Timer fire\n");
 				this.fire();
 				return true;
 		}
-		
-		public TimerTrigger(uint timeout)
-		{
-				
-		}
+		/**
+		 * Destructor
+		 */
 		~TimerTrigger()
 		{
-			if(handler > 0){
-				GLib.Source.remove(handler);
-				handler = 0;
-			}
+			disable_trigger();
 		}
 		
 		public override void enable_trigger()
@@ -99,7 +97,11 @@ namespace IfThenElse
 			}
 			handler = 0;
 		}
-		
+		/**
+		 * Generate dot code for this node.
+		 *
+		 * {@inheritDoc}
+		 */		
 		public override void output_dot(FileStream fp)
 		{
 			fp.printf("\"%s\" [label=\"%s\\nTimeout Trigger: %.2f seconds\", shape=oval]\n", 

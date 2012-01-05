@@ -19,9 +19,36 @@ using GLib;
 
 namespace IfThenElse
 {
+	/**
+	 * A init trigger: Fires onces at startup.
+	 *
+	 * This trigger fires at startup.; 
+	 *
+	 * The timer trigger supports being started and stopped and can be placed
+	 * anywhere in the chain.
+	 *
+	 * =Example=
+	 *
+	 * So if you want a certain branch (MainBranch) to fire at startup. 
+	 * Add an element like:
+	 * {{{
+	 * [InitTrigger]
+	 * type=InitTrigger
+	 * action=MainBranch
+	 * }}}
+	 *
+	 * It is also to trigger each time the object gets activated. 
+	 * This is done by setting the always_trigger property true.
+	 *
+	 * @see ClockTrigger
+	 */
 	public class InitTrigger : BaseTrigger
 	{
 		private bool init = true;	
+		/**
+		 * When this property is true, fire when this action gets
+		 * activated.
+		 */
 		public bool always_trigger {get;set;default = false;}
 		
 		public override void enable_trigger()

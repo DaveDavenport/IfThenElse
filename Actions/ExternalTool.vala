@@ -20,16 +20,28 @@ using Posix;
 
 namespace IfThenElse
 {
+	/**
+	 * Execute an external tool. 
+	 *
+	 * This executes an external tool.
+	 * 
+	 * =Example=
+	 *
+	 * {{{
+	 * [EAction]
+	 * cmd=mpc play
+	 * }}}
+	 */
 	public class ExternalToolAction: BaseAction, Base
 	{
 		public string cmd {get; set; default = "";}
+		/**
+	 	 * If the property kill_child is set to true, it kills the
+		 * client when the object is deactivated.
+		 */
 		public bool kill_child {get; set; default = false;}
 		
-		public ExternalToolAction(string cmd)
-		{
-			this.cmd = cmd;
-		}
-				private GLib.Pid pid = 0;
+		private GLib.Pid pid = 0;
 		private void child_watch_called(GLib.Pid p, int status)
 		{
 			GLib.Process.close_pid(p);

@@ -21,13 +21,32 @@ using GLib;
 namespace IfThenElse
 {
 	/**
-	 * This check class alternates between true/false. 
-	 * This is usefull purely for testing.
+	 * TimeChecks: After a certain time fire one branch, before the time fire 
+	 * the other branch.
+	 *
+	 * =Example=
+	 *
+	 * When Action1 should be fired after the set time, Action2 before the set time.
+	 * {{{
+	 * [InitTrigger]
+	 * type=TimeCheck
+	 * hour=6
+	 * minute=30
+	 * if-action=Action1
+	 * else-action=Action2
+	 * }}}
 	 */
 	public class TimeCheck : BaseCheck
 	{
+		/**
+		 * The hour, of the time.
+		 */
 		public uint hour		{get; set; default = 8;}
+		/**
+		 * The minute, of the time.
+		 */
 		public uint minute		{get; set; default = 0;}
+	
 		private bool prev_state = false;
 		private bool init = true;
 		

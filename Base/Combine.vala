@@ -18,6 +18,12 @@
 using GLib;
 namespace IfThenElse
 {
+	/**
+	 * If one or more inputs activates, it activates it child.
+	 *
+	 * This is basically an OR statement.
+	 * This is the only nodet that can be child to multiple other nodes.
+	 */
 	public class MultiCombine : BaseAction, Base
 	{
 		private BaseAction _action = null;

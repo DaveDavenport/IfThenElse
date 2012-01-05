@@ -340,9 +340,7 @@ namespace IfThenElse
 
 		// Register the types.
 		// Checks
-		var a = typeof(TrueCheck);
-		a = typeof(AlternateCheck);
-		a = typeof(ExternalToolCheck);
+		var a  = typeof(ExternalToolCheck);
 		a = typeof(TimeCheck);
 		a = typeof(OutputWatch);
 
@@ -355,6 +353,7 @@ namespace IfThenElse
 		a = typeof(TimerTrigger);
 		a = typeof(InitTrigger);
 		a = typeof(ClockTrigger);
+
 		// other
 		a = typeof(MultiCombine);
 

@@ -19,15 +19,60 @@ using GLib;
 
 namespace IfThenElse
 {
+	/**
+	 * Checks an external tool to see what branch should fire.
+	 *
+	 * =Example=
+	 *
+	 * When Action1 should be fired when test.sh returns 1, action2 should 
+	 * fire when Action2 should fire and nothing should happen 
+	 * when another status is returns. 
+	 *
+	 * {{{
+	 * [TestSHCheck]
+	 * type=ExternalToolCheck
+	 * cmd=test.sh
+	 * true_status=1	
+	 * false_status=0
+	 * compare_old_state=false
+	 * if-action=Action1
+	 * else-action=Action2
+	 * }}}
+	 * 
+	 * It is also possible to check the output string, by setting the 
+	 * output_compare property. Setting this property will disable the return
+	 * status check. 
+	 */
 
 	public class ExternalToolCheck : BaseCheck
 	{
+		/**
+		 * Program to execute.
+		 */
 		public string cmd {get; set; default = "";}
+		/**
+		 * Regex that when matches the output fires the if branch.
+		 * 
+		 * Setting this property disables the status check.
+		 */
 		public string? output_compare { get; set; default=null;}
-		public bool state = false;
-		
+	
+		/**
+		 * The output status that triggers the then branch
+		 */
 		public int true_status {get; set; default = 1;}
+
+		/**
+		 * The output status that triggers the else branch
+		 */
 		public int false_status {get; set; default=8;}
+
+		/**
+		 * If the same status result comes in a row ignore these. 
+		 * e.g. you have a script that returns 1 when the light is on and
+		 * 0 when off, you only want it to trigger when it changes. 
+		 * enabling this option enables this.
+		 */
 		public bool compare_old_state {get;set;default=false;}
 		private int old_state = -99999;
 		/**
@@ -67,7 +112,10 @@ namespace IfThenElse
 						return StateType.NO_CHANGE;
 					}
 				}else{
-						if(output_compare.strip() == output.strip())
+					try
+					{
+						var regex = new GLib.Regex (output_compare);	
+						if(regex.match(output)) 
 						{
 							if(compare_old_state && old_state == (int)StateType.TRUE)
 								return StateType.NO_CHANGE;
@@ -79,6 +127,12 @@ namespace IfThenElse
 							old_state = StateType.FALSE;
 							return StateType.FALSE;
 						}
+					}
+					catch (GLib.Error e) 
+					{
+						GLib.error("Failed to parse Regex: %s: %s", output_compare, 
+								e.message);
+					}
 				}
 			} catch(GLib.SpawnError e) {
 					GLib.error("Failed to spawn external program: %s\n",

@@ -17,6 +17,9 @@
  
 namespace IfThenElse
 {
+	/**
+	 * Abstract BaseTrigger class. All triggers should inherit from this.
+	 */
 	public abstract class BaseTrigger: BaseAction, Base
 	{
 		private BaseAction _action = null;
