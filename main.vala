@@ -124,6 +124,8 @@ using GLib;
  * ifthenelse -b <list of intput files>
  * }}}
  * 
+ * If a directory is passed it will, recursively, scan that directory for .ife files.
+ *
  * To stop the program send it a TERM/HUP/INT signal (e.g. press ctrl-c)
  *
  * To force it to reload the input files send it a USR1 signal.
@@ -196,7 +198,7 @@ namespace IfThenElse
 	{
 		stdout.printf("================ Reload all  ================\n");
 		stop();
-		load();
+		load_argument();
 		start();
 	}
 
@@ -236,14 +238,10 @@ namespace IfThenElse
 	/**
 	 * Construct the parser, load all files.
 	 */
-	private void load()
+	private void load_file(string file, bool force = false)
 	{
-		parser = null;
-		parser = new IfThenElse.Parser();
-		// Load the files passed on the commandline.
-		for(int i =1; i < g_argv.length; i++)
-		{
-			unowned string file = g_argv[i];
+		if(force || GLib.Regex.match_simple(".*\\.ife$", file))
+		{	
 			stdout.printf("Load file: %s\n", file);
 			try{
 				parser.add_from_file(file);
@@ -251,6 +249,48 @@ namespace IfThenElse
 				GLib.error("Failed to load builder file: %s, %s\n",
 						file, e.message);
 			}
+		}
+		else
+		{
+			stdout.printf("Ignoring: %s\n", file);
+		}
+	}
+	private void load_dir(string dir)
+	{
+		try{
+			Dir d = Dir.open(dir);
+			unowned string? file = null;
+			while( (file = d.read_name()) != null)
+			{
+				var filename = GLib.Path.build_filename(dir, file);
+				load(filename);
+			}
+
+		}catch(GLib.Error e) {
+			GLib.error("Failed to load directory: %s, %s\n",
+					dir, e.message);
+		}
+	}
+	private void load(string file, bool force = false)
+	{
+		if(GLib.FileUtils.test(file, GLib.FileTest.IS_REGULAR))
+		{
+			load_file(file, force);
+		}
+		else if (GLib.FileUtils.test(file, GLib.FileTest.IS_DIR))
+		{
+			load_dir(file);
+		}
+	}
+	private void load_argument()
+	{
+		parser = null;
+		parser = new IfThenElse.Parser();
+		// Load the files passed on the commandline.
+		for(int i =1; i < g_argv.length; i++)
+		{
+			unowned string file = g_argv[i];
+			load(file, true);		
 		}
 	}
 
@@ -294,88 +334,88 @@ namespace IfThenElse
 			Posix.exit(0);
 		}
 	}	
-	
+
 	static int main(string[] argv)
 	{
 
-			// Register the types.
-			// Checks
-			var a = typeof(TrueCheck);
-			a = typeof(AlternateCheck);
-			a = typeof(ExternalToolCheck);
-			a = typeof(TimeCheck);
-			a = typeof(OutputWatch);
+		// Register the types.
+		// Checks
+		var a = typeof(TrueCheck);
+		a = typeof(AlternateCheck);
+		a = typeof(ExternalToolCheck);
+		a = typeof(TimeCheck);
+		a = typeof(OutputWatch);
 
-			// Actions.
-			a = typeof(ExternalToolAction);
-			a = typeof(MultiAction);
-			
-			// Triggers
-			a = typeof(ExternalToolTrigger);
-			a = typeof(TimerTrigger);
-			a = typeof(InitTrigger);
-			a = typeof(ClockTrigger);
-			// other
-			a = typeof(MultiCombine);
+		// Actions.
+		a = typeof(ExternalToolAction);
+		a = typeof(MultiAction);
 
-
-			// Commandline options parsing.
-			GLib.OptionContext og = new GLib.OptionContext("IfThenElse");
-			og.add_main_entries(entries,null);
-			try{
-				og.parse(ref argv);
-			}catch (Error e) {
-				GLib.error("Failed to parse command line options: %s\n", 
-							e.message);
-			}
-			g_argv = argv;
-
-			// Load the setup file.
-			load();
-
-			// Generate a dot file.
-			if(dot_file != null)
-			{
-				generate_dot_file(parser);
-				parser = null;
-				// Exit succesfull
-				return 0;
-			}
-			
-
-			if(daemonize) {
-				background();
-			}
-			// Create main loop.
-			loop = new GLib.MainLoop();
-
-			/**
-			 * Handle signals
-			 */
-			var empty_mask = Posix.sigset_t ();
-			Posix.sigemptyset (empty_mask);
-
-			var act = Posix.sigaction_t ();
-			act.sa_handler = signal_handler;
-			act.sa_mask = empty_mask;
-			act.sa_flags = 0;
-
-			Posix.sigaction (Posix.SIGTERM, act, null);
-			Posix.sigaction (Posix.SIGINT, act, null);
-			Posix.sigaction (Posix.SIGHUP, act, null);
-			Posix.sigaction (Posix.SIGUSR1, act, null);
+		// Triggers
+		a = typeof(ExternalToolTrigger);
+		a = typeof(TimerTrigger);
+		a = typeof(InitTrigger);
+		a = typeof(ClockTrigger);
+		// other
+		a = typeof(MultiCombine);
 
 
-			// Run program.
-			stdout.printf("Start....\n");
-			start();
-			stdout.printf("Run loop...\n");
-			loop.run();
-			stdout.printf("\nQuit....\n");
+		// Commandline options parsing.
+		GLib.OptionContext og = new GLib.OptionContext("IfThenElse");
+		og.add_main_entries(entries,null);
+		try{
+			og.parse(ref argv);
+		}catch (Error e) {
+			GLib.error("Failed to parse command line options: %s\n", 
+					e.message);
+		}
+		g_argv = argv;
 
-			stop();
-			// Destroy
+		// Load the setup file.
+		load_argument();
+
+		// Generate a dot file.
+		if(dot_file != null)
+		{
+			generate_dot_file(parser);
 			parser = null;
+			// Exit succesfull
 			return 0;
+		}
+
+
+		if(daemonize) {
+			background();
+		}
+		// Create main loop.
+		loop = new GLib.MainLoop();
+
+		/**
+		 * Handle signals
+		 */
+		var empty_mask = Posix.sigset_t ();
+		Posix.sigemptyset (empty_mask);
+
+		var act = Posix.sigaction_t ();
+		act.sa_handler = signal_handler;
+		act.sa_mask = empty_mask;
+		act.sa_flags = 0;
+
+		Posix.sigaction (Posix.SIGTERM, act, null);
+		Posix.sigaction (Posix.SIGINT, act, null);
+		Posix.sigaction (Posix.SIGHUP, act, null);
+		Posix.sigaction (Posix.SIGUSR1, act, null);
+
+
+		// Run program.
+		stdout.printf("Start....\n");
+		start();
+		stdout.printf("Run loop...\n");
+		loop.run();
+		stdout.printf("\nQuit....\n");
+
+		stop();
+		// Destroy
+		parser = null;
+		return 0;
 	}
 }
