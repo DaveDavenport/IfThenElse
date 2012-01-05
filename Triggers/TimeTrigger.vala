@@ -19,13 +19,36 @@ using GLib;
 
 namespace IfThenElse
 {
+	/**
+	 * An alarm trigger: Fire at a certain time.
+	 *
+	 * This triggers fires at a certain time each day.
+	 * After the trigger has fired, the alarm is reset.
+	 * The alarm supports being started and stopped and can be placed
+	 * anywhere in the chain.
+	 *
+	 * =Example=
+	 *
+	 * So if you want a certain branch (MainBranch) to fire at 6 o clock
+	 * Add an element like:
+	 * {{{
+	 * [AlarmTrigger]
+	 * type=ClockTrigger
+	 * minute=0
+	 * hour=6
+	 * action=MainBranch
+	 * }}}
+	 */
 	public class ClockTrigger : BaseTrigger
 	{
 		private uint handler = 0;
 		private int _hour = 8;
 		private int _minute = 30;
 
-		/// Accessor to hour.  Valid range is 0-23.
+		/**
+		 * The hour.
+		 * Valid range is 0-23.
+		 */
 		public int hour {
 			get{
 				return _hour;
@@ -37,7 +60,10 @@ namespace IfThenElse
 				_hour = value;
 			}
 		}
-		/// Accessor to minute.  Valid range is 0-59.
+		/**
+		 * The minute.
+		 * Valid range is 0-59.
+		 */
 		public int minute {
 			get{
 				return _minute;
@@ -63,7 +89,9 @@ namespace IfThenElse
 		{
 			stop_timer();
 		}
-
+		/**
+		 * 
+		 */
 		public override void output_dot(FileStream fp)
 		{
 			fp.printf("\"%s\" [label=\"%s\\nTimeout Trigger: %02i:%02i\", shape=oval]\n", 
@@ -75,12 +103,18 @@ namespace IfThenElse
 				this.action.output_dot(fp);
 			}
 		}
-		// TIMER CODE
+		/**
+		 * restart the timer.
+		 */
 		private void restart_timer()
 		{
 			stop_timer();
 			start_timer();
 		}
+
+		/**
+		 * stop the active timer.
+		 */
 		private void stop_timer()
 		{
 			// Remove old timeout.
@@ -89,6 +123,10 @@ namespace IfThenElse
 				handler = 0;
 			}
 		}
+
+		/**
+		 * start the timer to fire at the set time.
+		 */
 		private void start_timer()
 		{
 			if(handler > 0) {
@@ -111,8 +149,10 @@ namespace IfThenElse
 
 		}
 		/**
-		 * Timer callbacks. 
-		 * Restarts the timer once done.
+		 * Timer callback.
+		 *
+		 * Fire the trigger, and
+		 * restarts the timer.
 		 */
 		private bool timer_callback()
 		{

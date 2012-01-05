@@ -1,8 +1,18 @@
+[TimeTrigger]
+type=ClockTrigger
+hour=17
+minute=30
+action=TriggerCombine
+
 [OutputWatch]
 type=OutputWatch
 kill_child = true
 cmd=dbus-monitor interface=org.gnome.ScreenSaver
 fire_regex=.*member=ActiveChanged.*
+action=TriggerCombine
+
+[TriggerCombine]
+type=MultiCombine
 action=CheckScreenSaver
 
 [CheckScreenSaver]

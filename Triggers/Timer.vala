@@ -19,15 +19,47 @@ using GLib;
 
 namespace IfThenElse
 {
+	/**
+	 * A timer trigger: Fire at a certain interval 
+	 *
+	 * This trigger fires at a certai interval. 
+	 *
+	 * The timer trigger supports being started and stopped and can be placed
+	 * anywhere in the chain.
+	 *
+	 * =Example=
+	 *
+	 * So if you want a certain branch (MainBranch) to fire each 5 seconds 
+	 * Add an element like:
+	 * {{{
+	 * [TimerTrigger]
+	 * type=TimerTrigger
+	 * timeout=5 
+	 * action=MainBranch
+	 * }}}
+	 *
+	 * To fire at a certain time use a {@link ClockTrigger}
+	 *
+	 * @see ClockTrigger
+	 */
 	public class TimerTrigger : BaseTrigger
 	{
 		private uint handler = 0;
-		private int _timeout = 5;
-		public int timeout {
+		private uint _timeout = 5;
+
+		/**
+		 * The interval at witch this trigger should fire in seconds.
+		 *
+		 *@default 5
+		 */
+		public uint timeout {
 			get{
 				return _timeout;
 			}
 			set{
+				if(value == 0) {
+					GLib.error("A timeout cannot be 0"); 
+				}
 				_timeout = value;
 				if(handler > 0) {
 					GLib.Source.remove(handler);
