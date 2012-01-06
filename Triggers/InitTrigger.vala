@@ -67,7 +67,7 @@ namespace IfThenElse
 		{
 			fp.printf("\"%s\" [label=\"%s\\nInit trigger\", shape=oval]\n", 
 						this.name,
-						this.name);
+						this.get_public_name());
 			fp.printf("\"%s\" -> \"%s\"\n", this.name, action.name);
 			this.action.output_dot(fp);
 		}

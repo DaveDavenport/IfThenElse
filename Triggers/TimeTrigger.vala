@@ -96,7 +96,7 @@ namespace IfThenElse
 		{
 			fp.printf("\"%s\" [label=\"%s\\nTimeout Trigger: %02i:%02i\", shape=oval]\n", 
 						this.name,
-						this.name,
+						this.get_public_name(),
 						this.hour, this.minute);
 			if(this.action != null) {
 				fp.printf("\"%s\" -> \"%s\"\n", this.name, action.name);

@@ -71,9 +71,9 @@ namespace IfThenElse
 		
 		public void output_dot(FileStream fp)
 		{
-			fp.printf("\"%s\" [label=\"%s\", shape=oval]\n", 
+			fp.printf("\"%s\" [label=\"%s\", shape=box]\n", 
 					this.name,
-					this.name);
+					this.get_public_name());
 			foreach(unowned BaseAction action in actions)
 			{
 				fp.printf("\"%s\" -> \"%s\"\n", this.name, 

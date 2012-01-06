@@ -358,6 +358,13 @@ namespace IfThenElse
 		FileStream fp = FileStream.open(dot_file, "w");
 		// Print header.
 		fp.printf("digraph FlowChart {\n");
+		fp.printf("""
+				node [
+					fontname = "Bitstream Vera Sans"
+			         fontsize = 8
+			         shape = "record"
+			     ]
+		 """);
 		// Iterates over all input files.
 		// Find the root item(s) and make them generate the rest 
 		// off the dot file.

@@ -93,6 +93,18 @@ namespace IfThenElse
 			GLib.stdout.printf("%s: Deactivate\n", this.name);
 			stop_application();
 		}
+		/**
+		 * Generate dot output for this node
+		 * 
+		 */
+		public void output_dot(FileStream fp)
+		{
+			fp.printf("\"%s\" [label=\"%s\\n(%s)\", shape=oval]\n", 
+						this.name,
+						this.get_public_name(),
+						cmd.escape("")
+					);
+		}
 	}
 }
 

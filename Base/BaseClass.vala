@@ -45,6 +45,14 @@ namespace IfThenElse
 		} 
 		public string name {get;set;default="n/a";}
 
+		/**
+		 * Get the public name. Strip off the filename
+		 */
+		public string get_public_name()
+		{
+			return name.substring(name.last_index_of_char(':')+1, -1);
+		}
+
 		~Base()
 		{
 			stdout.printf("Destroying: %s\n", this.name);

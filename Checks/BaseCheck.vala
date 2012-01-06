@@ -104,7 +104,7 @@ namespace IfThenElse
 			string dot_desc = this.get_dot_description();
 			fp.printf("\"%s\" [label=\"%s\\n(%s)\", shape=diamond]\n", 
 					this.name,
-					this.name,
+					this.get_public_name(),
 								dot_desc);
 			if(_then_action != null)
 			{

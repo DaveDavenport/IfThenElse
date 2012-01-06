@@ -148,7 +148,7 @@ namespace IfThenElse
 		{
 			if(output_compare != null)
 			{
-				return "%s == %s".printf(cmd, output_compare);
+				return "%s == %s".printf(cmd.escape(""), output_compare.escape(""));
 			}else{
 				return cmd;
 			}

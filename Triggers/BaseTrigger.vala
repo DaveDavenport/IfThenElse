@@ -22,7 +22,7 @@ namespace IfThenElse
 	 */
 	public abstract class BaseTrigger: BaseAction, Base
 	{
-		private BaseAction _action = null;
+		protected BaseAction _action = null;
 		// Make this unowned so we don't get circular dependency.
 		public BaseAction action {
 			get {
@@ -69,7 +69,7 @@ namespace IfThenElse
 		{
 			fp.printf("\"%s\" [label=\"%s\", shape=oval]\n", 
 						this.name,
-						this.name);
+						this.get_public_name());
 			fp.printf("\"%s\" -> \"%s\"\n", this.name, _action.name);
 			this._action.output_dot(fp);
 		}

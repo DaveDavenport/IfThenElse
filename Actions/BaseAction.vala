@@ -68,7 +68,7 @@ namespace IfThenElse
 		{
 			fp.printf("\"%s\" [label=\"%s\", shape=oval]\n", 
 						this.name,
-						this.name);
+						this.get_public_name());
 		}
 	}
 }

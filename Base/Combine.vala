@@ -64,7 +64,7 @@ namespace IfThenElse
 			{
 				fp.printf("\"%s\" [label=\"%s\", shape=box]\n", 
 						this.name,
-						this.name);
+						this.get_public_name());
 				if(_action != null) 
 				{
 					fp.printf("\"%s\" -> \"%s\"\n", this.name, _action.name);

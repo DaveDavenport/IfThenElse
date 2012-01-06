@@ -19,7 +19,7 @@ VALADOC_DRIVER?=$(shell valac --version | awk -F' ' '{c= split($$2,B,"\."); prin
 all: $(PROGRAM)
 
 # Check pkg-config dependencies.
-$(PACKAGE_CHECK): 
+$(PACKAGE_CHECK): Makefile
 	$(info == Checking dependencies: $(PACKAGES))
 	@pkg-config --exists $(PACKAGES) &&  touch $@
 

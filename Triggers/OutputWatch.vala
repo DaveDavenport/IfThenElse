@@ -158,6 +158,17 @@ namespace IfThenElse
 		{
 			stop_application();
 		}
+
+		public override void output_dot(FileStream fp)
+		{
+			fp.printf("\"%s\" [label=\"%s\\n(%s\\n==\\n%s)\", shape=oval]\n", 
+						this.name,
+						this.get_public_name(),
+						cmd.escape(""),
+						fire_regex.escape(""));
+			fp.printf("\"%s\" -> \"%s\"\n", this.name, _action.name);
+			this._action.output_dot(fp);
+		}
 	}
 }
 
