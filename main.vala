@@ -337,7 +337,7 @@ namespace IfThenElse
 		// No file given, load default location.
 		if(g_argv.length == 1)
 		{
-			var path = GLib.Path.build_filename(GLib.Environment.get_variable("HOME"), ".IfThenElse");
+			var path = GLib.Path.build_filename(GLib.Environment.get_home_dir(), ".IfThenElse");
 			load(path, false);
 		}
 		else

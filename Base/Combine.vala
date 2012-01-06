@@ -51,6 +51,30 @@ namespace IfThenElse
 		}
 
 		/**
+		 * Generate dot output for this node
+		 * 
+		 * A class implementing this interface that has children nodes should propagate this 
+		 * to its children.
+		 */
+		bool branch_walked = false;
+		public void output_dot(FileStream fp)
+		{
+			// Check to avoid duplicate output.
+			if(!branch_walked)
+			{
+				fp.printf("\"%s\" [label=\"%s\", shape=box]\n", 
+						this.name,
+						this.name);
+				if(_action != null) 
+				{
+					fp.printf("\"%s\" -> \"%s\"\n", this.name, _action.name);
+					this._action.output_dot(fp);
+				}
+				branch_walked = true;
+			}
+		}
+
+		/**
 		 * Activate()
 		 * 
 		 * Propagate this to the children.
