@@ -143,7 +143,7 @@ namespace IfThenElse
 				// time has past, so next day.
 				remaining_time+=24*60*60;
 			}
-			stdout.printf("Remaining seconds: %i\n", remaining_time);
+			GLib.debug("Remaining seconds: %i\n", remaining_time);
 
 			handler = GLib.Timeout.add_seconds(remaining_time, timer_callback);
 

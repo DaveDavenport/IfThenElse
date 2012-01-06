@@ -62,7 +62,7 @@ namespace IfThenElse
 		public void Activate()
 		{
 			BaseCheck.StateType state = this.check();
-			stdout.printf("%s Activate: %i\n", this.name, (int)state);
+			GLib.debug("%s Activate: %i\n", this.name, (int)state);
 			// If no change, do nothing.
 			if(state == BaseCheck.StateType.NO_CHANGE)
 				return;
@@ -87,7 +87,7 @@ namespace IfThenElse
 		 */
 		public void Deactivate()
 		{
-			stdout.printf("%s Deactivate\n", this.name);
+			GLib.debug("%s Deactivate\n", this.name);
 			// Deactivate both.
 			if(_then_action != null)
 				_then_action.Deactivate();

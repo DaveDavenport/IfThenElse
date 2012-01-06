@@ -48,7 +48,7 @@ namespace IfThenElse
 		
 		public void Deactivate()
 		{
-			stdout.printf("%s: Deactivate\n", this.name);
+			GLib.debug("%s: Deactivate\n", this.name);
 			if(_action != null) {
 				_action.Deactivate();
 			}
@@ -59,7 +59,7 @@ namespace IfThenElse
 		 */
 		public void fire()
 		{
-			stdout.printf("Fire trigger: %p\n", _action);
+			GLib.debug("Fire trigger: %p\n", _action);
 			if(_action != null) {
 				_action.Activate();
 			}

@@ -55,7 +55,7 @@ namespace IfThenElse
 		private void child_watch_called(GLib.Pid p, int status)
 		{
 			GLib.Process.close_pid(pid);
-			GLib.stdout.printf("Child watch called.\n");
+			GLib.debug("Child watch called.\n");
 			pid = 0;
 			if(status == 0)
 			{
@@ -68,13 +68,13 @@ namespace IfThenElse
 			if(pid == 0)
 			{
 				string[] argv;
-				GLib.stdout.printf("Start application\n");
+				GLib.debug("Start application\n");
 				try {
 					GLib.Shell.parse_argv(cmd, out argv);
 
 					foreach (var s in argv)
 					{
-						GLib.stdout.printf("argv: %s\n", s);
+						GLib.debug("argv: %s\n", s);
 					}
 					GLib.Process.spawn_async(null, argv, null, SpawnFlags.SEARCH_PATH|SpawnFlags.DO_NOT_REAP_CHILD, null, out pid);
 
@@ -88,7 +88,7 @@ namespace IfThenElse
 		{
 			if(pid > 0)
 			{
-				GLib.stdout.printf("%s: Killing pid: %i\n",this.name, (int)pid);
+				GLib.debug("%s: Killing pid: %i\n",this.name, (int)pid);
 				Posix.kill((pid_t)pid, 1);
 			}
 		}

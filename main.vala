@@ -182,25 +182,39 @@ using GLib;
  */
 namespace IfThenElse
 {
+	/** Pointer to the commandline arguments. */
 	private unowned string[] g_argv;
+	/** Pointer to the parser */
 	private Parser parser = null;
+	/** Main loop. */
 	private GLib.MainLoop  loop = null;
+	/**
+	 * Config options
+	 */
+	private bool quiet = false;
 	private bool daemonize = false;
-	string? dot_file = null;
-	const GLib.OptionEntry[] entries = {
+	private string? dot_file = null;
+	private const GLib.OptionEntry[] entries = {
 		{"dot", 	'd',	0,	GLib.OptionArg.FILENAME, 	ref dot_file,
 				"Output a flowchart off the if-the-else structure", null},
 		{"background",	'b', 0, GLib.OptionArg.NONE,		out daemonize,
 				"Daemonize the program", null},	
+		{"quiet",	'q', 0, GLib.OptionArg.NONE,		out quiet,
+				"Do not output debug messages", null},	
 		{null}
 	};
 
+	/**
+	 * Quit the program. Dot his by terminating the mainloop
+	 */
 	private void quit_program()
 	{
 		if(loop != null) loop.quit();
 	}
 
-
+	/**
+	 * Give all the root nodes the start signal
+ 	 */
 	private void start()
 	{
 		if(parser == null) return;
@@ -214,13 +228,14 @@ namespace IfThenElse
 				// Activate the toplevel one.
 				if(o is BaseAction)
 				{
-					stdout.printf("==== Starting : %s\n", (o as Base).name);
 					(o as BaseAction).Activate();
 				}
 			}
 		}
-		stdout.printf("================ Started all ================\n");
 	}
+	/**
+	 * Give all the root nodes the stop signal.
+	 */
 	private void stop()
 	{
 		if(parser == null) return;
@@ -238,12 +253,13 @@ namespace IfThenElse
 				}
 			}
 		}
-		stdout.printf("================ Stopped all ================\n");
 	}
-
+	/**
+	 * Reload all the files
+	 */
 	private void reload_files()
 	{
-		stdout.printf("================ Reload all  ================\n");
+		GLib.debug("Reload....");
 		stop();
 		load_argument();
 		start();
@@ -252,7 +268,7 @@ namespace IfThenElse
 	/**
 	 * This handles sigaction.
 	 * USR1 == RELOAD
-	 * TERM/INT == QUIT
+	 * HUP/TERM/INT == QUIT
 	 * Other == Give message
 	 */
 	static void signal_handler (int signo) 
@@ -268,14 +284,12 @@ namespace IfThenElse
 				quit_program();
 
 				if (strsignal (signo) != null) {
-					print ("\n");
-					print ("Received signal:%d->'%s'\n", signo, strsignal (signo));
+					GLib.debug ("Received signal:%d->'%s'", signo, strsignal (signo));
 				}
 				break;
 			default:
 				if (strsignal (signo) != null) {
-					print ("\n");
-					print ("Received signal:%d->'%s'\n", signo, strsignal (signo));
+					GLib.debug ("Received signal:%d->'%s'", signo, strsignal (signo));
 				}
 				break;
 		}
@@ -289,7 +303,7 @@ namespace IfThenElse
 	{
 		if(force || GLib.Regex.match_simple(".*\\.ife$", file))
 		{	
-			stdout.printf("Load file: %s\n", file);
+			GLib.debug("Load file: %s", file);
 			try{
 				parser.add_from_file(file);
 			}catch(GLib.Error e) {
@@ -299,9 +313,12 @@ namespace IfThenElse
 		}
 		else
 		{
-			stdout.printf("Ignoring: %s\n", file);
+			GLib.debug("Ignoring: %s\n", file);
 		}
 	}
+	/**
+	 * Load content off the sub directory
+	 */
 	private void load_dir(string dir)
 	{
 		try{
@@ -318,6 +335,9 @@ namespace IfThenElse
 					dir, e.message);
 		}
 	}
+	/**
+	 * Load a path. (check if it is directory or file.
+	 */
 	private void load(string file, bool force = false)
 	{
 		if(GLib.FileUtils.test(file, GLib.FileTest.IS_REGULAR))
@@ -329,6 +349,9 @@ namespace IfThenElse
 			load_dir(file);
 		}
 	}
+	/**
+	 * Load the commandline passed files
+	 */
 	private void load_argument()
 	{
 		parser = null;
@@ -398,10 +421,20 @@ namespace IfThenElse
 			Posix.exit(0);
 		}
 	}	
+	/**
+ 	 * Log handler.
+	 */
+	static void my_log_handler(string? domain, GLib.LogLevelFlags level, string message)
+	{
+		if(!quiet)
+		{
+			GLib.Log.default_handler(domain,level, message);
+		}
+	}
 
 	static int main(string[] argv)
 	{
-
+		
 		// Register the types.
 		// Checks
 		var a  = typeof(ExternalToolCheck);
@@ -421,7 +454,6 @@ namespace IfThenElse
 		// other
 		a = typeof(MultiCombine);
 
-
 		// Commandline options parsing.
 		GLib.OptionContext og = new GLib.OptionContext("IfThenElse");
 		og.add_main_entries(entries,null);
@@ -432,6 +464,11 @@ namespace IfThenElse
 					e.message);
 		}
 		g_argv = argv;
+
+		// Log handler
+		GLib.Log.set_handler(null, 
+				GLib.LogLevelFlags.LEVEL_INFO|GLib.LogLevelFlags.LEVEL_DEBUG,
+				my_log_handler);
 
 		// Load the setup file.
 		load_argument();
@@ -470,13 +507,13 @@ namespace IfThenElse
 
 
 		// Run program.
-		stdout.printf("Start....\n");
 		start();
-		stdout.printf("Run loop...\n");
 		loop.run();
-		stdout.printf("\nQuit....\n");
+
+		GLib.debug("Quit....");
 
 		stop();
+		GLib.debug("Cleanup....");
 		// Destroy
 		parser = null;
 		return 0;
