@@ -21,8 +21,9 @@ using GLib;
  * IfThenElse is a simple program used to glue small unix tools to getter
  * with the ultimate goal to automate some tedious tasks.
  *
- * The structure off an IfThenElse chain is as follow:
- * Trigger -> Check -> [Then] Action1 | [Else] Action2
+ * The structure off an IfThenElse chain matches that off a flow chart:
+ * Trigger -> Check -> [Then] Action1 | [Else] Action2.<<BR>>
+ * TODO: add nice ascii art picture here.
  *
  * For example a chain could be:
  *
@@ -36,10 +37,23 @@ using GLib;
  *
  * Each IfThenElse chain is an action in itself and can be chained up.
  * 
- * ''File format''
+ * =File format=
  *
- * A chain is described in it own file using the ini format. 
- * The above example would look like:
+ * A chain is described in it own file using the KeyFile format. 
+ * The parser used is the one provided with GLib, {@link GKeyFile}
+ * 
+ * The format used in the KeyFile is very similar to the used on windows, 
+ * with the following differences:
+ * 
+ *  * .ini files use the ';' character to begin comments, key files use the '#' character.
+ *  * Key files do not allow for ungrouped keys meaning only comments can precede the first group.
+ *  * Key files are always encoded in UTF-8.
+ *  * Key and Group names are case-sensitive, for example a group called [GROUP] is a different group from [group].
+ *  * .ini files don't have a strongly typed boolean entry type, they only have GetProfileInt. In GKeyFile only true and false (in lower case) are allowed.
+ *
+ * ==Example==
+ * 
+ * The above mentioned chain could be described with the following example: 
  *
  * {{{
  * [Trigger]
@@ -65,12 +79,23 @@ using GLib;
  * cmd=switch_on_lights.sh 
  * }}}
  *
- * As you can see all it does is to tie external tools together.
- * If you want to use multiple triggers, or drive multiple actions you have to use the
- * {@link MultiCombine} node in between to combine the different inputs, or the {@link MultiAction} to 
- * drive multiple actions.
  * 
- * So say that we want to turn_off the lights and put gajim in offline mode:
+ * As you can see in the previous example, IfThenElse ties external tools together.
+ * A IfThenElse chain can be seen as a flowchart.
+ *
+ * 
+ * ==Extending the example==
+ * 
+ * Each 'node' in the chain can only have one input and one output connected to each 'port'.
+ * So a trigger can only drive one next node, and visa versa.
+ * 
+ * If you want to use multiple triggers, or drive multiple actions you have to use one of the 
+ * special nodes. 
+ * The {@link MultiCombine} node combines the different inputs, the {@link MultiAction} 
+ * drives multiple outputs.
+ * 
+ * An example that uses the {@link MultiAction}: 
+ * Say that, in the previous example, we want to turn_off the lights and put gajim in offline mode:
  *
  * {{{
  * [Trigger]
@@ -106,30 +131,52 @@ using GLib;
  *
  * This way, it is easy to make complex chains. 
  *
- * ''Using the program''  
+ * =Using the program=
  *
- * Run the program:
+ * IfThenElse takes a keyfile describing the chain as input.
+ * 
+ * To run the program:
  * {{{
- * ifthenelse <list of input files>
- * }}}
- *
- *
- * If you want to generate a dot graph:
- * {{{
- * ifthenelse -d output.dot <list of intput files>
+ * 		ifthenelse <list of input files>
  * }}}
  *
  * If you want to background IfThenElse. 
  * {{{
- * ifthenelse -b <list of intput files>
+ * 		ifthenelse -b <list of intput files>
  * }}}
  * 
- * If a directory is passed it will, recursively, scan that directory for .ife files.
+ * If you want to generate a flow chart from the chain:
+ * {{{
+ * 		ifthenelse -d output.dot <list of intput files>
+ * }}}
  *
- * To stop the program send it a TERM/HUP/INT signal (e.g. press ctrl-c)
+ * The generated dot file can be converted into an actual chart by
+ * running do on it:
+ * {{{
+ * 		dot -Tpng -O output.dot
+ * }}}
+ * This will generate a output.dot.png
  *
- * To force it to reload the input files send it a USR1 signal.
+ * ==Accepted inputfiles==
  * 
+ * IfThenElse accepts both individual files as input as directories.
+ * If a directory is passed it will, recursively, scan that directory for .ife files.
+ * 
+ * If no input file is given, it will load the .ife files in the ~/.IfThenElse directory.
+ *
+ * ==Accepted Signals==
+ * 
+ * IfThenElse accepts the following signals:
+ *
+ *  * INT, HUP, TERMP: Exit the program.
+ *  * USR1: Reload the input files.
+ *
+ * 
+ * =Error Handling=
+ *
+ * Error handling is currently not propperly handled in IfThenElse.
+ * In it current form it will exit when any error is encountered.
+ *
  * @see MultiAction
  * @see MultiCombine
  */
@@ -286,11 +333,21 @@ namespace IfThenElse
 	{
 		parser = null;
 		parser = new IfThenElse.Parser();
-		// Load the files passed on the commandline.
-		for(int i =1; i < g_argv.length; i++)
+
+		// No file given, load default location.
+		if(g_argv.length == 1)
 		{
-			unowned string file = g_argv[i];
-			load(file, true);		
+			var path = GLib.Path.build_filename(GLib.Environment.get_variable("HOME"), ".IfThenElse");
+			load(path, false);
+		}
+		else
+		{
+			// Load the files passed on the commandline.
+			for(int i =1; i < g_argv.length; i++)
+			{
+				unowned string file = g_argv[i];
+				load(file, true);		
+			}
 		}
 	}
 
