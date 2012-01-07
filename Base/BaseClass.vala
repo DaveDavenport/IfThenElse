@@ -55,7 +55,7 @@ namespace IfThenElse
 
 		~Base()
 		{
-			GLib.debug("Destroying: %s\n", this.name);
+			GLib.message("Destroying: %s\n", this.name);
 		}	
 		/**
 		 * Check if it is a toplevel object.

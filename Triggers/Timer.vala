@@ -72,7 +72,7 @@ namespace IfThenElse
 		 */
 		private bool timer_callback()
 		{
-				GLib.debug("Timer fire\n");
+				GLib.message("Timer fire\n");
 				this.fire();
 				return true;
 		}

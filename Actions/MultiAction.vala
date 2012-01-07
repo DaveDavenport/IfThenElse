@@ -61,7 +61,7 @@ namespace IfThenElse
 		 */
 		public void Deactivate()
 		{
-			GLib.debug("%s: Deactivate\n", this.name);
+			GLib.message("%s: Deactivate\n", this.name);
 			foreach(BaseAction action in actions)
 			{
 				action.Deactivate();

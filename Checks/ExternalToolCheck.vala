@@ -93,7 +93,7 @@ namespace IfThenElse
 				GLib.Process.spawn_command_line_sync(cmd,
 							out output, null, out exit_value);
 				exit_value = GLib.Process.exit_status(exit_value);
-				GLib.debug("output: %i:%s vs %s\n", exit_value, output, output_compare);
+				GLib.message("output: %i:%s vs %s\n", exit_value, output, output_compare);
 				if(output_compare == null)
 				{
 					if(compare_old_state)

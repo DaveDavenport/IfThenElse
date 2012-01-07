@@ -43,7 +43,7 @@ namespace IfThenElse
 		 */
 		~Parser()
 		{
-			GLib.debug("Destroying parser\n");
+			GLib.message("Destroying parser\n");
 		}
 
 		/**
@@ -56,7 +56,7 @@ namespace IfThenElse
 			foreach(string group in kf.get_groups())
 			{
 				var str_tp = kf.get_string(group, "type");
-				GLib.debug("Creating object: %s\n", group);
+				GLib.message("Creating object: %s\n", group);
 				GLib.Type tp = GLib.Type.from_name("IfThenElse"+str_tp);
 				if(tp == 0) {
 					GLib.error("Failed to lookup type: %s for %s\n",str_tp, group);
@@ -82,13 +82,13 @@ namespace IfThenElse
 				}catch(GLib.KeyFileError e) {
 					GLib.error("Failed to parse keyfile: %s", e.message);
 				}
-				GLib.debug("=== %s ===\n", group);
+				GLib.message("=== %s ===\n", group);
 				foreach(var prop in keys)
 				{
 					// Skip the "Type" field.
 					if(prop == "type") continue;
 
-					GLib.debug("Setting property: %s\n", prop);
+					GLib.message("Setting property: %s\n", prop);
 
 					// Load property
 					unowned ParamSpec? ps = object.get_class().find_property(prop);

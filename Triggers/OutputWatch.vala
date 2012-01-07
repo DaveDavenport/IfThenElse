@@ -73,11 +73,11 @@ namespace IfThenElse
 			size_t length, term_pos;
 			try{
 				source.read_line(out retv,  out length, out term_pos);
-				GLib.debug("Read: %s\n", retv);
+				GLib.message("Read: %s\n", retv);
 				// continue to watch.
 				var regex = new GLib.Regex (fire_regex);	
 				if(regex.match(retv)) {
-					GLib.debug("Fire: %s\n", retv);
+					GLib.message("Fire: %s\n", retv);
 					this.fire();
 				}
 			}catch(GLib.Error e) {
@@ -94,7 +94,7 @@ namespace IfThenElse
 		private void child_watch_called(GLib.Pid p, int status)
 		{
 			GLib.Process.close_pid(p);
-			GLib.debug("Child watch called: %i.\n", (int)p);
+			GLib.message("Child watch called: %i.\n", (int)p);
 			pid = 0;
 			if(output_watch > 0){
 				GLib.Source.remove(output_watch);
@@ -116,14 +116,14 @@ namespace IfThenElse
 			if(pid == 0)
 			{
 				string[] argv;
-				GLib.debug("Start application\n");
+				GLib.message("Start application\n");
 				try {
 					int standard_output = -1;
 					GLib.Shell.parse_argv(cmd, out argv);
 
 					foreach (var s in argv)
 					{
-						GLib.debug("argv: %s\n", s);
+						GLib.message("argv: %s\n", s);
 					}
 					GLib.Process.spawn_async_with_pipes(
 							null, argv, null, 
@@ -143,7 +143,7 @@ namespace IfThenElse
 		{
 			if(pid > 0)
 			{
-				GLib.debug("%s: Killing pid: %i\n",this.name, (int)pid);
+				GLib.message("%s: Killing pid: %i\n",this.name, (int)pid);
 				Posix.kill((pid_t)pid, 1);
 				// Disconnect all signals. 
 				child_watch_called(pid, 1);

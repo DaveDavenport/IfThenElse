@@ -259,7 +259,7 @@ namespace IfThenElse
 	 */
 	private void reload_files()
 	{
-		GLib.debug("Reload....");
+		GLib.message("Reload....");
 		stop();
 		load_argument();
 		start();
@@ -284,12 +284,12 @@ namespace IfThenElse
 				quit_program();
 
 				if (strsignal (signo) != null) {
-					GLib.debug ("Received signal:%d->'%s'", signo, strsignal (signo));
+					GLib.message ("Received signal:%d->'%s'", signo, strsignal (signo));
 				}
 				break;
 			default:
 				if (strsignal (signo) != null) {
-					GLib.debug ("Received signal:%d->'%s'", signo, strsignal (signo));
+					GLib.message ("Received signal:%d->'%s'", signo, strsignal (signo));
 				}
 				break;
 		}
@@ -303,7 +303,7 @@ namespace IfThenElse
 	{
 		if(force || GLib.Regex.match_simple(".*\\.ife$", file))
 		{	
-			GLib.debug("Load file: %s", file);
+			GLib.message("Load file: %s", file);
 			try{
 				parser.add_from_file(file);
 			}catch(GLib.Error e) {
@@ -313,7 +313,7 @@ namespace IfThenElse
 		}
 		else
 		{
-			GLib.debug("Ignoring: %s\n", file);
+			GLib.message("Ignoring: %s\n", file);
 		}
 	}
 	/**
@@ -467,7 +467,8 @@ namespace IfThenElse
 
 		// Log handler
 		GLib.Log.set_handler(null, 
-				GLib.LogLevelFlags.LEVEL_INFO|GLib.LogLevelFlags.LEVEL_DEBUG,
+				GLib.LogLevelFlags.LEVEL_INFO|GLib.LogLevelFlags.LEVEL_DEBUG|
+				GLib.LogLevelFlags.LEVEL_MESSAGE,
 				my_log_handler);
 
 		// Load the setup file.
@@ -510,10 +511,10 @@ namespace IfThenElse
 		start();
 		loop.run();
 
-		GLib.debug("Quit....");
+		GLib.message("Quit....");
 
 		stop();
-		GLib.debug("Cleanup....");
+		GLib.message("Cleanup....");
 		// Destroy
 		parser = null;
 		return 0;
