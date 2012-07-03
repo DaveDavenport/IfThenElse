@@ -2,7 +2,7 @@ PROGRAM=ifthenelse
 SOURCES=$(wildcard *.vala **/*.vala)
 PACKAGES=glib-2.0
 EMPTY=
-PREFIX?=~/.local/
+PREFIX?=/usr
 
 
 
