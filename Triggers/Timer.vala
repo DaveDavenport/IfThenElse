@@ -48,7 +48,7 @@ namespace IfThenElse
 		private uint _timeout = 5;
 
 
-        public bool repeat { get; set; default = false;}
+        public bool repeat { get; set; default = true;}
 		/**
 		 * The interval at witch this trigger should fire in seconds.
 		 *
