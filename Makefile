@@ -33,7 +33,7 @@ clean:
 	@rm -rf $(PROGRAM) $(PACKAGE_CHECK)
 
 install:
-	install $(PROGRAM) $(PREFIX)/bin/
+	install -Dm 755 $(PROGRAM) $(PREFIX)/bin/
 
 
 doc:
