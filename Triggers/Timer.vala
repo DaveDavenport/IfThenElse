@@ -1,40 +1,40 @@
 /*
  * Copyright 2011-2012  Martijn Koedam <qball@gmpclient.org>
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
- * published by the Free Software Foundation; either version 2 of 
+ * published by the Free Software Foundation; either version 2 of
  * the License.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 using GLib;
 
 namespace IfThenElse
 {
 	/**
-	 * A timer trigger: Fire at a certain interval 
+	 * A timer trigger: Fire at a certain interval
 	 *
-	 * This trigger fires at a certai interval. 
+	 * This trigger fires at a certai interval.
 	 *
 	 * The timer trigger supports being started and stopped and can be placed
 	 * anywhere in the chain.
 	 *
 	 * =Example=
 	 *
-	 * So if you want a certain branch (MainBranch) to fire each 5 seconds 
+	 * So if you want a certain branch (MainBranch) to fire each 5 seconds
 	 * Add an element like:
 	 * {{{
 	 * [TimerTrigger]
 	 * type=TimerTrigger
-	 * timeout=5 
+	 * timeout=5
 	 * action=MainBranch
 	 * }}}
 	 *
@@ -47,6 +47,8 @@ namespace IfThenElse
 		private uint handler = 0;
 		private uint _timeout = 5;
 
+
+        public bool repeat { get; set; default = false;}
 		/**
 		 * The interval at witch this trigger should fire in seconds.
 		 *
@@ -58,7 +60,7 @@ namespace IfThenElse
 			}
 			set{
 				if(value == 0) {
-					GLib.error("A timeout cannot be 0"); 
+					GLib.error("A timeout cannot be 0");
 				}
 				_timeout = value;
 				if(handler > 0) {
@@ -74,7 +76,8 @@ namespace IfThenElse
 		{
 				GLib.message("Timer fire\n");
 				this.fire();
-				return true;
+                if(!this.repeat) handler = 0;
+				return this.repeat;
 		}
 		/**
 		 * Destructor
@@ -83,7 +86,7 @@ namespace IfThenElse
 		{
 			disable_trigger();
 		}
-		
+
 		public override void enable_trigger()
 		{
 			if(handler == 0) {
@@ -101,10 +104,10 @@ namespace IfThenElse
 		 * Generate dot code for this node.
 		 *
 		 * {@inheritDoc}
-		 */		
+		 */
 		public override void output_dot(FileStream fp)
 		{
-			fp.printf("\"%s\" [label=\"%s\\nTimeout Trigger: %.2f seconds\", shape=oval]\n", 
+			fp.printf("\"%s\" [label=\"%s\\nTimeout Trigger: %.2f seconds\", shape=oval]\n",
 						this.name,
 						this.name,
 						this.timeout);
