@@ -1,20 +1,20 @@
 /*
  * Copyright 2011-2012  Martijn Koedam <qball@gmpclient.org>
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
- * published by the Free Software Foundation; either version 2 of 
+ * published by the Free Software Foundation; either version 2 of
  * the License.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 using GLib;
 
 /**
@@ -36,15 +36,15 @@ using GLib;
  * when the movie is finished.
  *
  * Each IfThenElse chain is an action in itself and can be chained up.
- * 
+ *
  * =File format=
  *
- * A chain is described in it own file using the KeyFile format. 
+ * A chain is described in it own file using the KeyFile format.
  * The parser used is the one provided with GLib, {@link GKeyFile}
- * 
- * The format used in the KeyFile is very similar to the used on windows, 
+ *
+ * The format used in the KeyFile is very similar to the used on windows,
  * with the following differences:
- * 
+ *
  *  * .ini files use the ';' character to begin comments, key files use the '#' character.
  *  * Key files do not allow for ungrouped keys meaning only comments can precede the first group.
  *  * Key files are always encoded in UTF-8.
@@ -52,15 +52,15 @@ using GLib;
  *  * .ini files don't have a strongly typed boolean entry type, they only have GetProfileInt. In GKeyFile only true and false (in lower case) are allowed.
  *
  * ==Example==
- * 
- * The above mentioned chain could be described with the following example: 
+ *
+ * The above mentioned chain could be described with the following example:
  *
  * {{{
  * [Trigger]
  * type=TimerTrigger
  * timeout=60
  * action=Check
- * 
+ *
  * [Check]
  * type=ExternalToolCheck
  * cmd=check_movies.sh
@@ -69,32 +69,32 @@ using GLib;
  * compare_old_state=true
  * then_action=Then
  * else_action=Else
- * 
+ *
  * [Then]
  * type=ExternalToolAction
  * cmd=switch_off_lights.sh
- * 
+ *
  * [Else]
  * type=ExternalToolAction
- * cmd=switch_on_lights.sh 
+ * cmd=switch_on_lights.sh
  * }}}
  *
- * 
+ *
  * As you can see in the previous example, IfThenElse ties external tools together.
  * A IfThenElse chain can be seen as a flowchart.
  *
- * 
+ *
  * ==Extending the example==
- * 
+ *
  * Each 'node' in the chain can only have one input and one output connected to each 'port'.
  * So a trigger can only drive one next node, and visa versa.
- * 
- * If you want to use multiple triggers, or drive multiple actions you have to use one of the 
- * special nodes. 
- * The {@link MultiCombine} node combines the different inputs, the {@link MultiAction} 
+ *
+ * If you want to use multiple triggers, or drive multiple actions you have to use one of the
+ * special nodes.
+ * The {@link MultiCombine} node combines the different inputs, the {@link MultiAction}
  * drives multiple outputs.
- * 
- * An example that uses the {@link MultiAction}: 
+ *
+ * An example that uses the {@link MultiAction}:
  * Say that, in the previous example, we want to turn_off the lights and put gajim in offline mode:
  *
  * {{{
@@ -102,7 +102,7 @@ using GLib;
  * type=TimerTrigger
  * timeout=60
  * action=Check
- * 
+ *
  * [Check]
  * type=ExternalToolCheck
  * cmd=check_movies.sh
@@ -115,36 +115,36 @@ using GLib;
  * [ThenMulti]
  * type=MultiAction
  * action=Then1;Then2
- * 
+ *
  * [Then1]
  * type=ExternalToolAction
  * cmd=switch_off_lights.sh
- * 
+ *
  * [Then2]
  * type=ExternalToolAction
  * cmd=gajim-remote change_status offline
  *
  * [Else]
  * type=ExternalToolAction
- * cmd=switch_on_lights.sh 
+ * cmd=switch_on_lights.sh
  * }}}
  *
- * This way, it is easy to make complex chains. 
+ * This way, it is easy to make complex chains.
  *
  * =Using the program=
  *
  * IfThenElse takes a keyfile describing the chain as input.
- * 
+ *
  * To run the program:
  * {{{
  * 		ifthenelse <list of input files>
  * }}}
  *
- * If you want to background IfThenElse. 
+ * If you want to background IfThenElse.
  * {{{
  * 		ifthenelse -b <list of intput files>
  * }}}
- * 
+ *
  * If you want to generate a flow chart from the chain:
  * {{{
  * 		ifthenelse -d output.dot <list of intput files>
@@ -158,20 +158,20 @@ using GLib;
  * This will generate a output.dot.png
  *
  * ==Accepted inputfiles==
- * 
+ *
  * IfThenElse accepts both individual files as input as directories.
  * If a directory is passed it will, recursively, scan that directory for .ife files.
- * 
+ *
  * If no input file is given, it will load the .ife files in the ~/.IfThenElse directory.
  *
  * ==Accepted Signals==
- * 
+ *
  * IfThenElse accepts the following signals:
  *
  *  * INT, HUP, TERMP: Exit the program.
  *  * USR1: Reload the input files.
  *
- * 
+ *
  * =Error Handling=
  *
  * Error handling is currently not propperly handled in IfThenElse.
@@ -198,9 +198,9 @@ namespace IfThenElse
 		{"dot", 	'd',	0,	GLib.OptionArg.FILENAME, 	ref dot_file,
 				"Output a flowchart off the if-the-else structure", null},
 		{"background",	'b', 0, GLib.OptionArg.NONE,		out daemonize,
-				"Daemonize the program", null},	
+				"Daemonize the program", null},
 		{"quiet",	'q', 0, GLib.OptionArg.NONE,		out quiet,
-				"Do not output debug messages", null},	
+				"Do not output debug messages", null},
 		{null}
 	};
 
@@ -271,7 +271,7 @@ namespace IfThenElse
 	 * HUP/TERM/INT == QUIT
 	 * Other == Give message
 	 */
-	static void signal_handler (int signo) 
+	static void signal_handler (int signo)
 	{
 		if(signo == Posix.SIGUSR1) {
 			reload_files();
@@ -301,8 +301,8 @@ namespace IfThenElse
 	 */
 	private void load_file(string file, bool force = false)
 	{
-		if(force || GLib.Regex.match_simple(".*\\.ife$", file))
-		{	
+		if(force || GLib.Regex.match_simple(".*\\.(ife|ini)$", file))
+		{
 			GLib.message("Load file: %s", file);
 			try{
 				parser.add_from_file(file);
@@ -369,7 +369,7 @@ namespace IfThenElse
 			for(int i =1; i < g_argv.length; i++)
 			{
 				unowned string file = g_argv[i];
-				load(file, true);		
+				load(file, true);
 			}
 		}
 	}
@@ -389,7 +389,7 @@ namespace IfThenElse
 			     ]
 		 """);
 		// Iterates over all input files.
-		// Find the root item(s) and make them generate the rest 
+		// Find the root item(s) and make them generate the rest
 		// off the dot file.
 		var objects = builder.get_objects();
 		foreach ( GLib.Object o in objects)
@@ -420,7 +420,7 @@ namespace IfThenElse
 			// Main thread.
 			Posix.exit(0);
 		}
-	}	
+	}
 	/**
  	 * Log handler.
 	 */
@@ -434,7 +434,7 @@ namespace IfThenElse
 
 	static int main(string[] argv)
 	{
-		
+
 		// Register the types.
 		// Checks
 		var a  = typeof(ExternalToolCheck);
@@ -461,13 +461,13 @@ namespace IfThenElse
 		try{
 			og.parse(ref argv);
 		}catch (Error e) {
-			GLib.error("Failed to parse command line options: %s\n", 
+			GLib.error("Failed to parse command line options: %s\n",
 					e.message);
 		}
 		g_argv = argv;
 
 		// Log handler
-		GLib.Log.set_handler(null, 
+		GLib.Log.set_handler(null,
 				GLib.LogLevelFlags.LEVEL_INFO|GLib.LogLevelFlags.LEVEL_DEBUG|
 				GLib.LogLevelFlags.LEVEL_MESSAGE,
 				my_log_handler);
