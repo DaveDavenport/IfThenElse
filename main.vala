@@ -228,7 +228,7 @@ namespace IfThenElse
 				// Activate the toplevel one.
 				if(o is BaseAction)
 				{
-					(o as BaseAction).Activate();
+					(o as BaseAction).Activate(o as Base);
 				}
 			}
 		}
@@ -249,7 +249,7 @@ namespace IfThenElse
 				// Activate the toplevel one.
 				if(o is BaseAction)
 				{
-					(o as BaseAction).Deactivate();
+					(o as BaseAction).Deactivate(o as Base);
 				}
 			}
 		}
@@ -453,6 +453,7 @@ namespace IfThenElse
 
 		// other
 		a = typeof(MultiCombine);
+		a = typeof(AndCombine);
 
 		// Commandline options parsing.
 		GLib.OptionContext og = new GLib.OptionContext("IfThenElse");

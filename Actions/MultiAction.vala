@@ -46,11 +46,11 @@ namespace IfThenElse
 		 * 
 		 * Propagate this to the children.
 		 */
-		public void Activate()
+		public void Activate(Base p)
 		{
 			foreach(BaseAction action in actions)
 			{
-				action.Activate();
+				action.Activate(this);
 			}
 		}
 
@@ -59,12 +59,12 @@ namespace IfThenElse
 		 * 
 		 * Propagate this to the children.
 		 */
-		public void Deactivate()
+		public void Deactivate(Base p)
 		{
 			GLib.message("%s: Deactivate\n", this.name);
 			foreach(BaseAction action in actions)
 			{
-				action.Deactivate();
+				action.Deactivate(this);
 			}
 		}
 		

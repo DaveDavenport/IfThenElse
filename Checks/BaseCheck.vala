@@ -59,7 +59,7 @@ namespace IfThenElse
 		 * Handle activation. In this case, we call the check,
 		 * see if it changed.
 		 */
-		public void Activate()
+		public void Activate(Base p)
 		{
 			BaseCheck.StateType state = this.check();
 			GLib.message("%s Activate: %i\n", this.name, (int)state);
@@ -70,29 +70,29 @@ namespace IfThenElse
 			{
 				// Then statement.
 				if(_then_action != null)
-					_then_action.Activate();
+					_then_action.Activate(this);
 				if(_else_action != null)
-					_else_action.Deactivate();
+					_else_action.Deactivate(this);
 			}else{
 				// Else Statement.
 				if(_else_action != null)
-					_else_action.Activate();
+					_else_action.Activate(this);
 				if(_then_action != null)
-					_then_action.Deactivate();
+					_then_action.Deactivate(this);
 			}
 		}
 
 		/**
 		 * If we get deactivated, propagate this to the children.
 		 */
-		public void Deactivate()
+		public void Deactivate(Base p)
 		{
 			GLib.message("%s Deactivate\n", this.name);
 			// Deactivate both.
 			if(_then_action != null)
-				_then_action.Deactivate();
+				_then_action.Deactivate(this);
 			if(_else_action != null)
-				_else_action.Deactivate();
+				_else_action.Deactivate(this);
 		}
 
 		/**

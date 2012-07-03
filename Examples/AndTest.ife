@@ -1,0 +1,31 @@
+[Timeout]
+type=TimerTrigger
+timeout=5
+action=MultiAction
+
+[MultiAction]
+type=MultiAction
+action=TriggerA;TriggerB
+
+
+[TriggerA]
+type=ExternalToolCheck
+cmd=cat a.txt
+compare-old-state=true
+output-compare=1
+then_action=AndTest
+
+[TriggerB]
+type=ExternalToolCheck
+cmd=cat b.txt
+compare-old-state=true
+output-compare=1
+then_action=AndTest
+
+[AndTest]
+type=AndCombine
+action=TestAction
+
+[TestAction]
+type=ExternalToolAction
+cmd=echo "aap noot mies"

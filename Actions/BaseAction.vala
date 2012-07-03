@@ -40,7 +40,7 @@ namespace IfThenElse
 		 * For Example the trigger calls this on the Action when fired.
 		 * Or the Chain calls this on the active branch.
 		 */
-		public virtual void Activate()
+		public virtual void Activate(Base p)
 		{
 			GLib.error("Activate action has not been implemented");
 		}
@@ -54,7 +54,7 @@ namespace IfThenElse
 		 * deactivatable. This is called for example on an action if 
 		 * The Chain condition changes.
 		 */
-		public virtual void Deactivate()
+		public virtual void Deactivate(Base p)
 		{
 			GLib.warning("Deactivate action has not been implemented");
 		}

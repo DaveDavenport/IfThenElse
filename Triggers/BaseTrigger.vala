@@ -41,16 +41,16 @@ namespace IfThenElse
 		/**
 		 * BaseAction implementation.
 		 */
-		public void Activate()
+		public void Activate(Base p)
 		{
 			enable_trigger();
 		}
 		
-		public void Deactivate()
+		public void Deactivate(Base p)
 		{
 			GLib.message("%s: Deactivate\n", this.name);
 			if(_action != null) {
-				_action.Deactivate();
+				_action.Deactivate(this);
 			}
 			disable_trigger();
 		}
@@ -61,7 +61,7 @@ namespace IfThenElse
 		{
 			GLib.message("Fire trigger: %p\n", _action);
 			if(_action != null) {
-				_action.Activate();
+				_action.Activate(this);
 			}
 		}
 		

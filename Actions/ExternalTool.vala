@@ -84,11 +84,11 @@ namespace IfThenElse
 			}
 		}
 		
-		public void Activate()
+		public void Activate(Base p)
 		{
 			start_application();
 		}
-		public void Deactivate()
+		public void Deactivate(Base p)
 		{
 			GLib.message("%s: Deactivate\n", this.name);
 			stop_application();

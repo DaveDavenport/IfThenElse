@@ -24,7 +24,7 @@ namespace IfThenElse
 	 * This is basically an OR statement.
 	 * This is the only nodet that can be child to multiple other nodes.
 	 */
-	public class MultiCombine : BaseAction, Base
+	public class AndCombine : BaseAction, Base
 	{
 		private BaseAction _action = null;
 		public BaseAction action { 
@@ -79,18 +79,39 @@ namespace IfThenElse
 		 * 
 		 * Propagate this to the children.
 		 */
-		public void Activate(Base p)
+		private List <unowned Base> active;
+        private List <unowned Base> inactive;
+
+		public void Activate(Base b)
 		{
-			action.Activate(this);
-		}
+            unowned List <unowned Base> item = inactive.find(b);
+            if(item != null) {
+                inactive.remove(b);
+            }
+            item = active.find(b);
+            if(item == null) {
+                active.prepend(b);
+            }
+            if(active.length() == parents.length()) {
+                action.Activate(this);
+            }
+        }
 
 		/**
 		 * Deactivate()
 		 * 
 		 * Propagate this to the children.
 		 */
-		public void Deactivate(Base p)
+		public void Deactivate(Base b)
 		{
+            unowned List <unowned Base> item = active.find(b);
+            if(item != null) {
+                active.remove(b);
+            }
+            item = inactive.find(b);
+            if(item == null) {
+                inactive.prepend(b);
+            }
 			action.Deactivate(this);
 		}
 	}
