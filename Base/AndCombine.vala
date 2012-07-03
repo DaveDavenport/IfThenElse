@@ -1,20 +1,20 @@
 /*
  * Copyright 2011-2012  Martijn Koedam <qball@gmpclient.org>
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
- * published by the Free Software Foundation; either version 2 of 
+ * published by the Free Software Foundation; either version 2 of
  * the License.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 using GLib;
 namespace IfThenElse
 {
@@ -27,7 +27,7 @@ namespace IfThenElse
 	public class AndCombine : BaseAction, Base
 	{
 		private BaseAction _action = null;
-		public BaseAction action { 
+		public BaseAction action {
 			get {
 				return _action;
 			}
@@ -52,8 +52,8 @@ namespace IfThenElse
 
 		/**
 		 * Generate dot output for this node
-		 * 
-		 * A class implementing this interface that has children nodes should propagate this 
+		 *
+		 * A class implementing this interface that has children nodes should propagate this
 		 * to its children.
 		 */
 		bool branch_walked = false;
@@ -62,10 +62,10 @@ namespace IfThenElse
 			// Check to avoid duplicate output.
 			if(!branch_walked)
 			{
-				fp.printf("\"%s\" [label=\"%s\", shape=box]\n", 
+				fp.printf("\"%s\" [label=\"AND\\n%s\", shape=box]\n",
 						this.name,
 						this.get_public_name());
-				if(_action != null) 
+				if(_action != null)
 				{
 					fp.printf("\"%s\" -> \"%s\"\n", this.name, _action.name);
 					this._action.output_dot(fp);
@@ -76,7 +76,7 @@ namespace IfThenElse
 
 		/**
 		 * Activate()
-		 * 
+		 *
 		 * Propagate this to the children.
 		 */
 		private List <unowned Base> active;
@@ -99,7 +99,7 @@ namespace IfThenElse
 
 		/**
 		 * Deactivate()
-		 * 
+		 *
 		 * Propagate this to the children.
 		 */
 		public void Deactivate(Base b)
