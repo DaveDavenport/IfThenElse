@@ -24,6 +24,12 @@ namespace IfThenElse
 	 * This is basically an AND statement.
 	 * This is and {@link MultiCombine} are only nodes that can be child to multiple other nodes.
      *
+     * Example:
+     * {{{
+     *  [CombineInputs]
+     *  type=AndCombine
+     *  action=CombinedAndAction
+     * }}}
      * @see MultiCombine
 	 */
 	public class AndCombine : BaseAction, Base
@@ -116,7 +122,7 @@ namespace IfThenElse
             if(item == null) {
                 inactive.prepend(b);
             }
-            // If in previous state everybody was activated, 
+            // If in previous state everybody was activated,
             // Deactivated.
             if(cur_activated == parents.length())
             {
