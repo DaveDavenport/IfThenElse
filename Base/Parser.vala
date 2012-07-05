@@ -52,6 +52,11 @@ namespace IfThenElse
 		private void load_classes(string prefix, GLib.KeyFile kf) 
 			throws GLib.KeyFileError, ParserError
 		{
+            if(kf.has_group("disable"))
+            {
+                GLib.message("Not loading file, disabled");
+                return;
+            }
 			// Create all instances.
 			foreach(string group in kf.get_groups())
 			{

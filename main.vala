@@ -177,6 +177,14 @@ using GLib;
  * Error handling is currently not propperly handled in IfThenElse.
  * In it current form it will exit when any error is encountered.
  *
+ * =Disable script=
+ * 
+ * To disable a script add an empty category called 'disable'. e.g.
+ *
+ * {{{
+ * [disable]
+ * }}}
+ * 
  * @see MultiAction
  * @see MultiCombine
  */
