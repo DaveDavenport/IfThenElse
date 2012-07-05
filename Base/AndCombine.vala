@@ -19,9 +19,9 @@ using GLib;
 namespace IfThenElse
 {
 	/**
-	 * If one or more inputs activates, it activates it child.
+	 * If all its inputs are activates, it activates it child.
 	 *
-	 * This is basically an OR statement.
+	 * This is basically an AND statement.
 	 * This is the only nodet that can be child to multiple other nodes.
 	 */
 	public class AndCombine : BaseAction, Base
@@ -104,6 +104,8 @@ namespace IfThenElse
 		 */
 		public void Deactivate(Base b)
 		{
+            // current number of activated items.
+            uint cur_activated = active.length();
             unowned List <unowned Base> item = active.find(b);
             if(item != null) {
                 active.remove(b);
@@ -112,7 +114,12 @@ namespace IfThenElse
             if(item == null) {
                 inactive.prepend(b);
             }
-			action.Deactivate(this);
-		}
+            // If in previous state everybody was activated, 
+            // Deactivated.
+            if(cur_activated == parents.length())
+            {
+                action.Deactivate(this);
+            }
+        }
 	}
 }
