@@ -193,22 +193,26 @@ namespace IfThenElse
 	/** Pointer to the commandline arguments. */
 	private unowned string[] g_argv;
 	/** Pointer to the parser */
-	private Parser parser = null;
+	private Parser          parser        = null;
 	/** Main loop. */
-	private GLib.MainLoop  loop = null;
+	private GLib.MainLoop   loop          = null;
 	/**
 	 * Config options
 	 */
-	private bool quiet = false;
-	private bool daemonize = false;
-	private string? dot_file = null;
-	private const GLib.OptionEntry[] entries = {
+    private bool            quiet         = false;
+    private bool            daemonize     = false;
+    private bool            ignore_errors = false;
+	private string?         dot_file      = null;
+
+	const GLib.OptionEntry[] entries = {
 		{"dot", 	'd',	0,	GLib.OptionArg.FILENAME, 	ref dot_file,
 				"Output a flowchart off the if-the-else structure", null},
 		{"background",	'b', 0, GLib.OptionArg.NONE,		out daemonize,
-				"Daemonize the program", null},
-		{"quiet",	'q', 0, GLib.OptionArg.NONE,		out quiet,
-				"Do not output debug messages", null},
+				"Daemonize the program", null},	
+        {"ignore-errors", 'i', 0, GLib.OptionArg.NONE,      out ignore_errors,
+                "Ignore unparsable input files", null},
+        {"quiet", 'q', 0, GLib.OptionArg.NONE,      out quiet,
+                "Reduce debug output", null},
 		{null}
 	};
 
@@ -314,9 +318,14 @@ namespace IfThenElse
 			GLib.message("Load file: %s", file);
 			try{
 				parser.add_from_file(file);
-			}catch(GLib.Error e) {
-				GLib.error("Failed to load builder file: %s, %s\n",
-						file, e.message);
+			}catch (GLib.Error e) {
+                if(!ignore_errors) {
+                    GLib.error("Failed to load builder file: %s, %s\n",
+                            file, e.message);
+                } else {
+                    GLib.warning("Failed to load builder file: %s, %s\n",
+                            file, e.message);
+                }
 			}
 		}
 		else
