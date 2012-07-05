@@ -24,7 +24,8 @@ namespace IfThenElse
 	 * This is basically an AND statement.
 	 * This is and {@link MultiCombine} are only nodes that can be child to multiple other nodes.
      *
-     * Example:
+     * =Example:=
+     *
      * {{{
      *  [CombineInputs]
      *  type=AndCombine
