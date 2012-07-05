@@ -22,7 +22,9 @@ namespace IfThenElse
 	 * If all its inputs are activates, it activates it child.
 	 *
 	 * This is basically an AND statement.
-	 * This is the only nodet that can be child to multiple other nodes.
+	 * This is and {@link MultiCombine} are only nodes that can be child to multiple other nodes.
+     *
+     * @see MultiCombine
 	 */
 	public class AndCombine : BaseAction, Base
 	{
