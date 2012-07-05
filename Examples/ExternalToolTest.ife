@@ -1,0 +1,9 @@
+[Trigger]
+type=TimerTrigger
+repeat=false
+timeout=2
+action=Action
+
+[Action]
+type=ExternalToolAction
+cmd=bash -c "echo \\"aap\\" | sed 's/a/b/g' ; echo \\"noot\\"; sleep 4; echo \\"mies\\""
