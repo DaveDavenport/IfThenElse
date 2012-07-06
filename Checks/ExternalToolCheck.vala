@@ -1,20 +1,20 @@
 /*
  * Copyright 2011-2012  Martijn Koedam <qball@gmpclient.org>
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
- * published by the Free Software Foundation; either version 2 of 
+ * published by the Free Software Foundation; either version 2 of
  * the License.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 using GLib;
 
 namespace IfThenElse
@@ -24,24 +24,24 @@ namespace IfThenElse
 	 *
 	 * =Example=
 	 *
-	 * When Action1 should be fired when test.sh returns 1, action2 should 
-	 * fire when Action2 should fire and nothing should happen 
-	 * when another status is returns. 
+	 * When Action1 should be fired when test.sh returns 1, action2 should
+	 * fire when Action2 should fire and nothing should happen
+	 * when another status is returns.
 	 *
 	 * {{{
 	 * [TestSHCheck]
 	 * type=ExternalToolCheck
 	 * cmd=test.sh
-	 * true_status=1	
+	 * true_status=1
 	 * false_status=0
 	 * compare_old_state=false
 	 * if-action=Action1
 	 * else-action=Action2
 	 * }}}
-	 * 
-	 * It is also possible to check the output string, by setting the 
+	 *
+	 * It is also possible to check the output string, by setting the
 	 * output_compare property. Setting this property will disable the return
-	 * status check. 
+	 * status check.
 	 */
 
 	public class ExternalToolCheck : BaseCheck
@@ -52,11 +52,11 @@ namespace IfThenElse
 		public string cmd {get; set; default = "";}
 		/**
 		 * Regex that when matches the output fires the if branch.
-		 * 
+		 *
 		 * Setting this property disables the status check.
 		 */
 		public string? output_compare { get; set; default=null;}
-	
+
 		/**
 		 * The output status that triggers the then branch
 		 */
@@ -68,9 +68,9 @@ namespace IfThenElse
 		public int false_status {get; set; default=8;}
 
 		/**
-		 * If the same status result comes in a row ignore these. 
+		 * If the same status result comes in a row ignore these.
 		 * e.g. you have a script that returns 1 when the light is on and
-		 * 0 when off, you only want it to trigger when it changes. 
+		 * 0 when off, you only want it to trigger when it changes.
 		 * enabling this option enables this.
 		 */
 		public bool compare_old_state {get;set;default=false;}
@@ -81,18 +81,31 @@ namespace IfThenElse
 		public ExternalToolCheck()
 		{
 		}
-		
+
 		/*
 		 * Check function.
 		 */
 		public override BaseCheck.StateType check()
 		{
 			try{
+				string[] argv;
 				int exit_value = 1;
 				string output = null;
-				GLib.Process.spawn_command_line_sync(cmd,
-							out output, null, out exit_value);
-				exit_value = GLib.Process.exit_status(exit_value);
+
+                // Parse the arguments.
+                GLib.Shell.parse_argv(cmd, out argv);
+
+				GLib.Process.spawn_sync(
+                        null, // work dir
+                        argv, // argv
+                        null, // envp
+                        SpawnFlags.SEARCH_PATH, // spawn flags
+                        null, // setup func
+                        out output, // stdout
+                        null, // stderr
+                        out exit_value // exit value.
+                        );
+                exit_value = GLib.Process.exit_status(exit_value);
 				GLib.message("output: %i:%s vs %s\n", exit_value, output, output_compare);
 				if(output_compare == null)
 				{
@@ -114,8 +127,8 @@ namespace IfThenElse
 				}else{
 					try
 					{
-						var regex = new GLib.Regex (output_compare);	
-						if(regex.match(output)) 
+						var regex = new GLib.Regex (output_compare);
+						if(regex.match(output))
 						{
 							if(compare_old_state && old_state == (int)StateType.TRUE)
 								return StateType.NO_CHANGE;
@@ -128,16 +141,20 @@ namespace IfThenElse
 							return StateType.FALSE;
 						}
 					}
-					catch (GLib.Error e) 
+					catch (GLib.Error e)
 					{
-						GLib.error("Failed to parse Regex: %s: %s", output_compare, 
+						GLib.error("Failed to parse Regex: %s: %s", output_compare,
 								e.message);
 					}
 				}
 			} catch(GLib.SpawnError e) {
 					GLib.error("Failed to spawn external program: %s\n",
 						e.message);
-			}
+			} catch (GLib.ShellError e) {
+					GLib.error("Failed to parse commandline for external program: %s\n",
+						e.message);
+            }
+
 			//return StateType.NO_CHANGE;
 		}
 		/**

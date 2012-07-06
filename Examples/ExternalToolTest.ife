@@ -5,5 +5,11 @@ timeout=2
 action=Action
 
 [Action]
+type=ExternalToolCheck
+true_status=0
+then_action=Action2
+cmd=true
+
+[Action2]
 type=ExternalToolAction
 cmd=bash -c "echo \\"aap\\" | sed 's/a/b/g' ; echo \\"noot\\"; sleep 4; echo \\"mies\\""
