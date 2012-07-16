@@ -1,37 +1,38 @@
 /*
  * Copyright 2011-2012  Martijn Koedam <qball@gmpclient.org>
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
- * published by the Free Software Foundation; either version 2 of 
+ * published by the Free Software Foundation; either version 2 of
  * the License.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 namespace IfThenElse
 {
 	/**
 	 * The base class used in IfThenElse. Each class should be derived from this.
 	 *
-	 * This class provides some basic functionality needed by everybody. 
+	 * This class provides some basic functionality needed by everybody.
 	 * E.g. name and parent property. A has_parent and is_toplevel check.
 	 */
 	public abstract class Base: GLib.Object
 	{
 		/// A pointer to the parent. This is the internal default storage.
-		/// Use the parent <accessor> 
+		/// Use the parent <accessor>
 		private unowned Base? _parent = null;
 
 		/// Accessors
 		/// Parent object. This accepts one and only one parent.
 		/// Can be overriden if you want different behaviour
+        [Description(blurb="Pointer to the parent object (automatically set)")]
 		public virtual unowned Base? parent
 		{
 			get {
@@ -42,7 +43,9 @@ namespace IfThenElse
 				_parent = value;
 			}
 
-		} 
+		}
+
+        [Description(blurb="The name of the module")]
 		public string name {get;set;default="n/a";}
 
 		/**
@@ -56,7 +59,7 @@ namespace IfThenElse
 		~Base()
 		{
 			GLib.message("Destroying: %s\n", this.name);
-		}	
+		}
 		/**
 		 * Check if it is a toplevel object.
 		 */

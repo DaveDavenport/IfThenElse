@@ -463,7 +463,7 @@ namespace IfThenElse
 
             foreach(var ps in obj.get_class().list_properties())
             {
-                stdout.printf("%20s:\t%s\n", ps.name,  ps.value_type.name());
+                stdout.printf("%20s:\t%s (%s)\n", ps.name,  ps.value_type.name(), ps.get_blurb());
             }
             stdout.printf("\n");
             obj = null;
