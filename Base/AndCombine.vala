@@ -71,7 +71,7 @@ namespace IfThenElse
 			// Check to avoid duplicate output.
 			if(!branch_walked)
 			{
-				fp.printf("\"%s\" [label=\"AND\\n%s\", shape=box]\n",
+				fp.printf("\"%s\" [label=\"AND\\n%s\", shape=house]\n",
 						this.name,
 						this.get_public_name());
 				if(_action != null)

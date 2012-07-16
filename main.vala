@@ -203,6 +203,7 @@ namespace IfThenElse
     private bool            daemonize     = false;
     private bool            ignore_errors = false;
     private bool            validate      = false;
+    private bool            list_modules  = false;
 	private string?         dot_file      = null;
 
 	const GLib.OptionEntry[] entries = {
@@ -216,6 +217,8 @@ namespace IfThenElse
                 "Reduce debug output", null},
         {"validate", 'v', 0, GLib.OptionArg.NONE,           out validate,
                 "Validate intput files.", null},
+        {"list-modules", 'l', 0, GLib.OptionArg.NONE,       out list_modules,
+                "List the build in modules.", null},
 		{null}
 	};
 
@@ -451,29 +454,50 @@ namespace IfThenElse
 			GLib.Log.default_handler(domain,level, message);
 		}
 	}
+    static void print_classes(List<GLib.Type> types)
+    {
+        foreach(GLib.Type type in types)
+        {
+            stdout.printf("Name: %s\n", type.name());
+            var obj = GLib.Object.new(type,null);
+
+            foreach(var ps in obj.get_class().list_properties())
+            {
+                stdout.printf("%20s:\t%s\n", ps.name,  ps.value_type.name());
+            }
+            stdout.printf("\n");
+            obj = null;
+        }
+    }
+
 
 	static int main(string[] argv)
 	{
+        List<GLib.Type> registered_types = new List<GLib.Type>();
 
 		// Register the types.
 		// Checks
-		var a  = typeof(ExternalToolCheck);
-		a = typeof(TimeCheck);
-		a = typeof(OutputWatch);
+        registered_types.prepend(typeof(ExternalToolCheck));
+		registered_types.prepend(typeof(TimeCheck));
+		registered_types.prepend(typeof(OutputWatch));
 
 		// Actions.
-		a = typeof(ExternalToolAction);
-		a = typeof(MultiAction);
+		registered_types.prepend(typeof(ExternalToolAction));
+		registered_types.prepend(typeof(MultiAction));
 
 		// Triggers
-		a = typeof(ExternalToolTrigger);
-		a = typeof(TimerTrigger);
-		a = typeof(InitTrigger);
-		a = typeof(ClockTrigger);
+		registered_types.prepend(typeof(ExternalToolTrigger));
+		registered_types.prepend(typeof(TimerTrigger));
+		registered_types.prepend(typeof(InitTrigger));
+		registered_types.prepend(typeof(ClockTrigger));
 
 		// other
-		a = typeof(MultiCombine);
-		a = typeof(AndCombine);
+		registered_types.prepend(typeof(MultiCombine));
+		registered_types.prepend(typeof(AndCombine));
+
+        // reverse list.
+        registered_types.reverse();
+
 
 		// Commandline options parsing.
 		GLib.OptionContext og = new GLib.OptionContext("IfThenElse");
@@ -486,8 +510,11 @@ namespace IfThenElse
 		}
 		g_argv = argv;
 
+        // argument check.
         if(validate && ignore_errors) {
             GLib.message("The commandline options validate and ignore errors cannot be enabled at the same time.");
+            parser = null;
+            registered_types = null;
             return Posix.EXIT_FAILURE;
         }
 
@@ -497,6 +524,14 @@ namespace IfThenElse
 				GLib.LogLevelFlags.LEVEL_MESSAGE,
 				my_log_handler);
 
+        // list modules.
+        if(list_modules) {
+            print_classes(registered_types);
+            parser = null;
+            registered_types = null;
+            return Posix.EXIT_SUCCESS;
+        }
+
 		// Load the setup file.
 		load_argument();
 
@@ -504,6 +539,8 @@ namespace IfThenElse
         if(validate)
         {
             GLib.message("Input files are valid ifthenelse scripts.");
+            parser = null;
+            registered_types = null;
             return Posix.EXIT_SUCCESS;
         }
 
@@ -511,7 +548,8 @@ namespace IfThenElse
 		if(dot_file != null)
 		{
 			generate_dot_file(parser);
-			parser = null;
+            parser = null;
+            registered_types = null;
 			// Exit succesfull
 			return 0;
 		}
@@ -550,6 +588,7 @@ namespace IfThenElse
 		GLib.message("Cleanup....");
 		// Destroy
 		parser = null;
-		return 0;
+        registered_types = null;
+        return 0;
 	}
 }
