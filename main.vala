@@ -178,13 +178,13 @@ using GLib;
  * In it current form it will exit when any error is encountered.
  *
  * =Disable script=
- * 
+ *
  * To disable a script add an empty category called 'disable'. e.g.
  *
  * {{{
  * [disable]
  * }}}
- * 
+ *
  * @see MultiAction
  * @see MultiCombine
  */
@@ -202,17 +202,20 @@ namespace IfThenElse
     private bool            quiet         = false;
     private bool            daemonize     = false;
     private bool            ignore_errors = false;
+    private bool            validate      = false;
 	private string?         dot_file      = null;
 
 	const GLib.OptionEntry[] entries = {
 		{"dot", 	'd',	0,	GLib.OptionArg.FILENAME, 	ref dot_file,
 				"Output a flowchart off the if-the-else structure", null},
 		{"background",	'b', 0, GLib.OptionArg.NONE,		out daemonize,
-				"Daemonize the program", null},	
+				"Daemonize the program", null},
         {"ignore-errors", 'i', 0, GLib.OptionArg.NONE,      out ignore_errors,
                 "Ignore unparsable input files", null},
-        {"quiet", 'q', 0, GLib.OptionArg.NONE,      out quiet,
+        {"quiet", 'q', 0, GLib.OptionArg.NONE,              out quiet,
                 "Reduce debug output", null},
+        {"validate", 'v', 0, GLib.OptionArg.NONE,           out validate,
+                "Validate intput files.", null},
 		{null}
 	};
 
@@ -483,6 +486,11 @@ namespace IfThenElse
 		}
 		g_argv = argv;
 
+        if(validate && ignore_errors) {
+            GLib.message("The commandline options validate and ignore errors cannot be enabled at the same time.");
+            return Posix.EXIT_FAILURE;
+        }
+
 		// Log handler
 		GLib.Log.set_handler(null,
 				GLib.LogLevelFlags.LEVEL_INFO|GLib.LogLevelFlags.LEVEL_DEBUG|
@@ -491,6 +499,13 @@ namespace IfThenElse
 
 		// Load the setup file.
 		load_argument();
+
+        // Validate. If we get to this, it was valid.
+        if(validate)
+        {
+            GLib.message("Input files are valid ifthenelse scripts.");
+            return Posix.EXIT_SUCCESS;
+        }
 
 		// Generate a dot file.
 		if(dot_file != null)
