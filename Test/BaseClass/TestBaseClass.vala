@@ -34,6 +34,14 @@ class TestBaseClass
 
         tc = new TestCase("test get public name end colon",setup, test_get_public_name_end_colon,teardown);
         ts.add(tc);
+
+        ts.add(new TestCase("Parent initially not set.",setup, has_parent,teardown));
+        ts.add(new TestCase("set parent",setup, set_parent,teardown));
+        ts.add(new TestCase("set parent twice",setup, set_parent_twice,teardown));
+        ts.add(new TestCase("set parent null",setup, set_parent_null,teardown));
+        ts.add(new TestCase("is toplevel",setup, is_toplevel,teardown));
+        ts.add(new TestCase("is not toplevel",setup, is_not_toplevel,teardown));
+
         TestSuite.get_root().add_suite(ts);
     }
 
@@ -109,12 +117,70 @@ class TestBaseClass
     {
         bc.name = "naar:";
 
-        assert(bc.get_public_name() == "naar");
-/*
+        if(bc.get_public_name() != "naar"){
             Test.message("Creating public name failed, got: %s instead of naar", bc.get_public_name());
             fail();
             return;
-        }*/
+        }
+    }
+
+    void has_parent()
+    {
+        if(bc.has_parent()) {
+            Test.message("Parent should not initially be set.");
+            fail();
+            return;
+        }
+    }
+
+    void set_parent()
+    {
+        var parent = new TestBaseDummy();
+        bc.parent = parent;
+        if(!bc.has_parent()) {
+            Test.message("Parent should be set.");
+            fail();
+            return;
+        }
+        parent = null;
+    }
+
+    void set_parent_twice()
+    {
+        var parent = new TestBaseDummy();
+        bc.parent = parent;
+        if(Test.trap_fork(0, TestTrapFlags.SILENCE_STDOUT|TestTrapFlags.SILENCE_STDERR))
+        {
+            bc.parent = parent;
+            Posix.exit(0);
+        }
+        Test.trap_assert_failed();
+        parent = null;
+    }
+
+    void set_parent_null()
+    {
+        if(Test.trap_fork(0, TestTrapFlags.SILENCE_STDOUT|TestTrapFlags.SILENCE_STDERR))
+        {
+            bc.parent = null;
+            Posix.exit(0);
+        }
+        Test.trap_assert_failed();
+    }
+
+    void is_toplevel()
+    {
+        GLib.assert(bc.is_toplevel());
+    }
+
+    void is_not_toplevel()
+    {
+        var parent = new TestBaseDummy();
+        bc.parent = parent;
+
+        GLib.assert(!bc.is_toplevel());
+
+        parent = null;
     }
 
     void teardown()
@@ -124,12 +190,3 @@ class TestBaseClass
 }
 
 
-static int main ( string[] argv )
-{
-    Test.init(ref argv);
-
-    var a = new TestBaseClass();
-    Test.run();
-    a = null;
-    return 0;
-}

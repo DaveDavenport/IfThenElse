@@ -1,5 +1,5 @@
-PROGRAM=ifthenelse
-SOURCES=$(wildcard *.vala Actions/*.vala Base/*.vala Checks/*.vala Triggers/*.vala)
+PROGRAM=ifthenelse-test
+SOURCES=$(wildcard *.vala **/*.vala ../Base/BaseClass.vala)
 PACKAGES=glib-2.0
 EMPTY=
 PREFIX?=/usr
@@ -18,6 +18,9 @@ VALADOC_DRIVER?=$(shell valac --version | awk -F' ' '{c= split($$2,B,"\."); prin
 
 all: $(PROGRAM)
 
+test: $(PROGRAM)
+	./$(PROGRAM) --verbose
+
 # Check pkg-config dependencies.
 $(PACKAGE_CHECK): Makefile
 	$(info == Checking dependencies: $(PACKAGES))
@@ -31,10 +34,3 @@ $(PROGRAM): $(SOURCES) | $(PACKAGE_CHECK)
 clean:
 	$(info == Cleaning)
 	@rm -rf $(PROGRAM) $(PACKAGE_CHECK)
-
-install:
-	install -Dm 755 $(PROGRAM) $(PREFIX)/bin/
-
-
-doc:
-	valadoc --private --driver $(VALADOC_DRIVER) -b ../  --verbose --force $(SOURCES) --pkg=posix -o ./Documentation/html --package-name=$(PROGRAM)

@@ -39,6 +39,7 @@ namespace IfThenElse
 				return _parent;
 			}
 			set {
+                GLib.assert(value != null);
 				if(_parent != null) GLib.error("%s: parent is allready set", this.name);
 				_parent = value;
 			}
@@ -63,20 +64,29 @@ namespace IfThenElse
 		 */
 		public string get_public_name()
 		{
+            var index = name.last_index_of_char(':');
+            // If no colon set.
+            if(index == 0) return name;
+            // If last is colon.
+            if(index == (name.length-1)) return name.substring(0, index);
+            // Last element.
 			return name.substring(name.last_index_of_char(':')+1, -1);
 		}
 
 		~Base()
 		{
-//			GLib.message("Destroying: %s\n", this.name);
 		}
-		/**
-		 * Check if it is a toplevel object.
-		 */
+
+        /**
+         * Check if we have a parent.
+         */
 		public bool has_parent()
 		{
 			return (parent != null);
 		}
+		/**
+		 * Check if it is a toplevel object.
+		 */
 		public bool is_toplevel()
 		{
 			return (parent == null);
