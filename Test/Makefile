@@ -1,5 +1,5 @@
 PROGRAM=ifthenelse-test
-SOURCES=$(wildcard *.vala **/*.vala ../Base/BaseClass.vala)
+SOURCES=$(wildcard *.vala **/*.vala ../Base/BaseClass.vala ../Actions/BaseAction.vala)
 PACKAGES=glib-2.0
 EMPTY=
 PREFIX?=/usr

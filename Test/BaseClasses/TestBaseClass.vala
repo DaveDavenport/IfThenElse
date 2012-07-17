@@ -1,6 +1,4 @@
 using GLib;
-[CCode(cname="g_test_fail")]
-extern void fail();
 
 class TestBaseDummy: IfThenElse.Base
 {
