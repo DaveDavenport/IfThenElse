@@ -45,8 +45,18 @@ namespace IfThenElse
 
 		}
 
+        private string _name = "n/a";
         [Description(blurb="The name of the module")]
-		public string name {get;set;default="n/a";}
+		public string name {
+                get {
+                    return _name;
+                }
+                set {
+                   GLib.assert(value != null);
+                   GLib.assert(value != "");
+                    _name = value;
+                }
+        }
 
 		/**
 		 * Get the public name. Strip off the filename
@@ -58,7 +68,7 @@ namespace IfThenElse
 
 		~Base()
 		{
-			GLib.message("Destroying: %s\n", this.name);
+//			GLib.message("Destroying: %s\n", this.name);
 		}
 		/**
 		 * Check if it is a toplevel object.
