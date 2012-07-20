@@ -1,20 +1,20 @@
 /*
  * Copyright 2011-2012  Martijn Koedam <qball@gmpclient.org>
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
- * published by the Free Software Foundation; either version 2 of 
+ * published by the Free Software Foundation; either version 2 of
  * the License.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 using GLib;
 namespace IfThenElse
 {
@@ -36,6 +36,9 @@ namespace IfThenElse
 		private List <BaseAction> actions;
 		public BaseAction action {
 			set{
+                if(actions.find(value) != null) {
+                    GLib.error("You cannot add the same action multiple times.");
+                }
 				actions.append(value as BaseAction);
 				(value as Base).parent = this;
 			}
@@ -43,7 +46,7 @@ namespace IfThenElse
 
 		/**
 		 * Activate()
-		 * 
+		 *
 		 * Propagate this to the children.
 		 */
 		public void Activate(Base p)
@@ -56,27 +59,26 @@ namespace IfThenElse
 
 		/**
 		 * Deactivate()
-		 * 
+		 *
 		 * Propagate this to the children.
 		 */
 		public void Deactivate(Base p)
 		{
-			GLib.message("%s: Deactivate\n", this.name);
 			foreach(BaseAction action in actions)
 			{
 				action.Deactivate(this);
 			}
 		}
-		
-		
+
+
 		public void output_dot(FileStream fp)
 		{
-			fp.printf("\"%s\" [label=\"%s\", shape=box]\n", 
+			fp.printf("\"%s\" [label=\"%s\", shape=box]\n",
 					this.name,
 					this.get_public_name());
 			foreach(unowned BaseAction action in actions)
 			{
-				fp.printf("\"%s\" -> \"%s\"\n", this.name, 
+				fp.printf("\"%s\" -> \"%s\"\n", this.name,
 						action.name);
 				action.output_dot(fp);
 			}

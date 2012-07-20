@@ -9,8 +9,10 @@ static int main ( string[] argv )
 
     var a = new TestBaseClass();
     var b = new TestActionBaseClass();
+    var c = new TestMultiActionClass();
     Test.run();
     a = null;
     b = null;
+    c = null;
     return 0;
 }

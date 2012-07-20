@@ -1,3 +1,5 @@
 ifthenelse
 Documentation/html
 .pkgcheck
+.*.swp
+Test/ifthenelse-test
