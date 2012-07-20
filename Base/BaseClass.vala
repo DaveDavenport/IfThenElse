@@ -29,6 +29,20 @@ namespace IfThenElse
 		/// Use the parent <accessor>
 		private unowned Base? _parent = null;
 
+
+        /// Check if we are allready a child of node.
+        /// TODO: This  might break on the combine module.
+        private bool is_nested_parent(Base node)
+        {
+            unowned Base? iter = null;
+            for(iter = node;  iter != null; iter = iter.parent)
+            {
+                if(iter == this) {
+                    return true;
+                }
+            }
+            return false;
+        }
 		/// Accessors
 		/// Parent object. This accepts one and only one parent.
 		/// Can be overriden if you want different behaviour
@@ -41,6 +55,7 @@ namespace IfThenElse
 			set {
                 GLib.assert(value != null);
 				if(_parent != null) GLib.error("%s: parent is allready set", this.name);
+                if(is_nested_parent(value)) GLib.error("%s: is allready a child of this node. Cycles are not allowed.", value.name);
 				_parent = value;
 			}
 

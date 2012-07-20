@@ -37,6 +37,7 @@ class TestBaseClass
         ts.add(new TestCase("set parent",setup, set_parent,teardown));
         ts.add(new TestCase("set parent twice",setup, set_parent_twice,teardown));
         ts.add(new TestCase("set parent null",setup, set_parent_null,teardown));
+        ts.add(new TestCase("set parent cycle",setup, no_cycle,teardown));
         ts.add(new TestCase("is toplevel",setup, is_toplevel,teardown));
         ts.add(new TestCase("is not toplevel",setup, is_not_toplevel,teardown));
 
@@ -179,6 +180,19 @@ class TestBaseClass
         GLib.assert(!bc.is_toplevel());
 
         parent = null;
+    }
+
+
+    void no_cycle()
+    {
+        var parent = new TestBaseDummy();
+        bc.parent = parent;
+        if(Test.trap_fork(0, TestTrapFlags.SILENCE_STDOUT|TestTrapFlags.SILENCE_STDERR))
+        {
+            parent.parent = bc;
+            Posix.exit(0);
+        }
+        Test.trap_assert_failed();
     }
 
     void teardown()
