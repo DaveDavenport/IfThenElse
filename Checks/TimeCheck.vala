@@ -23,10 +23,11 @@ namespace IfThenElse
 	/**
 	 * TimeChecks: After a certain time fire one branch, before the time fire
 	 * the other branch.
+     * A range can be specified.
 	 *
 	 * =Example=
 	 *
-	 * When Action1 should be fired after the set time, Action2 before the set time.
+	 * Action1 fires after the set time before end time, Action2 elsewhere.
 	 * {{{
 	 * [Between]
 	 * type=TimeCheck
@@ -95,7 +96,7 @@ namespace IfThenElse
 
 		public override string get_dot_description()
 		{
-			return "Now >= %02u:%02u".printf(hour, minute);
+			return "%02u:%02u <=  now <= %02u:%02u".printf(hour, minute, end_hour, end_minute);
 		}
 	}
 }

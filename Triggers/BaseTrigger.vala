@@ -1,20 +1,20 @@
 /*
  * Copyright 2011-2012  Martijn Koedam <qball@gmpclient.org>
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
- * published by the Free Software Foundation; either version 2 of 
+ * published by the Free Software Foundation; either version 2 of
  * the License.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 namespace IfThenElse
 {
 	/**
@@ -45,7 +45,7 @@ namespace IfThenElse
 		{
 			enable_trigger();
 		}
-		
+
 		public void Deactivate(Base p)
 		{
 			GLib.message("%s: Deactivate\n", this.name);
@@ -57,17 +57,17 @@ namespace IfThenElse
 		/**
 		 * Activate the child
 		 */
-		public void fire()
+		public virtual void fire()
 		{
 			GLib.message("Fire trigger: %p\n", _action);
 			if(_action != null) {
 				_action.Activate(this);
 			}
 		}
-		
+
 		public virtual void output_dot(FileStream fp)
 		{
-			fp.printf("\"%s\" [label=\"%s\", shape=oval]\n", 
+			fp.printf("\"%s\" [label=\"%s\", shape=oval]\n",
 						this.name,
 						this.get_public_name());
 			fp.printf("\"%s\" -> \"%s\"\n", this.name, _action.name);

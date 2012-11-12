@@ -1,0 +1,18 @@
+[Trigger]
+type=TimerTrigger
+timeout=5
+action=check
+
+
+[check]
+type=TimeCheck
+hour=9
+minute=01
+end_hour=9
+end_minute=02
+repeat=true
+then_action=action
+
+[action]
+type=ExternalToolAction
+cmd=bash -c "echo `date`"

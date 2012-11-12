@@ -1,0 +1,12 @@
+[check]
+type=BetweenTrigger
+hour=17
+minute=58
+end_hour=18
+end_minute=01
+action=action
+
+[action]
+type=ExternalToolAction
+cmd=bash -c "while sleep 5; do echo On: `date`; done"
+

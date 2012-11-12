@@ -490,6 +490,7 @@ namespace IfThenElse
 		registered_types.prepend(typeof(TimerTrigger));
 		registered_types.prepend(typeof(InitTrigger));
 		registered_types.prepend(typeof(ClockTrigger));
+		registered_types.prepend(typeof(BetweenTrigger));
 
 		// other
 		registered_types.prepend(typeof(MultiCombine));
