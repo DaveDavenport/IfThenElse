@@ -1,34 +1,35 @@
 /*
  * Copyright 2011-2012  Martijn Koedam <qball@gmpclient.org>
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
- * published by the Free Software Foundation; either version 2 of 
+ * published by the Free Software Foundation; either version 2 of
  * the License.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 using GLib;
 using Posix;
 
 namespace IfThenElse
 {
 	/**
-	 * Execute an external tool. 
+	 * Execute an external tool.
 	 *
 	 * This executes an external tool.
-	 * 
+	 *
 	 * =Example=
 	 *
 	 * {{{
 	 * [EAction]
+     * type=ExternalToolAction
 	 * cmd=mpc play
 	 * }}}
 	 */
@@ -40,7 +41,7 @@ namespace IfThenElse
 		 * client when the object is deactivated.
 		 */
 		public bool kill_child {get; set; default = false;}
-		
+
 		private GLib.Pid pid = 0;
 		private void child_watch_called(GLib.Pid p, int status)
 		{
@@ -83,7 +84,7 @@ namespace IfThenElse
 				Posix.kill((pid_t)pid, 1);
 			}
 		}
-		
+
 		public void Activate(Base p)
 		{
 			start_application();
@@ -95,11 +96,11 @@ namespace IfThenElse
 		}
 		/**
 		 * Generate dot output for this node
-		 * 
+		 *
 		 */
 		public void output_dot(FileStream fp)
 		{
-			fp.printf("\"%s\" [label=\"%s\\n(%s)\", shape=oval]\n", 
+			fp.printf("\"%s\" [label=\"%s\\n(%s)\", shape=oval]\n",
 						this.name,
 						this.get_public_name(),
 						cmd.escape("")
