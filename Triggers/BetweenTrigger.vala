@@ -25,6 +25,7 @@ namespace IfThenElse
      * Activates the child chain based on the time.
      * Use this as parent to enable a certain if-then-else tree between a certain time.
      *
+     * * Note: this fires also on activate/disable. so output is set in correct state.
      *
 	 * =Example=
 	 *

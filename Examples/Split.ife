@@ -1,0 +1,17 @@
+[check]
+type=BetweenTrigger
+hour=18
+minute=32
+end_hour=18
+end_minute=33
+action=Split
+
+[Split]
+type=SplitAction
+else_action=out
+
+[out]
+type=ExternalToolAction
+cmd=bash -c "echo Disable"
+
+

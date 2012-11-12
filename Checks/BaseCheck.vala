@@ -1,20 +1,20 @@
 /*
  * Copyright 2011-2012  Martijn Koedam <qball@gmpclient.org>
- * 
+ *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License as
- * published by the Free Software Foundation; either version 2 of 
+ * published by the Free Software Foundation; either version 2 of
  * the License.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
- 
+
 namespace IfThenElse
 {
 	/**
@@ -25,8 +25,8 @@ namespace IfThenElse
 		// Then/Else actions.
 		private BaseAction? _else_action = null;
 		private BaseAction? _then_action = null;
-		public BaseAction?  else_action { 
-				get { 
+		public BaseAction?  else_action {
+				get {
 					return _else_action;
 				}
 				set {
@@ -35,7 +35,7 @@ namespace IfThenElse
 				}
 		}
 		public BaseAction?  then_action {
-				get { 
+				get {
 					return _then_action;
 				}
 				set {
@@ -102,7 +102,7 @@ namespace IfThenElse
 		public void output_dot(FileStream fp)
 		{
 			string dot_desc = this.get_dot_description();
-			fp.printf("\"%s\" [label=\"%s\\n(%s)\", shape=diamond]\n", 
+			fp.printf("\"%s\" [label=\"%s\\n(%s)\", shape=diamond]\n",
 					this.name,
 					this.get_public_name(),
 								dot_desc);
