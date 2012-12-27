@@ -54,8 +54,8 @@ namespace IfThenElse
 			}
 			set {
                 GLib.assert(value != null);
-				if(_parent != null) GLib.error("%s: parent is allready set", this.name);
-                if(is_nested_parent(value)) GLib.error("%s: is allready a child of this node. Cycles are not allowed.", value.name);
+				if(_parent != null) GLib.error("%s: parent is already set", this.name);
+                if(is_nested_parent(value)) GLib.error("%s: is already a child of this node. Cycles are not allowed.", value.name);
 				_parent = value;
 			}
 

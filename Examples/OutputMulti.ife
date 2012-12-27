@@ -1,0 +1,13 @@
+[Watch]
+type=MultiOutputWatch
+cmd=bash -c "echo $(($RANDOM%3))"
+fire_regex=^2$;^1$
+action=test2;test
+
+[test]
+type=ExternalToolAction
+cmd=bash -c "echo 'found you'"
+
+[test2]
+type=ExternalToolAction
+cmd=bash -c "echo 'found2 you'"

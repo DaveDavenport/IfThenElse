@@ -121,6 +121,10 @@ namespace IfThenElse
 						bool temp = kf.get_boolean(group,prop);
 						object.set(prop, temp);
 					}
+                    else if (ps.value_type == typeof(string[])) {
+						string[] names = kf.get_string_list(group,prop);
+                        object.set(prop,names);
+                    }
 					// Type is BaseAction
 					else if (ps.value_type == typeof(BaseAction)) {
 						string[] names = kf.get_string_list(group,prop);

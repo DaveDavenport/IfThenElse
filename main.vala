@@ -480,6 +480,7 @@ namespace IfThenElse
         registered_types.prepend(typeof(ExternalToolCheck));
 		registered_types.prepend(typeof(TimeCheck));
 		registered_types.prepend(typeof(OutputWatch));
+		registered_types.prepend(typeof(MultiOutputWatch));
 
 		// Actions.
 		registered_types.prepend(typeof(ExternalToolAction));
