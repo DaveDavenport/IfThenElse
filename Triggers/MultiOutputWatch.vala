@@ -199,6 +199,15 @@ namespace IfThenElse
 			fp.printf("\"%s\" -> \"%s\"\n", this.name, _action.name);
 			this._action.output_dot(fp);
 		}
+
+		public override void Deactivate(Base p)
+		{
+			GLib.message("%s: Deactivate\n", this.name);
+            for(uint i =0; i < num_actions; i++) {
+				actions[i].Deactivate(this);
+			}
+			disable_trigger();
+		}
 	}
 }
 

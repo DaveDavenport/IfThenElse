@@ -41,12 +41,12 @@ namespace IfThenElse
 		/**
 		 * BaseAction implementation.
 		 */
-		public void Activate(Base p)
+		public virtual void Activate(Base p)
 		{
 			enable_trigger();
 		}
 
-		public void Deactivate(Base p)
+		public virtual void Deactivate(Base p)
 		{
 			GLib.message("%s: Deactivate\n", this.name);
 			if(_action != null) {
