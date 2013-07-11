@@ -21,12 +21,13 @@ namespace IfThenElse
 	/**
 	 * Split the activate and Deactivate signal into 2 branches.
 	 *
-     * So   then_action = input.
-     *      else_action = !input.
+     * So then_action = input.
+     * else_action = !input.
      *
      * basic if/then block.
      *
      * =Example=
+     *
      * Invert the input,  call Action1 when Split is deactivated.
 	 * {{{
 	 * [Split]
