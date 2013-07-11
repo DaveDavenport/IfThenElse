@@ -205,6 +205,7 @@ namespace IfThenElse
     private bool            validate      = false;
     private bool            list_modules  = false;
 	private string?         dot_file      = null;
+    private string?         pid_file      = null;
 
 	const GLib.OptionEntry[] entries = {
 		{"dot", 	'd',	0,	GLib.OptionArg.FILENAME, 	ref dot_file,
@@ -219,8 +220,50 @@ namespace IfThenElse
                 "Validate intput files.", null},
         {"list-modules", 'l', 0, GLib.OptionArg.NONE,       out list_modules,
                 "List the build in modules.", null},
+        {"pid", 'p', 0, GLib.OptionArg.FILENAME,            ref pid_file,
+                "Use PID file.", null},
 		{null}
 	};
+
+    private void clear_pid_file()
+    {
+        assert(pid_file != null);
+        Posix.unlink(pid_file);
+    }
+
+    /**
+     * return true when already running.
+     */
+    private bool create_pid_file()
+    {
+        assert(pid_file != null);
+        int fd = Posix.open(pid_file,
+                Posix.O_RDWR|Posix.O_CREAT,
+                Posix.S_IRUSR | Posix.S_IWUSR);
+        if(fd == -1) {
+            error("Failed to open pidfile: "+pid_file);
+        }
+        // Set auto close on exit.
+        var  flags = Posix.fcntl(fd, Posix.F_GETFD);  
+        flags |= Posix.FD_CLOEXEC;
+        if(Posix.fcntl(fd, Posix.F_SETFD, flags) < 0) {
+            error("Failed to set CLOEXEC on pidfile: "+pid_file);
+        }
+
+        Posix.Flock fl = Posix.Flock();
+        fl.l_type = Posix.F_WRLCK;
+        fl.l_whence = Posix.SEEK_SET;
+        fl.l_start = 0; fl.l_len = 0;
+        fl.l_pid = Posix.getpid();
+
+        if(Posix.fcntl(fd, Posix.F_SETLK, &fl) < 0){
+            error("Failed to set lock on pidfile: "+pid_file);
+        }
+
+        string buf = "%i".printf(Posix.getpid());
+        Posix.write(fd, buf,buf.length); 
+        return false;
+    }
 
 	/**
 	 * Quit the program. Dot his by terminating the mainloop
@@ -557,7 +600,11 @@ namespace IfThenElse
 			return 0;
 		}
 
-
+        if(pid_file != null){
+            if(create_pid_file()) {
+                error("Failed to obtain a lock.");
+            }
+        }
 		if(daemonize) {
 			background();
 		}
@@ -589,6 +636,10 @@ namespace IfThenElse
 
 		stop();
 		GLib.message("Cleanup....");
+
+        if(pid_file != null){
+            clear_pid_file();
+        }
 		// Destroy
 		parser = null;
         registered_types = null;
