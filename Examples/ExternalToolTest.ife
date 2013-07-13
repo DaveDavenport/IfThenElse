@@ -12,4 +12,4 @@ cmd=true
 
 [Action2]
 type=ExternalToolAction
-cmd=bash -c "echo \\"aap\\" | sed 's/a/b/g' ; echo \\"noot\\"; sleep 4; echo \\"mies\\""
+cmd=echo "aap" | sed 's/a/b/g' ; echo "noot"; sleep 4; echo "mies"

@@ -67,16 +67,16 @@ namespace IfThenElse
 		{
 			if(pid == 0)
 			{
-				string[] argv;
+				string[3] argv = new string[3];
 				GLib.message("Start application\n");
 				try {
-					GLib.Shell.parse_argv(cmd, out argv);
 
-					foreach (var s in argv)
-					{
-						GLib.message("argv: %s\n", s);
-					}
-					GLib.Process.spawn_async(null, argv, null, SpawnFlags.SEARCH_PATH|SpawnFlags.DO_NOT_REAP_CHILD, null, out pid);
+                    argv[0] = "bash";
+                    argv[1] = "-c";
+                    argv[2] = cmd;
+
+					GLib.Process.spawn_async(null, argv, null, 
+                            SpawnFlags.SEARCH_PATH|SpawnFlags.DO_NOT_REAP_CHILD, null, out pid);
 
 					GLib.ChildWatch.add(pid, child_watch_called);
 				} catch (Error e) {

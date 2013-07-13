@@ -146,11 +146,14 @@ namespace IfThenElse
 			}
 			if(pid == 0)
 			{
-				string[] argv;
+				string[3] argv = new string[3];
 				GLib.message("Start application\n");
 				try {
 					int standard_output = -1;
-					GLib.Shell.parse_argv(cmd, out argv);
+
+                    argv[0] = "bash";
+                    argv[1] = "-c";
+                    argv[2] = cmd;
 
 					foreach (var s in argv)
 					{

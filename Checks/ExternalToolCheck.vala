@@ -88,14 +88,15 @@ namespace IfThenElse
 		public override BaseCheck.StateType check()
 		{
 			try{
-				string[] argv;
+				string[3] argv = new string[3];
 				int exit_value = 1;
 				string output = null;
 
-                // Parse the arguments.
-                GLib.Shell.parse_argv(cmd, out argv);
+                argv[0] = "bash";
+                argv[1] = "-c";
+                argv[2] = cmd;
 
-				GLib.Process.spawn_sync(
+                GLib.Process.spawn_sync(
                         null, // work dir
                         argv, // argv
                         null, // envp
@@ -150,11 +151,7 @@ namespace IfThenElse
 			} catch(GLib.SpawnError e) {
 					GLib.error("Failed to spawn external program: %s\n",
 						e.message);
-			} catch (GLib.ShellError e) {
-					GLib.error("Failed to parse commandline for external program: %s\n",
-						e.message);
-            }
-
+			}
 			//return StateType.NO_CHANGE;
 		}
 		/**
