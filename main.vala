@@ -16,7 +16,7 @@
  */
 
 using GLib;
-
+using Fix;
 /**
  * IfThenElse is a simple program used to glue small unix tools to getter
  * with the ultimate goal to automate some tedious tasks.
@@ -188,6 +188,7 @@ using GLib;
  * @see MultiAction
  * @see MultiCombine
  */
+
 namespace IfThenElse
 {
 	/** Pointer to the commandline arguments. */
@@ -250,7 +251,7 @@ namespace IfThenElse
             error("Failed to set CLOEXEC on pidfile: "+pid_file);
         }
 
-        Posix.Flock fl = Posix.Flock();
+        Fix.Flock fl = Fix.Flock();
         fl.l_type = Posix.F_WRLCK;
         fl.l_whence = Posix.SEEK_SET;
         fl.l_start = 0; fl.l_len = 0;
@@ -259,7 +260,8 @@ namespace IfThenElse
         if(Posix.fcntl(fd, Posix.F_SETLK, &fl) < 0){
             error("Failed to set lock on pidfile: "+pid_file);
         }
-
+        
+        Posix.ftruncate(fd, 0);
         string buf = "%i".printf(Posix.getpid());
         Posix.write(fd, buf,buf.length); 
         return false;
@@ -600,14 +602,14 @@ namespace IfThenElse
 			return 0;
 		}
 
+		if(daemonize) {
+			background();
+		}
         if(pid_file != null){
             if(create_pid_file()) {
                 error("Failed to obtain a lock.");
             }
         }
-		if(daemonize) {
-			background();
-		}
 		// Create main loop.
 		loop = new GLib.MainLoop();
 
