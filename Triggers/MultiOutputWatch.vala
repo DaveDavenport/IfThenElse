@@ -109,6 +109,10 @@ namespace IfThenElse
                         }else{
                             GLib.error("Action for this match does not exist");
                         }
+                    }else{
+                        if( num_actions >= i) {
+                            this.actions[i].Deactivate(this);
+                        }
                     }
                 }
             }catch(GLib.Error e) {
