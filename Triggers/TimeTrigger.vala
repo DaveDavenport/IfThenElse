@@ -83,10 +83,12 @@ namespace IfThenElse
 		
 		public override void enable_trigger()
 		{
+            GLib.message("%s: Start timer\n", this.name);
 			start_timer();
 		}
 		public override void disable_trigger()
 		{
+            GLib.message("%s: Stop timer\n", this.name);
 			stop_timer();
 		}
 		/**
