@@ -89,12 +89,14 @@ namespace IfThenElse
 
 		public override void enable_trigger()
 		{
+            GLib.message("%s: enable\n", this.name);
 			if(handler == 0) {
 				handler = GLib.Timeout.add_seconds(timeout, timer_callback);
 			}
 		}
 		public override void disable_trigger()
 		{
+            GLib.message("%s: disable\n", this.name);
 			if(handler > 0) {
 				GLib.Source.remove(handler);
 			}
