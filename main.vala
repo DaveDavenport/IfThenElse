@@ -531,6 +531,7 @@ namespace IfThenElse
 		registered_types.prepend(typeof(ExternalToolAction));
 		registered_types.prepend(typeof(MultiAction));
 		registered_types.prepend(typeof(SplitAction));
+		registered_types.prepend(typeof(Single));
 
 		// Triggers
 		registered_types.prepend(typeof(ExternalToolTrigger));
