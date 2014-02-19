@@ -36,6 +36,7 @@ namespace IfThenElse
 	 * type=ClockTrigger
 	 * minute=0
 	 * hour=6
+     * days=mo,tu,we,th,fr,sa,su
 	 * action=MainBranch
 	 * }}}
 	 */
@@ -44,6 +45,7 @@ namespace IfThenElse
 		private uint handler = 0;
 		private int _hour = 8;
 		private int _minute = 30;
+        private string _weekdays = "";
 
 		/**
 		 * The hour.
@@ -75,7 +77,16 @@ namespace IfThenElse
 				_minute = value;
 			}
 		}
-		
+
+        public string weekdays {
+            get{
+                return _weekdays;
+            }
+            set{
+                _weekdays = value;
+            }	
+
+        }	
 		~ClockTrigger()
 		{
 			stop_timer();
@@ -156,10 +167,22 @@ namespace IfThenElse
 		 * Fire the trigger, and
 		 * restarts the timer.
 		 */
+        const string day_names[] = { "su","mo","tu","we","th","fr","sa"};
 		private bool timer_callback()
 		{
-			this.fire();
-			restart_timer();
+			time_t t = time_t();
+			Time now = GLib.Time.local(t);
+
+            weak string today = day_names[now.weekday];
+
+            if (weekdays.length == 0) {
+                this.fire();
+            }else{
+                if(weekdays.str(today) != null) {
+                    this.fire();
+                }
+            }
+            restart_timer();
 			return false;
 		}
 	}
