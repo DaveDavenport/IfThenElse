@@ -178,7 +178,7 @@ namespace IfThenElse
             if (weekdays.length == 0) {
                 this.fire();
             }else{
-                if(weekdays.index_of(today) >= 0) {
+                if(today in weekdays) {
                     this.fire();
                 }
             }
