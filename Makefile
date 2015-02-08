@@ -37,7 +37,7 @@ install:
 
 
 doc:
-	valadoc --private --driver $(VALADOC_DRIVER) -b ../  --verbose --force $(SOURCES) --pkg=posix -o ./Documentation/html --package-name=$(PROGRAM)
+	valadoc --vapidir=./Vapi/ --pkg=fix --pkg=posix --private --driver $(VALADOC_DRIVER) -b ../  --verbose --force $(SOURCES) --pkg=posix -o ./Documentation/html --package-name=$(PROGRAM)
 
 test:
 	make -C Test/ test
