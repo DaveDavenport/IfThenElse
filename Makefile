@@ -10,7 +10,7 @@ PACKAGE_CHECK=.pkgcheck
 # VALAC magic.
 VALAC?=valac
 VALAC_PACKAGES=$(foreach PKG, $(PACKAGES), --pkg=$(PKG))
-VALAC_FLAGS=-g $(VALAC_PACKAGES) --vapidir=./Vapi/ --pkg=posix --pkg=fix --save-temps
+VALAC_FLAGS=-g $(VALAC_PACKAGES) --vapidir=./Vapi/ --pkg=posix --pkg=fix
 VALADOC_DRIVER?=$(shell valac --version | awk -F' ' '{c= split($$2,B,"\."); printf "%s.%s.x", B[1], B[2]}')
 
 

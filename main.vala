@@ -209,20 +209,13 @@ namespace IfThenElse
     private string?         pid_file      = null;
 
 	const GLib.OptionEntry[] entries = {
-		{"dot", 	'd',	0,	GLib.OptionArg.FILENAME, 	ref dot_file,
-				"Output a flowchart off the if-the-else structure", null},
-		{"background",	'b', 0, GLib.OptionArg.NONE,		out daemonize,
-				"Daemonize the program", null},
-        {"ignore-errors", 'i', 0, GLib.OptionArg.NONE,      out ignore_errors,
-                "Ignore unparsable input files", null},
-        {"quiet", 'q', 0, GLib.OptionArg.NONE,              out quiet,
-                "Reduce debug output", null},
-        {"validate", 'v', 0, GLib.OptionArg.NONE,           out validate,
-                "Validate intput files.", null},
-        {"list-modules", 'l', 0, GLib.OptionArg.NONE,       out list_modules,
-                "List the build in modules.", null},
-        {"pid", 'p', 0, GLib.OptionArg.FILENAME,            ref pid_file,
-                "Use PID file.", null},
+        {"dot", 	      'd', 0, GLib.OptionArg.FILENAME, ref dot_file,      "Output a flowchart off the if-the-else structure", null},
+        {"background",	  'b', 0, GLib.OptionArg.NONE,	   out daemonize,     "Daemonize the program",                            null},
+        {"ignore-errors", 'i', 0, GLib.OptionArg.NONE,     out ignore_errors, "Ignore unparsable input files",                    null},
+        {"quiet",         'q', 0, GLib.OptionArg.NONE,     out quiet,         "Reduce debug output",                              null},
+        {"validate",      'v', 0, GLib.OptionArg.NONE,     out validate,      "Validate intput files.",                           null},
+        {"list-modules",  'l', 0, GLib.OptionArg.NONE,     out list_modules,  "List the build in modules.",                       null},
+        {"pid",           'p', 0, GLib.OptionArg.FILENAME, ref pid_file,      "Use PID file.",                                    null},
 		{null}
 	};
 
@@ -238,9 +231,7 @@ namespace IfThenElse
     private bool create_pid_file()
     {
         assert(pid_file != null);
-        int fd = Posix.open(pid_file,
-                Posix.O_RDWR|Posix.O_CREAT,
-                Posix.S_IRUSR | Posix.S_IWUSR);
+        int fd = Posix.open(pid_file, Posix.O_RDWR|Posix.O_CREAT, Posix.S_IRUSR | Posix.S_IWUSR);
         if(fd == -1) {
             error("Failed to open pidfile: "+pid_file);
         }
