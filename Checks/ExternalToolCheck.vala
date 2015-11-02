@@ -25,7 +25,7 @@ namespace IfThenElse
 	 * =Example=
 	 *
 	 * When Action1 should be fired when test.sh returns 1, action2 should
-	 * fire when Action2 should fire and nothing should happen
+	 * fire when test.sh returns 0 and nothing should happen
 	 * when another status is returns.
 	 *
 	 * {{{
@@ -35,7 +35,7 @@ namespace IfThenElse
 	 * true_status=1
 	 * false_status=0
 	 * compare_old_state=false
-	 * if-action=Action1
+	 * then-action=Action1
 	 * else-action=Action2
 	 * }}}
 	 *
