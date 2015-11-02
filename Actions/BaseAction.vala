@@ -21,10 +21,10 @@ namespace IfThenElse
 	 * Base interface each 'Action' class should implement.
 	 *
 	 * In the current design each class that should be part of the
-	 * descission tree should implement this. Or should inherit from a
+	 * decision tree should implement this. Or should inherit from a
 	 * base class that implements this interface.
 	 *
-	 * Activate() gets called when a certain branch in the descission tree
+	 * Activate() gets called when a certain branch in the decision tree
 	 * is activated.
 	 * Deactivate() gets called when a certain branch in the tree gets
 	 * deactivated.
