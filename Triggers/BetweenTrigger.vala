@@ -115,7 +115,7 @@ namespace IfThenElse
 			}
 		}
 
-		~ClockTrigger()
+		~BetweenTrigger()
 		{
 			stop_timer();
 		}
