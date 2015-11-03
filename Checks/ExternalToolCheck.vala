@@ -107,8 +107,9 @@ namespace IfThenElse
                         out exit_value // exit value.
                         );
                 exit_value = GLib.Process.exit_status(exit_value);
-				GLib.message("output: %i:%s vs %s\n", exit_value, output, output_compare);
-				if(output_compare == null)
+				GLib.message("output: %i:%s vs %s %d\n", exit_value, output, output_compare,
+                        exit_value);
+                if(output_compare == null)
 				{
 					if(compare_old_state)
 					{

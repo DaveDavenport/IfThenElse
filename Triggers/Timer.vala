@@ -74,7 +74,7 @@ namespace IfThenElse
 		 */
 		private bool timer_callback()
 		{
-				GLib.message("Timer fire\n");
+				GLib.message("%s: Timer fire\n", this.name);
 				this.fire();
                 if(!this.repeat) handler = 0;
 				return this.repeat;
