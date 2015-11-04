@@ -3,3 +3,4 @@ Documentation/html
 .pkgcheck
 .*.swp
 Test/ifthenelse-test
+*.*~
