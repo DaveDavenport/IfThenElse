@@ -15,99 +15,93 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GLib;
-using Posix;
+using GLib ;
+using Posix ;
 
-namespace IfThenElse
-{
-	/**
-	 * Execute an external tool.
-	 *
-	 * This executes an external tool.
-	 *
-	 * =Example=
-	 *
-	 * {{{
-	 * [EAction]
-     * type=ExternalToolAction
-	 * cmd=mpc play
-	 * }}}
-	 */
-	public class ExternalToolAction: BaseAction, Base
-	{
-		public string cmd {get; set; default = "";}
-		/**
-	 	 * If the property kill_child is set to true, it kills the
-		 * client when the object is deactivated.
-		 */
-		public bool kill_child {get; set; default = false;}
+namespace IfThenElse{
+/**
+ * Execute an external tool.
+ *
+ * This executes an external tool.
+ *
+ * =Example=
+ *
+ * {{{
+ * [EAction]
+ * type=ExternalToolAction
+ * cmd=mpc play
+ * }}}
+ */
+    public class ExternalToolAction : BaseAction, Base {
+        public string cmd { get ; set ; default = "" ; }
+/**
+ * If the property kill_child is set to true, it kills the
+ * client when the object is deactivated.
+ */
+        public bool kill_child { get ; set ; default = false ; }
 
-		private GLib.Pid pid = 0;
-		private void child_watch_called(GLib.Pid p, int status)
-		{
-			GLib.Process.close_pid(p);
-			GLib.message("Child watch called.\n");
-			pid = 0;
-		}
-		private void start_application()
-		{
-			GLib.message("%s: %s", this.name, "start application");
-			if(kill_child)
-			{
-				stop_application();
-				pid = 0;
-			}
-			if(pid == 0)
-			{
-				string[3] argv = new string[3];
-				GLib.message("Start application\n");
-				try {
-                    argv[0] = "bash";
-                    argv[1] = "-c";
-                    argv[2] = cmd;
-					foreach (var s in argv)
-					{
-						GLib.message("argv: %s\n", s);
-					}
-					GLib.Process.spawn_async(null, argv, null,
-                            SpawnFlags.SEARCH_PATH|SpawnFlags.DO_NOT_REAP_CHILD, null, out pid);
+        private GLib.Pid pid = 0 ;
+        private void child_watch_called(GLib.Pid p, int status) {
+            GLib.Process.close_pid (p) ;
+            GLib.message ("Child watch called.\n") ;
+            pid = 0 ;
+        }
 
-					GLib.ChildWatch.add(pid, child_watch_called);
-				} catch (Error e) {
-					GLib.warning("Failed to start application: %s", e.message);
-				}
-			}
-		}
-		private void stop_application()
-		{
-			if(pid > 0)
-			{
-				GLib.message("%s: Killing pid: %i\n",this.name, (int)pid);
-				Posix.kill((pid_t)pid, 1);
-			}
-		}
+        private void start_application() {
+            GLib.message ("%s: %s", this.name, "start application") ;
+            if( kill_child ){
+                stop_application () ;
+                pid = 0 ;
+            }
+            if( pid == 0 ){
+                string[3] argv = new string[3] ;
+                GLib.message ("Start application\n") ;
+                try {
+                    argv[0] = "bash" ;
+                    argv[1] = "-c" ;
+                    argv[2] = cmd ;
+                    foreach( var s in argv ){
+                        GLib.message ("argv: %s\n", s) ;
+                    }
+                    GLib.Process.spawn_async (null, argv, null,
+                                              SpawnFlags.SEARCH_PATH | SpawnFlags.DO_NOT_REAP_CHILD, null, out pid) ;
 
-		public void Activate(Base p)
-		{
-			start_application();
-		}
-		public void Deactivate(Base p)
-		{
-			GLib.message("%s: Deactivate\n", this.name);
-			stop_application();
-		}
-		/**
-		 * Generate dot output for this node
-		 *
-		 */
-		public void output_dot(FileStream fp)
-		{
-			fp.printf("\"%s\" [label=\"%s\\n(%s)\", shape=oval]\n",
-						this.name,
-						this.get_public_name(),
-						cmd.escape("")
-					);
-		}
-	}
+                    GLib.ChildWatch.add (pid, child_watch_called) ;
+                } catch (Error e)
+                {
+                    GLib.warning ("Failed to start application: %s", e.message) ;
+                }
+            }
+        }
+
+        private void stop_application() {
+            if( pid > 0 ){
+                GLib.message ("%s: Killing pid: %i\n", this.name, (int) pid) ;
+                Posix.kill ((pid_t) pid, 1) ;
+            }
+        }
+
+        public void Activate(Base p) {
+            start_application () ;
+        }
+
+        public void Deactivate(Base p) {
+            GLib.message ("%s: Deactivate\n", this.name) ;
+            stop_application () ;
+        }
+
+/**
+ * Generate dot output for this node
+ *
+ */
+        public void output_dot(FileStream fp) {
+            fp.printf ("\"%s\" [label=\"%s\\n(%s)\", shape=oval]\n",
+                       this.name,
+                       this.get_public_name (),
+                       cmd.escape ("")
+                       ) ;
+        }
+
+    }
 }
 

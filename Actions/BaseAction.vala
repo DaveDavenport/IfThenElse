@@ -15,60 +15,56 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace IfThenElse
-{
-	/**
-	 * Base interface each 'Action' class should implement.
-	 *
-	 * In the current design each class that should be part of the
-	 * decision tree should implement this. Or should inherit from a
-	 * base class that implements this interface.
-	 *
-	 * Activate() gets called when a certain branch in the decision tree
-	 * is activated.
-	 * Deactivate() gets called when a certain branch in the tree gets
-	 * deactivated.
-	 */
-	public interface BaseAction : Base
-	{
+namespace IfThenElse{
+/**
+ * Base interface each 'Action' class should implement.
+ *
+ * In the current design each class that should be part of the
+ * decision tree should implement this. Or should inherit from a
+ * base class that implements this interface.
+ *
+ * Activate() gets called when a certain branch in the decision tree
+ * is activated.
+ * Deactivate() gets called when a certain branch in the tree gets
+ * deactivated.
+ */
+    public interface BaseAction : Base {
+/**
+ * This activates the Action.
+ *
+ * A class that can have children nodes should propagate this
+ * to its children.
+ * For Example the trigger calls this on the Action when fired.
+ * Or the Chain calls this on the active branch.
+ */
+        public virtual void Activate(Base p) {
+            GLib.error ("Activate action has not been implemented") ;
+        }
 
-		/**
-		 * This activates the Action.
-		 *
-		 * A class that can have children nodes should propagate this
-		 * to its children.
-		 * For Example the trigger calls this on the Action when fired.
-		 * Or the Chain calls this on the active branch.
-		 */
-		public virtual void Activate(Base p)
-		{
-			GLib.error("Activate action has not been implemented");
-		}
+/**
+ * This Deactivates the Action.
+ *
+ * A class that can have children nodes should propagate this
+ * to its children.
+ * ot all actions have to be
+ * deactivatable. This is called for example on an action if
+ * The Chain condition changes.
+ */
+        public virtual void Deactivate(Base p) {
+            GLib.warning ("Deactivate action has not been implemented") ;
+        }
 
-		/**
-		 * This Deactivates the Action.
-		 *
-		 * A class that can have children nodes should propagate this
-		 * to its children.
-		 * ot all actions have to be
-		 * deactivatable. This is called for example on an action if
-		 * The Chain condition changes.
-		 */
-		public virtual void Deactivate(Base p)
-		{
-			GLib.warning("Deactivate action has not been implemented");
-		}
-		/**
-		 * Generate dot output for this node
-		 *
-		 * A class implementing this interface that has children nodes should propagate this
-		 * to its children.
-		 */
-		public virtual void output_dot(FileStream fp)
-		{
-			fp.printf("\"%s\" [label=\"%s\", shape=oval]\n",
-						this.name,
-						this.get_public_name());
-		}
-	}
+/**
+ * Generate dot output for this node
+ *
+ * A class implementing this interface that has children nodes should propagate this
+ * to its children.
+ */
+        public virtual void output_dot(FileStream fp) {
+            fp.printf ("\"%s\" [label=\"%s\", shape=oval]\n",
+                       this.name,
+                       this.get_public_name ()) ;
+        }
+
+    }
 }

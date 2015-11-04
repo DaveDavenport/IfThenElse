@@ -42,3 +42,6 @@ doc:
 
 test:
 	make -C Test/ test
+
+indent: $(SOURCES)
+	uncrustify -c data/uncrustify.cfg --replace $^	

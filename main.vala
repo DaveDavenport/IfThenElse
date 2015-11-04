@@ -15,8 +15,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GLib;
-using Fix;
+using GLib ;
+using Fix ;
 /**
  * IfThenElse is a simple program used to glue small unix tools to getter
  * with the ultimate goal to automate some tedious tasks.
@@ -137,23 +137,23 @@ using Fix;
  *
  * To run the program:
  * {{{
- * 		ifthenelse <list of input files>
+ *      ifthenelse <list of input files>
  * }}}
  *
  * If you want to background IfThenElse.
  * {{{
- * 		ifthenelse -b <list of intput files>
+ *      ifthenelse -b <list of intput files>
  * }}}
  *
  * If you want to generate a flow chart from the chain:
  * {{{
- * 		ifthenelse -d output.dot <list of intput files>
+ *      ifthenelse -d output.dot <list of intput files>
  * }}}
  *
  * The generated dot file can be converted into an actual chart by
  * running do on it:
  * {{{
- * 		dot -Tpng -O output.dot
+ *      dot -Tpng -O output.dot
  * }}}
  * This will generate a output.dot.png
  *
@@ -189,454 +189,426 @@ using Fix;
  * @see MultiCombine
  */
 
-namespace IfThenElse
-{
-	/** Pointer to the commandline arguments. */
-	private unowned string[] g_argv;
-	/** Pointer to the parser */
-	private Parser          parser        = null;
-	/** Main loop. */
-	private GLib.MainLoop   loop          = null;
-	/**
-	 * Config options
-	 */
-    private bool            quiet         = false;
-    private bool            daemonize     = false;
-    private bool            ignore_errors = false;
-    private bool            validate      = false;
-    private bool            list_modules  = false;
-	private string?         dot_file      = null;
-    private string?         pid_file      = null;
+namespace IfThenElse{
+/** Pointer to the commandline arguments. */
+    private unowned string[] g_argv ;
+/** Pointer to the parser */
+    private Parser parser = null ;
+/** Main loop. */
+    private GLib.MainLoop loop = null ;
+/**
+ * Config options
+ */
+    private bool quiet = false ;
+    private bool daemonize = false ;
+    private bool ignore_errors = false ;
+    private bool validate = false ;
+    private bool list_modules = false ;
+    private string ? dot_file = null ;
+    private string ? pid_file = null ;
 
-	const GLib.OptionEntry[] entries = {
-        {"dot", 	      'd', 0, GLib.OptionArg.FILENAME, ref dot_file,      "Output a flowchart off the if-the-else structure", null},
-        {"background",	  'b', 0, GLib.OptionArg.NONE,	   out daemonize,     "Daemonize the program",                            null},
-        {"ignore-errors", 'i', 0, GLib.OptionArg.NONE,     out ignore_errors, "Ignore unparsable input files",                    null},
-        {"quiet",         'q', 0, GLib.OptionArg.NONE,     out quiet,         "Reduce debug output",                              null},
-        {"validate",      'v', 0, GLib.OptionArg.NONE,     out validate,      "Validate intput files.",                           null},
-        {"list-modules",  'l', 0, GLib.OptionArg.NONE,     out list_modules,  "List the build in modules.",                       null},
-        {"pid",           'p', 0, GLib.OptionArg.FILENAME, ref pid_file,      "Use PID file.",                                    null},
-		{null}
-	};
+    const GLib.OptionEntry[] entries = {
+        { "dot", 'd', 0, GLib.OptionArg.FILENAME, ref dot_file, "Output a flowchart off the if-the-else structure", null },
+        { "background", 'b', 0, GLib.OptionArg.NONE, out daemonize, "Daemonize the program", null },
+        { "ignore-errors", 'i', 0, GLib.OptionArg.NONE, out ignore_errors, "Ignore unparsable input files", null },
+        { "quiet", 'q', 0, GLib.OptionArg.NONE, out quiet, "Reduce debug output", null },
+        { "validate", 'v', 0, GLib.OptionArg.NONE, out validate, "Validate intput files.", null },
+        { "list-modules", 'l', 0, GLib.OptionArg.NONE, out list_modules, "List the build in modules.", null },
+        { "pid", 'p', 0, GLib.OptionArg.FILENAME, ref pid_file, "Use PID file.", null },
+        { null }
+    } ;
 
-    private void clear_pid_file()
-    {
-        assert(pid_file != null);
-        Posix.unlink(pid_file);
+    private void clear_pid_file() {
+        assert (pid_file != null) ;
+        Posix.unlink (pid_file) ;
     }
 
-    /**
-     * return true when already running.
-     */
-    private bool create_pid_file()
-    {
-        assert(pid_file != null);
-        int fd = Posix.open(pid_file, Posix.O_RDWR|Posix.O_CREAT, Posix.S_IRUSR | Posix.S_IWUSR);
-        if(fd == -1) {
-            error("Failed to open pidfile: "+pid_file);
+/**
+ * return true when already running.
+ */
+    private bool create_pid_file() {
+        assert (pid_file != null) ;
+        int fd = Posix.open (pid_file, Posix.O_RDWR | Posix.O_CREAT, Posix.S_IRUSR | Posix.S_IWUSR) ;
+        if( fd == -1 ){
+            error ("Failed to open pidfile: " + pid_file) ;
         }
         // Set auto close on exit.
-        var  flags = Posix.fcntl(fd, Posix.F_GETFD);  
-        flags |= Posix.FD_CLOEXEC;
-        if(Posix.fcntl(fd, Posix.F_SETFD, flags) < 0) {
-            error("Failed to set CLOEXEC on pidfile: "+pid_file);
+        var flags = Posix.fcntl (fd, Posix.F_GETFD) ;
+        flags |= Posix.FD_CLOEXEC ;
+        if( Posix.fcntl (fd, Posix.F_SETFD, flags) < 0 ){
+            error ("Failed to set CLOEXEC on pidfile: " + pid_file) ;
         }
 
-        Fix.Flock fl = Fix.Flock();
-        fl.l_type = Posix.F_WRLCK;
-        fl.l_whence = Posix.SEEK_SET;
-        fl.l_start = 0; fl.l_len = 0;
-        fl.l_pid = Posix.getpid();
+        Fix.Flock fl = Fix.Flock () ;
+        fl.l_type = Posix.F_WRLCK ;
+        fl.l_whence = Posix.SEEK_SET ;
+        fl.l_start = 0 ; fl.l_len = 0 ;
+        fl.l_pid = Posix.getpid () ;
 
-        if(Posix.fcntl(fd, Posix.F_SETLK, &fl) < 0){
-            error("Failed to set lock on pidfile: "+pid_file);
+        if( Posix.fcntl (fd, Posix.F_SETLK, &fl) < 0 ){
+            error ("Failed to set lock on pidfile: " + pid_file) ;
         }
-        
-        Posix.ftruncate(fd, 0);
-        string buf = "%i".printf(Posix.getpid());
-        Posix.write(fd, buf,buf.length); 
-        return false;
+
+        Posix.ftruncate (fd, 0) ;
+        string buf = "%i".printf (Posix.getpid ()) ;
+        Posix.write (fd, buf, buf.length) ;
+        return false ;
     }
 
-	/**
-	 * Quit the program. Dot his by terminating the mainloop
-	 */
-	private void quit_program()
-	{
-		if(loop != null) loop.quit();
-	}
+/**
+ * Quit the program. Dot his by terminating the mainloop
+ */
+    private void quit_program() {
+        if( loop != null ){
+            loop.quit () ;
+        }
+    }
 
-	/**
-	 * Give all the root nodes the start signal
- 	 */
-	private void start()
-	{
-		if(parser == null) return;
+/**
+ * Give all the root nodes the start signal
+ */
+    private void start() {
+        if( parser == null ){
+            return ;
+        }
 
-		// Iterates over all input files.
-		var objects = parser.get_objects();
-		foreach ( GLib.Object o in objects)
-		{
-			if((o as Base).is_toplevel())
-			{
-				// Activate the toplevel one.
-				if(o is BaseAction)
-				{
-					(o as BaseAction).Activate(o as Base);
-				}
-			}
-		}
-	}
-	/**
-	 * Give all the root nodes the stop signal.
-	 */
-	private void stop()
-	{
-		if(parser == null) return;
-
-		// Iterates over all input files.
-		var objects = parser.get_objects();
-		foreach ( GLib.Object o in objects)
-		{
-			if((o as Base).is_toplevel())
-			{
-				// Activate the toplevel one.
-				if(o is BaseAction)
-				{
-					(o as BaseAction).Deactivate(o as Base);
-				}
-			}
-		}
-	}
-	/**
-	 * Reload all the files
-	 */
-	private void reload_files()
-	{
-		GLib.message("Reload....");
-		stop();
-		load_argument();
-		start();
-	}
-
-	/**
-	 * This handles sigaction.
-	 * USR1 == RELOAD
-	 * HUP/TERM/INT == QUIT
-	 * Other == Give message
-	 */
-	static void signal_handler (int signo)
-	{
-		if(signo == Posix.SIGUSR1) {
-			reload_files();
-			return;
-		}
-
-		switch (signo) {
-			case Posix.SIGTERM:
-			case Posix.SIGINT:
-				quit_program();
-
-				if (strsignal (signo) != null) {
-					GLib.message ("Received signal:%d->'%s'", signo, strsignal (signo));
-				}
-				break;
-			default:
-				if (strsignal (signo) != null) {
-					GLib.message ("Received signal:%d->'%s'", signo, strsignal (signo));
-				}
-				break;
-		}
-
-
-	}
-	/**
-	 * Construct the parser, load all files.
-	 */
-	private void load_file(string file, bool force = false)
-	{
-		if(force || GLib.Regex.match_simple(".*\\.(ife|ini)$", file))
-		{
-			GLib.message("Load file: %s", file);
-			try{
-				parser.add_from_file(file);
-			}catch (GLib.Error e) {
-                if(!ignore_errors) {
-                    GLib.error("Failed to load builder file: %s, %s\n",
-                            file, e.message);
-                } else {
-                    GLib.warning("Failed to load builder file: %s, %s\n",
-                            file, e.message);
+        // Iterates over all input files.
+        var objects = parser.get_objects () ;
+        foreach( GLib.Object o in objects ){
+            if((o as Base).is_toplevel ()){
+                // Activate the toplevel one.
+                if( o is BaseAction ){
+                    (o as BaseAction).Activate (o as Base) ;
                 }
-			}
-		}
-		else
-		{
-			GLib.message("Ignoring: %s\n", file);
-		}
-	}
-	/**
-	 * Load content off the sub directory
-	 */
-	private void load_dir(string dir)
-	{
-		try{
-			Dir d = Dir.open(dir);
-			unowned string? file = null;
-			while( (file = d.read_name()) != null)
-			{
-				var filename = GLib.Path.build_filename(dir, file);
-				load(filename);
-			}
+            }
+        }
+    }
 
-		}catch(GLib.Error e) {
-			GLib.error("Failed to load directory: %s, %s\n",
-					dir, e.message);
-		}
-	}
-	/**
-	 * Load a path. (check if it is directory or file.
-	 */
-	private void load(string file, bool force = false)
-	{
-		if(GLib.FileUtils.test(file, GLib.FileTest.IS_REGULAR))
-		{
-			load_file(file, force);
-		}
-		else if (GLib.FileUtils.test(file, GLib.FileTest.IS_DIR))
-		{
-			load_dir(file);
-		}
-	}
-	/**
-	 * Load the commandline passed files
-	 */
-	private void load_argument()
-	{
-		parser = null;
-		parser = new IfThenElse.Parser();
+/**
+ * Give all the root nodes the stop signal.
+ */
+    private void stop() {
+        if( parser == null ){
+            return ;
+        }
 
-		// No file given, load default location.
-		if(g_argv.length == 1)
-		{
-			var path = GLib.Path.build_filename(GLib.Environment.get_home_dir(), ".IfThenElse");
-			load(path, false);
-		}
-		else
-		{
-			// Load the files passed on the commandline.
-			for(int i =1; i < g_argv.length; i++)
-			{
-				unowned string file = g_argv[i];
-				load(file, true);
-			}
-		}
-	}
+        // Iterates over all input files.
+        var objects = parser.get_objects () ;
+        foreach( GLib.Object o in objects ){
+            if((o as Base).is_toplevel ()){
+                // Activate the toplevel one.
+                if( o is BaseAction ){
+                    (o as BaseAction).Deactivate (o as Base) ;
+                }
+            }
+        }
+    }
 
-	// This generates a dot file for the given obect structure
-	// (builder).
-	static void generate_dot_file(Parser builder)
-	{
-		FileStream fp = FileStream.open(dot_file, "w");
-		// Print header.
-		fp.printf("digraph FlowChart {\n");
-		fp.printf("""
+/**
+ * Reload all the files
+ */
+    private void reload_files() {
+        GLib.message ("Reload....") ;
+        stop () ;
+        load_argument () ;
+        start () ;
+    }
+
+/**
+ * This handles sigaction.
+ * USR1 == RELOAD
+ * HUP/TERM/INT == QUIT
+ * Other == Give message
+ */
+    static void signal_handler(int signo) {
+        if( signo == Posix.SIGUSR1 ){
+            reload_files () ;
+            return ;
+        }
+
+        switch( signo ){
+        case Posix.SIGTERM :
+        case Posix.SIGINT :
+            quit_program () ;
+
+            if( strsignal (signo) != null ){
+                GLib.message ("Received signal:%d->'%s'", signo, strsignal (signo)) ;
+            }
+            break ;
+        default:
+            if( strsignal (signo) != null ){
+                GLib.message ("Received signal:%d->'%s'", signo, strsignal (signo)) ;
+            }
+            break ;
+        }
+    }
+
+/**
+ * Construct the parser, load all files.
+ */
+    private void load_file(string file, bool force = false) {
+        if( force || GLib.Regex.match_simple (".*\\.(ife|ini)$", file)){
+            GLib.message ("Load file: %s", file) ;
+            try {
+                parser.add_from_file (file) ;
+            } catch (GLib.Error e)
+            {
+                if( !ignore_errors ){
+                    GLib.error ("Failed to load builder file: %s, %s\n",
+                                file, e.message) ;
+                } else {
+                    GLib.warning ("Failed to load builder file: %s, %s\n",
+                                  file, e.message) ;
+                }
+            }
+        } else {
+            GLib.message ("Ignoring: %s\n", file) ;
+        }
+    }
+
+/**
+ * Load content off the sub directory
+ */
+    private void load_dir(string dir) {
+        try {
+            Dir d = Dir.open (dir) ;
+            unowned string ? file = null ;
+            while((file = d.read_name ()) != null ){
+                var filename = GLib.Path.build_filename (dir, file) ;
+                load (filename) ;
+            }
+        } catch (GLib.Error e)
+        {
+            GLib.error ("Failed to load directory: %s, %s\n",
+                        dir, e.message) ;
+        }
+    }
+
+/**
+ * Load a path. (check if it is directory or file.
+ */
+    private void load(string file, bool force = false) {
+        if( GLib.FileUtils.test (file, GLib.FileTest.IS_REGULAR)){
+            load_file (file, force) ;
+        } else if( GLib.FileUtils.test (file, GLib.FileTest.IS_DIR)){
+            load_dir (file) ;
+        }
+    }
+
+/**
+ * Load the commandline passed files
+ */
+    private void load_argument() {
+        parser = null ;
+        parser = new IfThenElse.Parser () ;
+
+        // No file given, load default location.
+        if( g_argv.length == 1 ){
+            var path = GLib.Path.build_filename (GLib.Environment.get_home_dir (), ".IfThenElse") ;
+            load (path, false) ;
+        } else {
+            // Load the files passed on the commandline.
+            for( int i = 1 ; i < g_argv.length ; i++ ){
+                unowned string file = g_argv[i] ;
+                load (file, true) ;
+            }
+        }
+    }
+
+// This generates a dot file for the given obect structure
+// (builder).
+    static void generate_dot_file(Parser builder) {
+        FileStream fp = FileStream.open (dot_file, "w") ;
+        // Print header.
+        fp.printf ("digraph FlowChart {\n") ;
+        fp.printf ("""
 				node [
 					fontname = "Bitstream Vera Sans"
 			         fontsize = 8
 			         shape = "record"
 			     ]
-		 """);
-		// Iterates over all input files.
-		// Find the root item(s) and make them generate the rest
-		// off the dot file.
-		var objects = builder.get_objects();
-		foreach ( GLib.Object o in objects)
-		{
-			if((o as Base).is_toplevel())
-			{
-				if(o is BaseAction)
-				{
-					(o as BaseAction).output_dot(fp);
-				}
-			}
-		}
-		fp.printf("}\n");
-		fp = null;
-	}
-
-	/**
-	 * Background ifthenelse.
-	 */
-	static void background()
-	{
-		// Duplicate and exit the parent.
-		var pid = Posix.fork();
-		if(pid < 0){
-			GLib.error("Failed to fork to the background");
-		}
-		if(pid > 0) {
-			// Main thread.
-			Posix.exit(0);
-		}
-	}
-	/**
- 	 * Log handler.
-	 */
-	static void my_log_handler(string? domain, GLib.LogLevelFlags level, string message)
-	{
-		if(!quiet)
-		{
-			GLib.Log.default_handler(domain,level, message);
-		}
-	}
-    static void print_classes(List<GLib.Type> types)
-    {
-        foreach(GLib.Type type in types)
-        {
-            stdout.printf("Name: %s\n", type.name());
-            var obj = GLib.Object.new(type,null);
-
-            foreach(var ps in obj.get_class().list_properties())
-            {
-                stdout.printf("%20s:\t%s (%s)\n", ps.name,  ps.value_type.name(), ps.get_blurb());
+		 """        ) ;
+        // Iterates over all input files.
+        // Find the root item(s) and make them generate the rest
+        // off the dot file.
+        var objects = builder.get_objects () ;
+        foreach( GLib.Object o in objects ){
+            if((o as Base).is_toplevel ()){
+                if( o is BaseAction ){
+                    (o as BaseAction).output_dot (fp) ;
+                }
             }
-            stdout.printf("\n");
-            obj = null;
+        }
+        fp.printf ("}\n") ;
+        fp = null ;
+    }
+
+/**
+ * Background ifthenelse.
+ */
+    static void background() {
+        // Duplicate and exit the parent.
+        var pid = Posix.fork () ;
+        if( pid < 0 ){
+            GLib.error ("Failed to fork to the background") ;
+        }
+        if( pid > 0 ){
+            // Main thread.
+            Posix.exit (0) ;
         }
     }
 
+/**
+ * Log handler.
+ */
+    static void my_log_handler(string ? domain, GLib.LogLevelFlags level, string message) {
+        if( !quiet ){
+            GLib.Log.default_handler (domain, level, message) ;
+        }
+    }
 
-	static int main(string[] argv)
-	{
-        List<GLib.Type> registered_types = new List<GLib.Type>();
+    static void print_classes(List<GLib.Type> types) {
+        foreach( GLib.Type type in types ){
+            stdout.printf ("Name: %s\n", type.name ()) ;
+            var obj = GLib.Object.new (type, null) ;
 
-		// Register the types.
-		// Checks
-        registered_types.prepend(typeof(ExternalToolCheck));
-		registered_types.prepend(typeof(TimeCheck));
-		registered_types.prepend(typeof(OutputWatch));
-		registered_types.prepend(typeof(MultiOutputWatch));
+            foreach( var ps in obj.get_class ().list_properties ()){
+                stdout.printf ("%20s:\t%s (%s)\n", ps.name, ps.value_type.name (), ps.get_blurb ()) ;
+            }
+            stdout.printf ("\n") ;
+            obj = null ;
+        }
+    }
 
-		// Actions.
-		registered_types.prepend(typeof(ExternalToolAction));
-		registered_types.prepend(typeof(MultiAction));
-		registered_types.prepend(typeof(SplitAction));
-		registered_types.prepend(typeof(Single));
+    static int main(string[] argv) {
+        List<GLib.Type> registered_types = new List<GLib.Type>() ;
 
-		// Triggers
-		registered_types.prepend(typeof(ExternalToolTrigger));
-		registered_types.prepend(typeof(TimerTrigger));
-		registered_types.prepend(typeof(InitTrigger));
-		registered_types.prepend(typeof(ClockTrigger));
-		registered_types.prepend(typeof(BetweenTrigger));
+        // Register the types.
+        // Checks
+        registered_types.prepend (typeof (ExternalToolCheck)) ;
+        registered_types.prepend (typeof (TimeCheck)) ;
+        registered_types.prepend (typeof (OutputWatch)) ;
+        registered_types.prepend (typeof (MultiOutputWatch)) ;
 
-		// other
-		registered_types.prepend(typeof(MultiCombine));
-		registered_types.prepend(typeof(AndCombine));
+        // Actions.
+        registered_types.prepend (typeof (ExternalToolAction)) ;
+        registered_types.prepend (typeof (MultiAction)) ;
+        registered_types.prepend (typeof (SplitAction)) ;
+        registered_types.prepend (typeof (Single)) ;
+
+        // Triggers
+        registered_types.prepend (typeof (ExternalToolTrigger)) ;
+        registered_types.prepend (typeof (TimerTrigger)) ;
+        registered_types.prepend (typeof (InitTrigger)) ;
+        registered_types.prepend (typeof (ClockTrigger)) ;
+        registered_types.prepend (typeof (BetweenTrigger)) ;
+
+        // other
+        registered_types.prepend (typeof (MultiCombine)) ;
+        registered_types.prepend (typeof (AndCombine)) ;
 
         // reverse list.
-        registered_types.reverse();
+        registered_types.reverse () ;
 
 
-		// Commandline options parsing.
-		GLib.OptionContext og = new GLib.OptionContext("IfThenElse");
-		og.add_main_entries(entries,null);
-		try{
-			og.parse(ref argv);
-		}catch (Error e) {
-			GLib.error("Failed to parse command line options: %s\n",
-					e.message);
-		}
-		g_argv = argv;
+        // Commandline options parsing.
+        GLib.OptionContext og = new GLib.OptionContext ("IfThenElse") ;
+        og.add_main_entries (entries, null) ;
+        try {
+            og.parse (ref argv) ;
+        } catch (Error e)
+        {
+            GLib.error ("Failed to parse command line options: %s\n",
+                        e.message) ;
+        }
+        g_argv = argv ;
 
         // argument check.
-        if(validate && ignore_errors) {
-            GLib.message("The commandline options validate and ignore errors cannot be enabled at the same time.");
-            parser = null;
-            registered_types = null;
-            return Posix.EXIT_FAILURE;
+        if( validate && ignore_errors ){
+            GLib.message ("The commandline options validate and ignore errors cannot be enabled at the same time.") ;
+            parser = null ;
+            registered_types = null ;
+            return Posix.EXIT_FAILURE ;
         }
 
-		// Log handler
-		GLib.Log.set_handler(null,
-				GLib.LogLevelFlags.LEVEL_INFO|GLib.LogLevelFlags.LEVEL_DEBUG|
-				GLib.LogLevelFlags.LEVEL_MESSAGE,
-				my_log_handler);
+        // Log handler
+        GLib.Log.set_handler (null,
+                              GLib.LogLevelFlags.LEVEL_INFO | GLib.LogLevelFlags.LEVEL_DEBUG |
+                              GLib.LogLevelFlags.LEVEL_MESSAGE,
+                              my_log_handler) ;
 
         // list modules.
-        if(list_modules) {
-            print_classes(registered_types);
-            parser = null;
-            registered_types = null;
-            return Posix.EXIT_SUCCESS;
+        if( list_modules ){
+            print_classes (registered_types) ;
+            parser = null ;
+            registered_types = null ;
+            return Posix.EXIT_SUCCESS ;
         }
 
-		// Load the setup file.
-		load_argument();
+        // Load the setup file.
+        load_argument () ;
 
         // Validate. If we get to this, it was valid.
-        if(validate)
-        {
-            GLib.message("Input files are valid ifthenelse scripts.");
-            parser = null;
-            registered_types = null;
-            return Posix.EXIT_SUCCESS;
+        if( validate ){
+            GLib.message ("Input files are valid ifthenelse scripts.") ;
+            parser = null ;
+            registered_types = null ;
+            return Posix.EXIT_SUCCESS ;
         }
 
-		// Generate a dot file.
-		if(dot_file != null)
-		{
-			generate_dot_file(parser);
-            parser = null;
-            registered_types = null;
-			// Exit succesfull
-			return 0;
-		}
+        // Generate a dot file.
+        if( dot_file != null ){
+            generate_dot_file (parser) ;
+            parser = null ;
+            registered_types = null ;
+            // Exit succesfull
+            return 0 ;
+        }
 
-		if(daemonize) {
-			background();
-		}
-        if(pid_file != null){
-            if(create_pid_file()) {
-                error("Failed to obtain a lock.");
+        if( daemonize ){
+            background () ;
+        }
+        if( pid_file != null ){
+            if( create_pid_file ()){
+                error ("Failed to obtain a lock.") ;
             }
         }
-		// Create main loop.
-		loop = new GLib.MainLoop();
+        // Create main loop.
+        loop = new GLib.MainLoop () ;
 
-		/**
-		 * Handle signals
-		 */
-		var empty_mask = Posix.sigset_t ();
-		Posix.sigemptyset (empty_mask);
+        /**
+         * Handle signals
+         */
+        var empty_mask = Posix.sigset_t () ;
+        Posix.sigemptyset (empty_mask) ;
 
-		var act = Posix.sigaction_t ();
-		act.sa_handler = signal_handler;
-		act.sa_mask = empty_mask;
-		act.sa_flags = 0;
+        var act = Posix.sigaction_t () ;
+        act.sa_handler = signal_handler ;
+        act.sa_mask = empty_mask ;
+        act.sa_flags = 0 ;
 
-		Posix.sigaction (Posix.SIGTERM, act, null);
-		Posix.sigaction (Posix.SIGINT, act, null);
-		Posix.sigaction (Posix.SIGHUP, act, null);
-		Posix.sigaction (Posix.SIGUSR1, act, null);
+        Posix.sigaction (Posix.SIGTERM, act, null) ;
+        Posix.sigaction (Posix.SIGINT, act, null) ;
+        Posix.sigaction (Posix.SIGHUP, act, null) ;
+        Posix.sigaction (Posix.SIGUSR1, act, null) ;
 
 
-		// Run program.
-		start();
-		loop.run();
+        // Run program.
+        start () ;
+        loop.run () ;
 
-		GLib.message("Quit....");
+        GLib.message ("Quit....") ;
 
-		stop();
-		GLib.message("Cleanup....");
+        stop () ;
+        GLib.message ("Cleanup....") ;
 
-        if(pid_file != null){
-            clear_pid_file();
+        if( pid_file != null ){
+            clear_pid_file () ;
         }
-		// Destroy
-		parser = null;
-        registered_types = null;
-        return 0;
-	}
+        // Destroy
+        parser = null ;
+        registered_types = null ;
+        return 0 ;
+    }
+
 }

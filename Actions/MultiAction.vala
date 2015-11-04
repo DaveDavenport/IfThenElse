@@ -15,73 +15,65 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-using GLib;
-namespace IfThenElse
-{
-	/**
-	 * Allow you to activate multiple branches from the same input.
-	 *
-	 * If you want to trigger Action1 and Action2 by one Trigger.
-	 * {{{
-	 * [Trigger]
-	 * ....
-	 * action=Multi
-	 *
-	 * [Multi]
-	 * action=Action1;Action2
-	 * }}}
-	 */
-	public class MultiAction : BaseAction, Base
-	{
-		private List <BaseAction> actions;
-		public BaseAction action {
-			set{
-                if(actions.find(value) != null) {
-                    GLib.error("You cannot add the same action multiple times.");
+using GLib ;
+namespace IfThenElse{
+/**
+ * Allow you to activate multiple branches from the same input.
+ *
+ * If you want to trigger Action1 and Action2 by one Trigger.
+ * {{{
+ * [Trigger]
+ * ....
+ * action=Multi
+ *
+ * [Multi]
+ * action=Action1;Action2
+ * }}}
+ */
+    public class MultiAction : BaseAction, Base {
+        private List<BaseAction> actions ;
+        public BaseAction action {
+            set {
+                if( actions.find (value) != null ){
+                    GLib.error ("You cannot add the same action multiple times.") ;
                 }
-				actions.append(value as BaseAction);
-				(value as Base).parent = this;
-			}
-		}
+                actions.append (value as BaseAction) ;
+                (value as Base).parent = this ;
+            }
+        }
 
-		/**
-		 * Activate()
-		 *
-		 * Propagate this to the children.
-		 */
-		public void Activate(Base p)
-		{
-			foreach(BaseAction action in actions)
-			{
-				action.Activate(this);
-			}
-		}
+/**
+ * Activate()
+ *
+ * Propagate this to the children.
+ */
+        public void Activate(Base p) {
+            foreach( BaseAction action in actions ){
+                action.Activate (this) ;
+            }
+        }
 
-		/**
-		 * Deactivate()
-		 *
-		 * Propagate this to the children.
-		 */
-		public void Deactivate(Base p)
-		{
-			foreach(BaseAction action in actions)
-			{
-				action.Deactivate(this);
-			}
-		}
+/**
+ * Deactivate()
+ *
+ * Propagate this to the children.
+ */
+        public void Deactivate(Base p) {
+            foreach( BaseAction action in actions ){
+                action.Deactivate (this) ;
+            }
+        }
 
+        public void output_dot(FileStream fp) {
+            fp.printf ("\"%s\" [label=\"%s\", shape=box]\n",
+                       this.name,
+                       this.get_public_name ()) ;
+            foreach( unowned BaseAction action in actions ){
+                fp.printf ("\"%s\" -> \"%s\"\n", this.name,
+                           action.name) ;
+                action.output_dot (fp) ;
+            }
+        }
 
-		public void output_dot(FileStream fp)
-		{
-			fp.printf("\"%s\" [label=\"%s\", shape=box]\n",
-					this.name,
-					this.get_public_name());
-			foreach(unowned BaseAction action in actions)
-			{
-				fp.printf("\"%s\" -> \"%s\"\n", this.name,
-						action.name);
-				action.output_dot(fp);
-			}
-		}
-	}
+    }
 }
