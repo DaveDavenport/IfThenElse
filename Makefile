@@ -31,6 +31,7 @@ $(PROGRAM): $(SOURCES) | $(PACKAGE_CHECK)
 clean:
 	$(info == Cleaning)
 	@rm -rf $(PROGRAM) $(PACKAGE_CHECK)
+	@rm -rf ./Documentation/html
 
 install:
 	install -Dm 755 $(PROGRAM) $(PREFIX)/bin/
