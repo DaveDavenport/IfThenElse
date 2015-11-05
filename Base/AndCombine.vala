@@ -40,7 +40,7 @@ namespace IfThenElse{
             }
             set {
                 if( _action != null ){
-                    GLib.error ("%s: action is allready set", this.name) ;
+                    GLib.error ("%s: action is already set", this.name) ;
                 }
                 _action = value ;
                 (_action).parent = this ;
@@ -131,6 +131,5 @@ namespace IfThenElse{
                 action.Deactivate (this) ;
             }
         }
-
     }
 }

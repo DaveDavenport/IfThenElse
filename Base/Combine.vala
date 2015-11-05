@@ -84,6 +84,7 @@ namespace IfThenElse{
          * Propagate this to the children.
          */
         public void Activate(Base p) {
+            this._is_active = true;
             action.Activate (this) ;
         }
 
@@ -93,6 +94,7 @@ namespace IfThenElse{
          * Propagate this to the children.
          */
         public void Deactivate(Base p) {
+            this._is_active = false;
             action.Deactivate (this) ;
         }
 
