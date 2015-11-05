@@ -17,6 +17,7 @@
 
 using GLib ;
 using Fix ;
+using Gvc ;
 /**
  * IfThenElse is a simple program used to glue small unix tools to getter
  * with the ultimate goal to automate some tedious tasks.
@@ -455,6 +456,9 @@ namespace IfThenElse {
         }
         fp.printf ("}\n") ;
         fp = null ;
+        var dot_graph  = new Gvc.Graph("g", Gvc.Agdirected);
+        dot_graph.write(GLib.stdout);
+        dot_graph = null;
     }
 
 /**
@@ -530,7 +534,7 @@ namespace IfThenElse {
         og.add_main_entries (entries, null) ;
         try {
             og.parse (ref argv) ;
-        } catch (Error e)
+        } catch (GLib.Error e)
         {
             GLib.error ("Failed to parse command line options: %s\n",
                         e.message) ;
