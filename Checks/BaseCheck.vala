@@ -81,6 +81,7 @@ namespace IfThenElse {
                     _then_action.Deactivate (this) ;
                 }
             }
+            this._is_active = true;
         }
 
 /**
@@ -95,6 +96,7 @@ namespace IfThenElse {
             if( _else_action != null ){
                 _else_action.Deactivate (this) ;
             }
+            this._is_active = false;
         }
 
 /**
@@ -103,10 +105,11 @@ namespace IfThenElse {
  */
         public void output_dot(FileStream fp) {
             string dot_desc = this.get_dot_description () ;
-            fp.printf ("\"%s\" [label=\"%s\\n(%s)\", shape=diamond]\n",
+            fp.printf ("\"%s\" [label=\"%s\\n(%s)\", shape=diamond, color=%s]\n",
                        this.name,
                        this.get_public_name (),
-                       dot_desc) ;
+                       dot_desc,
+                       this._is_active?"red":"black") ;
             if( _then_action != null ){
                 fp.printf ("\"%s\" -> \"%s\" [label=\"Yes\"]\n", this.name,
                            _then_action.name) ;

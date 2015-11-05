@@ -102,10 +102,11 @@ namespace IfThenElse {
  *
  */
         public override void output_dot(FileStream fp) {
-            fp.printf ("\"%s\" [label=\"%s\\nTimeout Trigger: %02i:%02i\", shape=oval]\n",
+            fp.printf ("\"%s\" [label=\"%s\\nTimeout Trigger: %02i:%02i\", shape=oval, color=%s]\n",
                        this.name,
                        this.get_public_name (),
-                       this.hour, this.minute) ;
+                       this.hour, this.minute,
+                        this._is_active?"red":"black") ;
             if( this.action != null ){
                 fp.printf ("\"%s\" -> \"%s\"\n", this.name, action.name) ;
                 this.action.output_dot (fp) ;
