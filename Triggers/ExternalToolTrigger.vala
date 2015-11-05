@@ -18,7 +18,7 @@
 using GLib ;
 using Posix ;
 
-namespace IfThenElse{
+namespace IfThenElse {
 /**
  * This trigger calls an external program.
  * When the program returns, the trigger is called.

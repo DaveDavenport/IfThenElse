@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace IfThenElse{
+namespace IfThenElse {
 /**
  * Base interface each 'Action' class should implement.
  *

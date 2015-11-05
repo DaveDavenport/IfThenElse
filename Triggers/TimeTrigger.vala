@@ -17,7 +17,7 @@
 
 using GLib ;
 
-namespace IfThenElse{
+namespace IfThenElse {
 /**
  * An alarm trigger: Fire at a certain time.
  *

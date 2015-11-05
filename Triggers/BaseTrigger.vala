@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace IfThenElse{
+namespace IfThenElse {
 /**
  * Abstract BaseTrigger class. All triggers should inherit from this.
  */
@@ -41,6 +41,7 @@ namespace IfThenElse{
  */
         public virtual void Activate(Base p) {
             enable_trigger () ;
+            _is_active = true ;
         }
 
         public virtual void Deactivate(Base p) {
@@ -49,6 +50,7 @@ namespace IfThenElse{
                 _action.Deactivate (this) ;
             }
             disable_trigger () ;
+            _is_active = false ;
         }
 
 /**
@@ -62,9 +64,10 @@ namespace IfThenElse{
         }
 
         public virtual void output_dot(FileStream fp) {
-            fp.printf ("\"%s\" [label=\"%s\", shape=oval]\n",
+            fp.printf ("\"%s\" [label=\"%s\", shape=oval, color=%s]\n",
                        this.name,
-                       this.get_public_name ()) ;
+                       this.get_public_name (),
+                       this._is_active ? "red" : "black") ;
             fp.printf ("\"%s\" -> \"%s\"\n", this.name, _action.name) ;
             this._action.output_dot (fp) ;
         }

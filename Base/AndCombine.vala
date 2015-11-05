@@ -16,7 +16,7 @@
  */
 
 using GLib ;
-namespace IfThenElse{
+namespace IfThenElse {
 /**
  * If all its inputs are activates, it activates it child.
  *

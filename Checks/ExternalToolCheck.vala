@@ -17,7 +17,7 @@
 
 using GLib ;
 
-namespace IfThenElse{
+namespace IfThenElse {
 /**
  * Checks an external tool to see what branch should fire.
  *
@@ -93,14 +93,14 @@ namespace IfThenElse{
                 argv[2] = cmd ;
 
                 GLib.Process.spawn_sync (
-                    null,           // work dir
-                    argv,           // argv
-                    null,           // envp
+                    null, // work dir
+                    argv, // argv
+                    null, // envp
                     SpawnFlags.SEARCH_PATH, // spawn flags
-                    null,           // setup func
-                    out output,     // stdout
-                    null,           // stderr
-                    out exit_value  // exit value.
+                    null, // setup func
+                    out output, // stdout
+                    null, // stderr
+                    out exit_value // exit value.
                     ) ;
                 exit_value = GLib.Process.exit_status (exit_value) ;
                 GLib.message ("output: %i:%s vs %s %d\n", exit_value, output, output_compare,

@@ -16,7 +16,7 @@
  */
 
 using GLib ;
-namespace IfThenElse{
+namespace IfThenElse {
 /**
  * Split the activate and Deactivate signal into 2 branches.
  *

@@ -16,7 +16,7 @@
  */
 
 using GLib ;
-namespace IfThenElse{
+namespace IfThenElse {
 /**
  * Allow you to activate multiple branches from the same input.
  *

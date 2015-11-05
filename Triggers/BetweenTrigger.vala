@@ -17,7 +17,7 @@
 
 using GLib ;
 
-namespace IfThenElse{
+namespace IfThenElse {
 /**
  * Between Trigger: A trigger that enables the child action when within a time-range.
  *

@@ -18,7 +18,7 @@
 using GLib ;
 using Posix ;
 
-namespace IfThenElse{
+namespace IfThenElse {
 /**
  * An MultiOutputWatch trigger: Watches the output off a program and triggers
  * when a certain condition is met.

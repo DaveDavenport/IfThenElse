@@ -189,7 +189,7 @@ using Fix ;
  * @see MultiCombine
  */
 
-namespace IfThenElse{
+namespace IfThenElse {
 /** Pointer to the commandline arguments. */
     private unowned string[] g_argv ;
 /** Pointer to the parser */
@@ -314,15 +314,26 @@ namespace IfThenElse{
         start () ;
     }
 
+    private bool signal_dump_dot() {
+        GLib.message ("Dumping dotty file...") ;
+        generate_dot_file (parser, "state.dotty") ;
+        return false ;
+    }
+
 /**
  * This handles sigaction.
  * USR1 == RELOAD
+ * USR2 == DOTTY
  * HUP/TERM/INT == QUIT
  * Other == Give message
  */
     static void signal_handler(int signo) {
         if( signo == Posix.SIGUSR1 ){
             reload_files () ;
+            return ;
+        }
+        if( signo == Posix.SIGUSR2 ){
+            GLib.Idle.add (signal_dump_dot) ;
             return ;
         }
 
@@ -417,17 +428,20 @@ namespace IfThenElse{
 
 // This generates a dot file for the given obect structure
 // (builder).
-    static void generate_dot_file(Parser builder) {
+    static void generate_dot_file(Parser builder, string dot_file) {
         FileStream fp = FileStream.open (dot_file, "w") ;
+        if( fp == null ){
+            GLib.error ("Failed to open dotty file for writing: %s", dot_file) ;
+        }
         // Print header.
         fp.printf ("digraph FlowChart {\n") ;
         fp.printf ("""
 				node [
-					fontname = "Bitstream Vera Sans"
+					fontname = "Bitstream                     Vera Sans "
 			         fontsize = 8
-			         shape = "record"
+			         shape = "record             "
 			     ]
-		 """        ) ;
+		 """) ;
         // Iterates over all input files.
         // Find the root item(s) and make them generate the rest
         // off the dot file.
@@ -558,7 +572,7 @@ namespace IfThenElse{
 
         // Generate a dot file.
         if( dot_file != null ){
-            generate_dot_file (parser) ;
+            generate_dot_file (parser, dot_file) ;
             parser = null ;
             registered_types = null ;
             // Exit succesfull
@@ -591,6 +605,7 @@ namespace IfThenElse{
         Posix.sigaction (Posix.SIGINT, act, null) ;
         Posix.sigaction (Posix.SIGHUP, act, null) ;
         Posix.sigaction (Posix.SIGUSR1, act, null) ;
+        Posix.sigaction (Posix.SIGUSR2, act, null) ;
 
 
         // Run program.

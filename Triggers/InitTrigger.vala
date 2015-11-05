@@ -17,7 +17,7 @@
 
 using GLib ;
 
-namespace IfThenElse{
+namespace IfThenElse {
 /**
  * A init trigger: Fires onces at startup.
  *

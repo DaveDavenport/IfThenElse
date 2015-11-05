@@ -16,7 +16,7 @@
  */
 using GLib ;
 
-namespace IfThenElse{
+namespace IfThenElse {
     errordomain ParserError {
         // Errors that occured during creation off a node.
         NODE_CREATION,

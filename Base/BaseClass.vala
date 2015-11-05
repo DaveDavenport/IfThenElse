@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace IfThenElse{
+namespace IfThenElse {
 /**
  * The base class used in IfThenElse. Each class should be derived from this.
  *
@@ -23,13 +23,14 @@ namespace IfThenElse{
  * E.g. name and parent property. A has_parent and is_toplevel check.
  */
     public abstract class Base : GLib.Object {
-/// A pointer to the parent. This is the internal default storage.
-/// Use the parent <accessor>
+        protected bool _is_active = false ;
+// / A pointer to the parent. This is the internal default storage.
+// / Use the parent <accessor>
         private unowned Base ? _parent = null ;
 
 
-/// Check if we are allready a child of node.
-/// TODO: This  might break on the combine module.
+// / Check if we are allready a child of node.
+// / TODO: This  might break on the combine module.
         private bool is_nested_parent(Base node) {
             unowned Base ? iter = null ;
             for( iter = node ; iter != null ; iter = iter.parent ){
@@ -40,9 +41,9 @@ namespace IfThenElse{
             return false ;
         }
 
-/// Accessors
-/// Parent object. This accepts one and only one parent.
-/// Can be overriden if you want different behaviour
+// / Accessors
+// / Parent object. This accepts one and only one parent.
+// / Can be overriden if you want different behaviour
         [Description (blurb = "Pointer to the parent object (automatically set)")]
         public virtual unowned Base ? parent
         {

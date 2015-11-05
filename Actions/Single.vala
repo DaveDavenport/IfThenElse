@@ -18,7 +18,7 @@
 using GLib ;
 
 
-namespace IfThenElse{
+namespace IfThenElse {
 /**
  * Singles: Only Activate/Deactivate once in a row.
  *

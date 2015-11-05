@@ -18,7 +18,7 @@
 using GLib ;
 using Posix ;
 
-namespace IfThenElse{
+namespace IfThenElse {
 /**
  * Execute an external tool.
  *
@@ -36,7 +36,7 @@ namespace IfThenElse{
         public string cmd { get ; set ; default = "" ; }
 /**
  * If the property kill_child is set to true, it kills the
- * client when the object is deactivated.
+ * client when the object is de_is_active.
  */
         public bool kill_child { get ; set ; default = false ; }
 
@@ -83,11 +83,13 @@ namespace IfThenElse{
 
         public void Activate(Base p) {
             start_application () ;
+            _is_active = true ;
         }
 
         public void Deactivate(Base p) {
             GLib.message ("%s: Deactivate\n", this.name) ;
             stop_application () ;
+            _is_active = false ;
         }
 
 /**
@@ -95,10 +97,11 @@ namespace IfThenElse{
  *
  */
         public void output_dot(FileStream fp) {
-            fp.printf ("\"%s\" [label=\"%s\\n(%s)\", shape=oval]\n",
+            fp.printf ("\"%s\" [label=\"%s\\n(%s)\", shape=oval, color=%s]\n",
                        this.name,
                        this.get_public_name (),
-                       cmd.escape ("")
+                       cmd.escape (""),
+                       this._is_active ? "red" : "black"
                        ) ;
         }
 
