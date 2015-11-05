@@ -17,7 +17,7 @@
 
 using GLib ;
 
-namespace IfThenElse {
+namespace IfThenElse{
 /**
  * An alarm trigger: Fire at a certain time.
  *
@@ -101,16 +101,20 @@ namespace IfThenElse {
 /**
  *
  */
-        public override void output_dot(FileStream fp) {
-            fp.printf ("\"%s\" [label=\"%s\\nTimeout Trigger: %02i:%02i\", shape=oval, color=%s]\n",
-                       this.name,
-                       this.get_public_name (),
-                       this.hour, this.minute,
-                        this._is_active?"red":"black") ;
-            if( this.action != null ){
-                fp.printf ("\"%s\" -> \"%s\"\n", this.name, action.name) ;
-                this.action.output_dot (fp) ;
+        public override Gvc.Node output_dot(Gvc.Graph graph) {
+            var str = "%s\\nTimeout Trigger: %02i:%02i".printf (
+                this.get_public_name (),
+                this.hour, this.minute) ;
+            var node = graph.create_node (this.name) ;
+            node.set ("label", str) ;
+            if( this._is_active ){
+                node.set ("color", "red") ;
             }
+            if( this.action != null ){
+                var action_node = this._action.output_dot (graph) ;
+                graph.create_edge (node, action_node) ;
+            }
+            return node ;
         }
 
 /**

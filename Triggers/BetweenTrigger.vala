@@ -17,7 +17,7 @@
 
 using GLib ;
 
-namespace IfThenElse {
+namespace IfThenElse{
 /**
  * Between Trigger: A trigger that enables the child action when within a time-range.
  *
@@ -130,24 +130,26 @@ namespace IfThenElse {
 /**
  *
  */
-        public override void output_dot(FileStream fp) {
+        public override Gvc.Node output_dot(Gvc.Graph graph) {
+            var str = "" ;
             if( _end_hour == 0 && _end_minute == 0 ){
-                fp.printf ("\"%s\" [label=\"%s\\nTimeout Trigger: %02i:%02i-%02i:%02i\", shape=oval]\n",
-                           this.name,
-                           this.get_public_name (),
-                           this.hour, this.minute,
-                           this.end_hour, this.end_minute
-                           ) ;
+                str = "%s\\nTimeout Trigger: %02i:%02i-%02i:%02i".printf (
+                    this.get_public_name (),
+                    this.hour, this.minute,
+                    this.end_hour, this.end_minute
+                    ) ;
             } else {
-                fp.printf ("\"%s\" [label=\"%s\\nTimeout Trigger: %02i:%02i\", shape=oval]\n",
-                           this.name,
-                           this.get_public_name (),
-                           this.hour, this.minute) ;
+                str = "%s\\nTimeout Trigger: %02i:%02i".printf (
+                    this.get_public_name (),
+                    this.hour, this.minute) ;
             }
+            var node = graph.create_node (this.name) ;
+            node.set ("label", str) ;
             if( this.action != null ){
-                fp.printf ("\"%s\" -> \"%s\"\n", this.name, action.name) ;
-                this.action.output_dot (fp) ;
+                var action_node = this._action.output_dot (graph) ;
+                graph.create_edge (node, action_node) ;
             }
+            return node ;
         }
 
 /**

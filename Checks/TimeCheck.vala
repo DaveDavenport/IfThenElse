@@ -18,7 +18,7 @@
 using GLib ;
 
 
-namespace IfThenElse {
+namespace IfThenElse{
 /**
  * TimeChecks: After a certain time fire one branch, before the time fire
  * the other branch.

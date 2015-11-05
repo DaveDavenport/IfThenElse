@@ -16,7 +16,7 @@
  */
 
 using GLib ;
-namespace IfThenElse {
+namespace IfThenElse{
 /**
  * Split the activate and Deactivate signal into 2 branches.
  *
@@ -85,20 +85,19 @@ namespace IfThenElse {
             }
         }
 
-        public void output_dot(FileStream fp) {
-            fp.printf ("\"%s\" [label=\"%s\", shape=diamond]\n",
-                       this.name,
-                       this.get_public_name ()) ;
+        public Gvc.Node output_dot(Gvc.Graph graph) {
+            var node = graph.create_node (this.name) ;
+            node.set ("label", this.get_public_name ()) ;
+            node.set ("shape", "diamond") ;
             if( _else_action != null ){
-                fp.printf ("\"%s\" -> \"%s\"\n", this.name,
-                           _else_action.name) ;
-                _else_action.output_dot (fp) ;
+                var action_node = this._else_action.output_dot (graph) ;
+                graph.create_edge (node, action_node) ;
             }
             if( _then_action != null ){
-                fp.printf ("\"%s\" -> \"%s\"\n", this.name,
-                           _then_action.name) ;
-                _then_action.output_dot (fp) ;
+                var action_node = this._then_action.output_dot (graph) ;
+                graph.create_edge (node, action_node) ;
             }
+            return node ;
         }
 
     }

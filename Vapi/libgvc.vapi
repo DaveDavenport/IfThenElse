@@ -49,6 +49,14 @@ namespace Gvc {
 		AGMAX,
 		AGPREV
 	}
+    [ CCode (cheader_filename = "cgraph.h", cprefix="AG") ]
+    public enum Kind {
+        GRAPH,
+        NODE,
+        OUTEDGE,
+        INEDGE,
+        EDGE
+    }
 
 	[Compact]
 	[CCode (cname = "GVC_t", free_function = "gvFreeContext")]
@@ -164,6 +172,9 @@ namespace Gvc {
 		[CCode (cname = "agset")]
 		public int set ([CCode (type = "char*")] string attribute_name, [CCode (type = "char*")] string attribute_value);
 
+
+        [CCode (cname = "agattr")]
+        public int set_attribute(Kind kind, [CCode(type="char*")] string name, [CCode(type="char*")] string value);
 		[CCode (cname = "agsafeset")]
 		public int safe_set ([CCode (type = "char*")] string attribute_name, [CCode (type = "char*")] string attribute_value, [CCode (type = "char*")] string? default_value);
 

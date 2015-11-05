@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace IfThenElse {
+namespace IfThenElse{
 /**
  * Abstract class for Checks: Each check should inherit from.
  */
@@ -81,7 +81,7 @@ namespace IfThenElse {
                     _then_action.Deactivate (this) ;
                 }
             }
-            this._is_active = true;
+            this._is_active = true ;
         }
 
 /**
@@ -96,30 +96,32 @@ namespace IfThenElse {
             if( _else_action != null ){
                 _else_action.Deactivate (this) ;
             }
-            this._is_active = false;
+            this._is_active = false ;
         }
 
 /**
  * Generate dot file for this element.
  * Diamond square with a yes and a no out arrow.
  */
-        public void output_dot(FileStream fp) {
+        public Gvc.Node output_dot(Gvc.Graph graph) {
             string dot_desc = this.get_dot_description () ;
-            fp.printf ("\"%s\" [label=\"%s\\n(%s)\", shape=diamond, color=%s]\n",
-                       this.name,
-                       this.get_public_name (),
-                       dot_desc,
-                       this._is_active?"red":"black") ;
+            var node = graph.create_node (this.name) ;
+            node.set ("shape", "diamond") ;
+            node.set ("label", "%s\\n%s".printf (this.get_public_name (), dot_desc)) ;
+            if( this._is_active ){
+                node.set ("color", "red") ;
+            }
             if( _then_action != null ){
-                fp.printf ("\"%s\" -> \"%s\" [label=\"Yes\"]\n", this.name,
-                           _then_action.name) ;
-                _then_action.output_dot (fp) ;
+                var then_node = _then_action.output_dot (graph) ;
+                var edge = graph.create_edge (node, then_node) ;
+                edge.set ("label", "Yes") ;
             }
             if( _else_action != null ){
-                fp.printf ("\"%s\" -> \"%s\" [label=\"No\"]\n", this.name,
-                           _else_action.name) ;
-                _else_action.output_dot (fp) ;
+                var else_node = _else_action.output_dot (graph) ;
+                var edge = graph.create_edge (node, else_node) ;
+                edge.set ("label", "No") ;
             }
+            return node ;
         }
 
     }

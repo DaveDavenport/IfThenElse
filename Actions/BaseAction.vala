@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace IfThenElse {
+namespace IfThenElse{
 /**
  * Base interface each 'Action' class should implement.
  *
@@ -60,10 +60,10 @@ namespace IfThenElse {
  * A class implementing this interface that has children nodes should propagate this
  * to its children.
  */
-        public virtual void output_dot(FileStream fp) {
-            fp.printf ("\"%s\" [label=\"%s\", shape=oval]\n",
-                       this.name,
-                       this.get_public_name ()) ;
+        public virtual Gvc.Node output_dot(Gvc.Graph graph) {
+            var node = graph.create_node (this.name) ;
+            node.set ("label", this.get_public_name ()) ;
+            return node ;
         }
 
     }

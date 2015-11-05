@@ -17,7 +17,7 @@
 
 using GLib ;
 
-namespace IfThenElse {
+namespace IfThenElse{
 /**
  * Checks an external tool to see what branch should fire.
  *
@@ -157,7 +157,7 @@ namespace IfThenElse {
  */
         public override string get_dot_description() {
             if( output_compare != null ){
-                return "%s == %s".printf (cmd.escape (""), output_compare.escape ("")) ;
+                return "%s == %s".printf (cmd, output_compare) ;
             } else {
                 return cmd ;
             }

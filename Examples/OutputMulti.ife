@@ -1,3 +1,7 @@
+[T]
+type=TimerTrigger
+timeout=5
+action=Watch
 [Watch]
 type=MultiOutputWatch
 cmd=bash -c "echo $(($RANDOM%3))"

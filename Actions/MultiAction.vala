@@ -16,7 +16,7 @@
  */
 
 using GLib ;
-namespace IfThenElse {
+namespace IfThenElse{
 /**
  * Allow you to activate multiple branches from the same input.
  *
@@ -64,15 +64,15 @@ namespace IfThenElse {
             }
         }
 
-        public void output_dot(FileStream fp) {
-            fp.printf ("\"%s\" [label=\"%s\", shape=box]\n",
-                       this.name,
-                       this.get_public_name ()) ;
+        public Gvc.Node output_dot(Gvc.Graph graph) {
+            var node = graph.create_node (this.name) ;
+            node.set ("shape", "box") ;
+            node.set ("label", this.get_public_name ()) ;
             foreach( unowned BaseAction action in actions ){
-                fp.printf ("\"%s\" -> \"%s\"\n", this.name,
-                           action.name) ;
-                action.output_dot (fp) ;
+                var an = action.output_dot (graph) ;
+                graph.create_edge (node, an) ;
             }
+            return node ;
         }
 
     }

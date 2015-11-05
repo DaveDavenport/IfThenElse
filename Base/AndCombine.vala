@@ -16,7 +16,7 @@
  */
 
 using GLib ;
-namespace IfThenElse {
+namespace IfThenElse{
 /**
  * If all its inputs are activates, it activates it child.
  *
@@ -67,19 +67,22 @@ namespace IfThenElse {
  * A class implementing this interface that has children nodes should propagate this
  * to its children.
  */
-        bool branch_walked = false ;
-        public void output_dot(FileStream fp) {
-            // Check to avoid duplicate output.
-            if( !branch_walked ){
-                fp.printf ("\"%s\" [label=\"AND\\n%s\", shape=house]\n",
-                           this.name,
-                           this.get_public_name ()) ;
-                if( _action != null ){
-                    fp.printf ("\"%s\" -> \"%s\"\n", this.name, _action.name) ;
-                    this._action.output_dot (fp) ;
-                }
-                branch_walked = true ;
+        public Gvc.Node output_dot(Gvc.Graph graph) {
+            var node = graph.find_node (this.name) ;
+            if( node != null ){
+                return node ;
             }
+            node = graph.create_node (this.name) ;
+            node.set ("label", this.get_public_name ()) ;
+            node.set ("shape", "box") ;
+            if( this._is_active ){
+                node.set ("color", "red") ;
+            }
+            if( this._action != null ){
+                var action_node = this._action.output_dot (graph) ;
+                graph.create_edge (node, action_node) ;
+            }
+            return node ;
         }
 
 /**

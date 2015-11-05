@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-namespace IfThenElse {
+namespace IfThenElse{
 /**
  * Abstract BaseTrigger class. All triggers should inherit from this.
  */
@@ -63,13 +63,17 @@ namespace IfThenElse {
             }
         }
 
-        public virtual void output_dot(FileStream fp) {
-            fp.printf ("\"%s\" [label=\"%s\", shape=oval, color=%s]\n",
-                       this.name,
-                       this.get_public_name (),
-                       this._is_active ? "red" : "black") ;
-            fp.printf ("\"%s\" -> \"%s\"\n", this.name, _action.name) ;
-            this._action.output_dot (fp) ;
+        public virtual Gvc.Node output_dot(Gvc.Graph graph) {
+            var node = graph.create_node (this.name) ;
+            node.set ("label", this.get_public_name ()) ;
+            if( this._is_active ){
+                node.set ("color", "red") ;
+            }
+            if( this._action != null ){
+                var action_node = this._action.output_dot (graph) ;
+                graph.create_edge (node, action_node) ;
+            }
+            return node ;
         }
 
     }

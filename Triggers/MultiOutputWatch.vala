@@ -18,7 +18,7 @@
 using GLib ;
 using Posix ;
 
-namespace IfThenElse {
+namespace IfThenElse{
 /**
  * An MultiOutputWatch trigger: Watches the output off a program and triggers
  * when a certain condition is met.
@@ -188,13 +188,20 @@ namespace IfThenElse {
             stop_application () ;
         }
 
-        public override void output_dot(FileStream fp) {
-            fp.printf ("\"%s\" [label=\"%s\\n(%s\\n==\\nset of regex)\", shape=oval]\n",
-                       this.name,
-                       this.get_public_name (),
-                       cmd.escape ("")) ;
-            fp.printf ("\"%s\" -> \"%s\"\n", this.name, _action.name) ;
-            this._action.output_dot (fp) ;
+        public override Gvc.Node output_dot(Gvc.Graph graph) {
+            var str = "%s\n(%s)".printf (this.get_public_name (),
+                                         cmd) ;
+
+            var node = graph.create_node (this.name) ;
+            node.set ("label", str) ;
+            if( this._is_active ){
+                node.set ("color", "red") ;
+            }
+            for( uint i = 0 ; i < num_actions ; i++ ){
+                var action_node = this.actions[i].output_dot (graph) ;
+                graph.create_edge (node, action_node) ;
+            }
+            return node ;
         }
 
         public override void Deactivate(Base p) {

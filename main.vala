@@ -17,6 +17,7 @@
 
 using GLib ;
 using Fix ;
+using MHD ;
 using Gvc ;
 /**
  * IfThenElse is a simple program used to glue small unix tools to getter
@@ -190,13 +191,15 @@ using Gvc ;
  * @see MultiCombine
  */
 
-namespace IfThenElse {
+namespace IfThenElse{
 /** Pointer to the commandline arguments. */
     private unowned string[] g_argv ;
 /** Pointer to the parser */
     private Parser parser = null ;
 /** Main loop. */
     private GLib.MainLoop loop = null ;
+    private Mutex mutex ;
+    private Cond cond ;
 /**
  * Config options
  */
@@ -204,6 +207,7 @@ namespace IfThenElse {
     private bool daemonize = false ;
     private bool ignore_errors = false ;
     private bool validate = false ;
+    private bool htmlserve = false ;
     private bool list_modules = false ;
     private string ? dot_file = null ;
     private string ? pid_file = null ;
@@ -216,6 +220,7 @@ namespace IfThenElse {
         { "validate", 'v', 0, GLib.OptionArg.NONE, out validate, "Validate intput files.", null },
         { "list-modules", 'l', 0, GLib.OptionArg.NONE, out list_modules, "List the build in modules.", null },
         { "pid", 'p', 0, GLib.OptionArg.FILENAME, ref pid_file, "Use PID file.", null },
+        { "html", 'h', 0, GLib.OptionArg.NONE, out htmlserve, "Enable build in webserver (port 9876)", null },
         { null }
     } ;
 
@@ -316,8 +321,13 @@ namespace IfThenElse {
     }
 
     private bool signal_dump_dot() {
-        GLib.message ("Dumping dotty file...") ;
-        generate_dot_file (parser, "state.dotty") ;
+        GLib.message ("Dumping svg plot of state ...") ;
+        // generate_dot_file (parser, "state.dotty") ;
+        var g = get_graph (parser) ;
+        var c = new Gvc.Context () ;
+        c.layout (g, "dot") ;
+        c.render_filename (g, "svg", "state.svg") ;
+        g = null ;
         return false ;
     }
 
@@ -429,20 +439,12 @@ namespace IfThenElse {
 
 // This generates a dot file for the given obect structure
 // (builder).
-    static void generate_dot_file(Parser builder, string dot_file) {
-        FileStream fp = FileStream.open (dot_file, "w") ;
-        if( fp == null ){
-            GLib.error ("Failed to open dotty file for writing: %s", dot_file) ;
-        }
-        // Print header.
-        fp.printf ("digraph FlowChart {\n") ;
-        fp.printf ("""
-				node [
-					fontname = "Bitstream                     Vera Sans "
-			         fontsize = 8
-			         shape = "record             "
-			     ]
-		 """) ;
+    static Gvc.Graph get_graph(Parser builder) {
+        var dot_graph = new Gvc.Graph ("g", Gvc.Agdirected) ;
+        dot_graph.set_attribute (Gvc.Kind.NODE, "color", "black") ;
+        dot_graph.set_attribute (Gvc.Kind.NODE, "shape", "oval") ;
+        dot_graph.set_attribute (Gvc.Kind.NODE, "label", "n/a") ;
+        dot_graph.set_attribute (Gvc.Kind.EDGE, "label", "") ;
         // Iterates over all input files.
         // Find the root item(s) and make them generate the rest
         // off the dot file.
@@ -450,15 +452,23 @@ namespace IfThenElse {
         foreach( GLib.Object o in objects ){
             if((o as Base).is_toplevel ()){
                 if( o is BaseAction ){
-                    (o as BaseAction).output_dot (fp) ;
+                    (o as BaseAction).output_dot (dot_graph) ;
                 }
             }
         }
-        fp.printf ("}\n") ;
+        return dot_graph ;
+    }
+
+    static void generate_dot_file(Parser builder, string dot_file) {
+        FileStream fp = FileStream.open (dot_file, "w") ;
+        if( fp == null ){
+            GLib.error ("Failed to open dotty file for writing: %s", dot_file) ;
+        }
+
+        var dot_graph = get_graph (builder) ;
+        dot_graph.write (fp) ;
         fp = null ;
-        var dot_graph  = new Gvc.Graph("g", Gvc.Agdirected);
-        dot_graph.write(GLib.stdout);
-        dot_graph = null;
+        dot_graph = null ;
     }
 
 /**
@@ -496,6 +506,45 @@ namespace IfThenElse {
             stdout.printf ("\n") ;
             obj = null ;
         }
+    }
+
+    static bool main_thread_svg_gen(out uint8[] data) {
+        mutex.lock( ) ;
+        var g = get_graph (parser) ;
+        var c = new Gvc.Context () ;
+        c.layout (g, "dot") ;
+        c.render_data (g, "svg", out data) ;
+        g = null ;
+        cond.broadcast () ;
+        mutex.unlock () ;
+        return false ;
+    }
+
+    static int MyAccessHandler(void * cls, MHD.Connection connection, string url, string method, string version, string ? upload_data, size_t upload_data_size, void * * con_cls) {
+        if( con_cls == null ){
+            *con_cls = connection ;
+            return MHD.YES ;
+        }
+        // Because generating the SVG is not thread safe (both graphviz as ifthenelse)
+        // We execute this in the mainloop and wait for result to get back.
+        // It is dirty, but should work.
+        uint8[] data = null ;
+        GLib.Idle.add (() => {
+            return main_thread_svg_gen (out data) ;
+        }) ;
+        mutex.lock( ) ;
+        while( data == null ){
+            cond.wait (mutex) ;
+        }
+        mutex.unlock () ;
+
+        MHD.Response response ;
+        string my_page = "<html><meta http-equiv=\"refresh\" content=\"5\"><body>" + (string) data + "</body></html>" ;
+        response = MHD.create_response_from_buffer (my_page.length, my_page, MHD.ResponseMemoryMode.MUST_COPY) ;
+        response.add_response_header ("Content-Type", "text/html") ;
+        data = null ;
+        return connection.queue_response (MHD.HTTP_OK, response) ;
+
     }
 
     static int main(string[] argv) {
@@ -610,8 +659,15 @@ namespace IfThenElse {
         Posix.sigaction (Posix.SIGHUP, act, null) ;
         Posix.sigaction (Posix.SIGUSR1, act, null) ;
         Posix.sigaction (Posix.SIGUSR2, act, null) ;
-
-
+        unowned MHD.Daemon ? d = null ;
+        if( htmlserve ){
+            GLib.message ("Start html server...") ;
+            d = MHD.start_daemon (FLAG.USE_SELECT_INTERNALLY, 8888, null, null,
+                                  (MHD.AccessHandlerCallback)MyAccessHandler, null) ;
+            if( d == null ){
+                GLib.error ("Failed to start MHD\n") ;
+            }
+        }
         // Run program.
         start () ;
         loop.run () ;
@@ -620,7 +676,9 @@ namespace IfThenElse {
 
         stop () ;
         GLib.message ("Cleanup....") ;
-
+        if( d != null ){
+            d.stop_daemon () ;
+        }
         if( pid_file != null ){
             clear_pid_file () ;
         }

@@ -18,7 +18,7 @@
 using GLib ;
 using Posix ;
 
-namespace IfThenElse {
+namespace IfThenElse{
 /**
  * Execute an external tool.
  *
@@ -82,27 +82,31 @@ namespace IfThenElse {
         }
 
         public void Activate(Base p) {
-            start_application () ;
             _is_active = true ;
+            start_application () ;
         }
 
         public void Deactivate(Base p) {
             GLib.message ("%s: Deactivate\n", this.name) ;
-            stop_application () ;
             _is_active = false ;
+            stop_application () ;
         }
 
 /**
  * Generate dot output for this node
  *
  */
-        public void output_dot(FileStream fp) {
-            fp.printf ("\"%s\" [label=\"%s\\n(%s)\", shape=oval, color=%s]\n",
-                       this.name,
-                       this.get_public_name (),
-                       cmd.escape (""),
-                       this._is_active ? "red" : "black"
-                       ) ;
+        public Gvc.Node output_dot(Gvc.Graph graph) {
+            var str = "%s\\n(%s)".printf (
+                this.get_public_name (),
+                cmd
+                ) ;
+            var node = graph.create_node (this.name) ;
+            node.set ("label", str) ;
+            if( this._is_active ){
+                node.set ("color", "red") ;
+            }
+            return node ;
         }
 
     }

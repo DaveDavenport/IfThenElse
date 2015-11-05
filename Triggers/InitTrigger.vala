@@ -17,7 +17,7 @@
 
 using GLib ;
 
-namespace IfThenElse {
+namespace IfThenElse{
 /**
  * A init trigger: Fires onces at startup.
  *
@@ -59,12 +59,17 @@ namespace IfThenElse {
         public override void disable_trigger() {
         }
 
-        public override void output_dot(FileStream fp) {
-            fp.printf ("\"%s\" [label=\"%s\\nInit trigger\", shape=oval]\n",
-                       this.name,
-                       this.get_public_name ()) ;
-            fp.printf ("\"%s\" -> \"%s\"\n", this.name, action.name) ;
-            this.action.output_dot (fp) ;
+        public override Gvc.Node output_dot(Gvc.Graph graph) {
+            var node = graph.create_node (this.name) ;
+            node.set ("label", "Init Trigger\n%s".printf (this.get_public_name ())) ;
+            if( this._is_active ){
+                node.set ("color", "red") ;
+            }
+            if( this.action != null ){
+                var action_node = this._action.output_dot (graph) ;
+                graph.create_edge (node, action_node) ;
+            }
+            return node ;
         }
 
     }

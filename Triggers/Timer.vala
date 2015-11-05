@@ -17,7 +17,7 @@
 
 using GLib ;
 
-namespace IfThenElse {
+namespace IfThenElse{
 /**
  * A timer trigger: Fire at a certain interval
  *
@@ -50,7 +50,7 @@ namespace IfThenElse {
 /**
  * The interval at witch this trigger should fire in seconds.
  *
- **@default 5
+ *****@default 5
  */
         public uint timeout {
             get {
@@ -106,14 +106,20 @@ namespace IfThenElse {
  *
  * {@inheritDoc}
  */
-        public override void output_dot(FileStream fp) {
-            fp.printf ("\"%s\" [label=\"%s\\nTimeout Trigger: %.2f seconds\", shape=oval, color=%s]\n",
-                       this.name,
-                       this.name,
-                       this.timeout,
-                       this._is_active ? "red" : "black") ;
-            fp.printf ("\"%s\" -> \"%s\"\n", this.name, action.name) ;
-            this.action.output_dot (fp) ;
+        public override Gvc.Node output_dot(Gvc.Graph graph) {
+            var str = "%s\\nTimeout Trigger: %.2f seconds".printf (
+                this.name,
+                this.timeout) ;
+            var node = graph.create_node (this.name) ;
+            node.set ("label", str) ;
+            if( this._is_active ){
+                node.set ("color", "red") ;
+            }
+            if( this.action != null ){
+                var action_node = this._action.output_dot (graph) ;
+                graph.create_edge (node, action_node) ;
+            }
+            return node ;
         }
 
     }
