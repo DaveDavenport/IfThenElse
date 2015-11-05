@@ -194,6 +194,7 @@ namespace IfThenElse{
 
             var node = graph.create_node (this.name) ;
             node.set ("label", str) ;
+            node.set ("shape", "diamond");
             if( this._is_active ){
                 node.set ("color", "red") ;
             }
