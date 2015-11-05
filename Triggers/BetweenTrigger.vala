@@ -18,32 +18,32 @@
 using GLib ;
 
 namespace IfThenElse{
-/**
- * Between Trigger: A trigger that enables the child action when within a time-range.
- *
- * Activates the child chain based on the time.
- * Use this as parent to enable a certain if-then-else tree between a certain time.
- *
- * * Note: this fires also on activate/disable. so output is set in correct state.
- *
- * =Example=
- *
- * Between 6.30 and 22.30 do every 5 seconds action1.
- * {{{
- * [Between]
- * type=BetweenTrigger
- * hour=6
- * minute=30
- * end_hour = 22
- * end_minute = 30
- * action=timeout
- *
- * [timeout]
- * type=TimerTrigger
- * timeout=5
- * action=action1
- * }}}
- */
+    /**
+     * Between Trigger: A trigger that enables the child action when within a time-range.
+     *
+     * Activates the child chain based on the time.
+     * Use this as parent to enable a certain if-then-else tree between a certain time.
+     *
+     * * Note: this fires also on activate/disable. so output is set in correct state.
+     *
+     * =Example=
+     *
+     * Between 6.30 and 22.30 do every 5 seconds action1.
+     * {{{
+     * [Between]
+     * type=BetweenTrigger
+     * hour=6
+     * minute=30
+     * end_hour = 22
+     * end_minute = 30
+     * action=timeout
+     *
+     * [timeout]
+     * type=TimerTrigger
+     * timeout=5
+     * action=action1
+     * }}}
+     */
     public class BetweenTrigger : BaseTrigger {
         private uint handler = 0 ;
 
@@ -52,10 +52,10 @@ namespace IfThenElse{
         private int _end_hour = 22 ;
         private int _end_minute = 30 ;
 
-/**
- * The hour.
- * Valid range is 0-23.
- */
+        /**
+         * The hour.
+         * Valid range is 0-23.
+         */
         public int hour {
             get {
                 return _hour ;
@@ -67,10 +67,10 @@ namespace IfThenElse{
                 _hour = value ;
             }
         }
-/**
- * The minute.
- * Valid range is 0-59.
- */
+        /**
+         * The minute.
+         * Valid range is 0-59.
+         */
         public int minute {
             get {
                 return _minute ;
@@ -82,10 +82,10 @@ namespace IfThenElse{
                 _minute = value ;
             }
         }
-/**
- * The end hour.
- * Valid range is 0-23.
- */
+        /**
+         * The end hour.
+         * Valid range is 0-23.
+         */
         public int end_hour {
             get {
                 return _end_hour ;
@@ -97,10 +97,10 @@ namespace IfThenElse{
                 _end_hour = value ;
             }
         }
-/**
- * The minute.
- * Valid range is 0-59.
- */
+        /**
+         * The minute.
+         * Valid range is 0-59.
+         */
         public int end_minute {
             get {
                 return _end_minute ;
@@ -127,24 +127,20 @@ namespace IfThenElse{
             stop_timer () ;
         }
 
-/**
- *
- */
+        /**
+         *
+         */
         public override Gvc.Node output_dot(Gvc.Graph graph) {
-            var str = "" ;
-            if( _end_hour == 0 && _end_minute == 0 ){
-                str = "%s\\nTimeout Trigger: %02i:%02i-%02i:%02i".printf (
-                    this.get_public_name (),
-                    this.hour, this.minute,
-                    this.end_hour, this.end_minute
-                    ) ;
-            } else {
-                str = "%s\\nTimeout Trigger: %02i:%02i".printf (
-                    this.get_public_name (),
-                    this.hour, this.minute) ;
-            }
+            var str = "%s\\nTimeout Trigger: %02i:%02i-%02i:%02i".printf (
+                this.get_public_name (),
+                this.hour, this.minute,
+                this.end_hour, this.end_minute
+                ) ;
             var node = graph.create_node (this.name) ;
             node.set ("label", str) ;
+            if( this._is_active ){
+                node.set ("color", "red") ;
+            }
             if( this.action != null ){
                 var action_node = this._action.output_dot (graph) ;
                 graph.create_edge (node, action_node) ;
@@ -152,17 +148,17 @@ namespace IfThenElse{
             return node ;
         }
 
-/**
- * restart the timer.
- */
+        /**
+         * restart the timer.
+         */
         private void restart_timer() {
             stop_timer () ;
             start_timer () ;
         }
 
-/**
- * stop the active timer.
- */
+        /**
+         * stop the active timer.
+         */
         private void stop_timer() {
             // Remove old timeout.
             if( handler > 0 ){
@@ -171,9 +167,9 @@ namespace IfThenElse{
             }
         }
 
-/**
- * start the timer to fire at the set time.
- */
+        /**
+         * start the timer to fire at the set time.
+         */
         private void start_timer() {
             if( handler > 0 ){
                 GLib.warning ("Trying to start an allready started time") ;
@@ -209,12 +205,12 @@ namespace IfThenElse{
             handler = GLib.Timeout.add_seconds (remaining_time, timer_callback) ;
         }
 
-/**
- * Timer callback.
- *
- * Fire the trigger, and
- * restarts the timer.
- */
+        /**
+         * Timer callback.
+         *
+         * Fire the trigger, and
+         * restarts the timer.
+         */
         private bool timer_callback() {
             fire () ;
             restart_timer () ;

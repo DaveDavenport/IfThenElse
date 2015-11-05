@@ -192,17 +192,17 @@ using Gvc ;
  */
 
 namespace IfThenElse{
-/** Pointer to the commandline arguments. */
+    /** Pointer to the commandline arguments. */
     private unowned string[] g_argv ;
-/** Pointer to the parser */
+    /** Pointer to the parser */
     private Parser parser = null ;
-/** Main loop. */
+    /** Main loop. */
     private GLib.MainLoop loop = null ;
     private Mutex mutex ;
     private Cond cond ;
-/**
- * Config options
- */
+    /**
+     * Config options
+     */
     private bool quiet = false ;
     private bool daemonize = false ;
     private bool ignore_errors = false ;
@@ -229,9 +229,9 @@ namespace IfThenElse{
         Posix.unlink (pid_file) ;
     }
 
-/**
- * return true when already running.
- */
+    /**
+     * return true when already running.
+     */
     private bool create_pid_file() {
         assert (pid_file != null) ;
         int fd = Posix.open (pid_file, Posix.O_RDWR | Posix.O_CREAT, Posix.S_IRUSR | Posix.S_IWUSR) ;
@@ -261,18 +261,18 @@ namespace IfThenElse{
         return false ;
     }
 
-/**
- * Quit the program. Dot his by terminating the mainloop
- */
+    /**
+     * Quit the program. Dot his by terminating the mainloop
+     */
     private void quit_program() {
         if( loop != null ){
             loop.quit () ;
         }
     }
 
-/**
- * Give all the root nodes the start signal
- */
+    /**
+     * Give all the root nodes the start signal
+     */
     private void start() {
         if( parser == null ){
             return ;
@@ -290,9 +290,9 @@ namespace IfThenElse{
         }
     }
 
-/**
- * Give all the root nodes the stop signal.
- */
+    /**
+     * Give all the root nodes the stop signal.
+     */
     private void stop() {
         if( parser == null ){
             return ;
@@ -310,9 +310,9 @@ namespace IfThenElse{
         }
     }
 
-/**
- * Reload all the files
- */
+    /**
+     * Reload all the files
+     */
     private void reload_files() {
         GLib.message ("Reload....") ;
         stop () ;
@@ -331,13 +331,13 @@ namespace IfThenElse{
         return false ;
     }
 
-/**
- * This handles sigaction.
- * USR1 == RELOAD
- * USR2 == DOTTY
- * HUP/TERM/INT == QUIT
- * Other == Give message
- */
+    /**
+     * This handles sigaction.
+     * USR1 == RELOAD
+     * USR2 == DOTTY
+     * HUP/TERM/INT == QUIT
+     * Other == Give message
+     */
     static void signal_handler(int signo) {
         if( signo == Posix.SIGUSR1 ){
             reload_files () ;
@@ -365,9 +365,9 @@ namespace IfThenElse{
         }
     }
 
-/**
- * Construct the parser, load all files.
- */
+    /**
+     * Construct the parser, load all files.
+     */
     private void load_file(string file, bool force = false) {
         if( force || GLib.Regex.match_simple (".*\\.(ife|ini)$", file)){
             GLib.message ("Load file: %s", file) ;
@@ -388,9 +388,9 @@ namespace IfThenElse{
         }
     }
 
-/**
- * Load content off the sub directory
- */
+    /**
+     * Load content off the sub directory
+     */
     private void load_dir(string dir) {
         try {
             Dir d = Dir.open (dir) ;
@@ -406,9 +406,9 @@ namespace IfThenElse{
         }
     }
 
-/**
- * Load a path. (check if it is directory or file.
- */
+    /**
+     * Load a path. (check if it is directory or file.
+     */
     private void load(string file, bool force = false) {
         if( GLib.FileUtils.test (file, GLib.FileTest.IS_REGULAR)){
             load_file (file, force) ;
@@ -417,9 +417,9 @@ namespace IfThenElse{
         }
     }
 
-/**
- * Load the commandline passed files
- */
+    /**
+     * Load the commandline passed files
+     */
     private void load_argument() {
         parser = null ;
         parser = new IfThenElse.Parser () ;
@@ -437,8 +437,8 @@ namespace IfThenElse{
         }
     }
 
-// This generates a dot file for the given obect structure
-// (builder).
+    // This generates a dot file for the given obect structure
+    // (builder).
     static Gvc.Graph get_graph(Parser builder) {
         var dot_graph = new Gvc.Graph ("g", Gvc.Agdirected) ;
         dot_graph.set_attribute (Gvc.Kind.NODE, "color", "black") ;
@@ -471,9 +471,9 @@ namespace IfThenElse{
         dot_graph = null ;
     }
 
-/**
- * Background ifthenelse.
- */
+    /**
+     * Background ifthenelse.
+     */
     static void background() {
         // Duplicate and exit the parent.
         var pid = Posix.fork () ;
@@ -486,9 +486,9 @@ namespace IfThenElse{
         }
     }
 
-/**
- * Log handler.
- */
+    /**
+     * Log handler.
+     */
     static void my_log_handler(string ? domain, GLib.LogLevelFlags level, string message) {
         if( !quiet ){
             GLib.Log.default_handler (domain, level, message) ;
@@ -530,6 +530,7 @@ namespace IfThenElse{
         // It is dirty, but should work.
         uint8[] data = null ;
         GLib.Idle.add (() => {
+            GLib.message ("send to other thread.") ;
             return main_thread_svg_gen (out data) ;
         }) ;
         mutex.lock( ) ;

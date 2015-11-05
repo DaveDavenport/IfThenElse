@@ -18,40 +18,40 @@
 using GLib ;
 
 namespace IfThenElse{
-/**
- * A timer trigger: Fire at a certain interval
- *
- * This trigger fires at a certai interval.
- *
- * The timer trigger supports being started and stopped and can be placed
- * anywhere in the chain.
- *
- * =Example=
- *
- * So if you want a certain branch (MainBranch) to fire each 5 seconds
- * Add an element like:
- * {{{
- * [TimerTrigger]
- * type=TimerTrigger
- * timeout=5
- * action=MainBranch
- * }}}
- *
- * To fire at a certain time use a {@link ClockTrigger}
- *
- * @see ClockTrigger
- */
+    /**
+     * A timer trigger: Fire at a certain interval
+     *
+     * This trigger fires at a certai interval.
+     *
+     * The timer trigger supports being started and stopped and can be placed
+     * anywhere in the chain.
+     *
+     * =Example=
+     *
+     * So if you want a certain branch (MainBranch) to fire each 5 seconds
+     * Add an element like:
+     * {{{
+     * [TimerTrigger]
+     * type=TimerTrigger
+     * timeout=5
+     * action=MainBranch
+     * }}}
+     *
+     * To fire at a certain time use a {@link ClockTrigger}
+     *
+     * @see ClockTrigger
+     */
     public class TimerTrigger : BaseTrigger {
         private uint handler = 0 ;
         private uint _timeout = 5 ;
 
 
         public bool repeat { get ; set ; default = true ; }
-/**
- * The interval at witch this trigger should fire in seconds.
- *
- *****@default 5
- */
+        /**
+         * The interval at witch this trigger should fire in seconds.
+         *
+         ********@default 5
+         */
         public uint timeout {
             get {
                 return _timeout ;
@@ -67,9 +67,9 @@ namespace IfThenElse{
                 }
             }
         }
-/**
- * Timer callback.
- */
+        /**
+         * Timer callback.
+         */
         private bool timer_callback() {
             GLib.message ("%s: Timer fire\n", this.name) ;
             this.fire () ;
@@ -79,9 +79,9 @@ namespace IfThenElse{
             return this.repeat ;
         }
 
-/**
- * Destructor
- */
+        /**
+         * Destructor
+         */
         ~TimerTrigger () {
             disable_trigger () ;
         }
@@ -101,11 +101,11 @@ namespace IfThenElse{
             handler = 0 ;
         }
 
-/**
- * Generate dot code for this node.
- *
- * {@inheritDoc}
- */
+        /**
+         * Generate dot code for this node.
+         *
+         * {@inheritDoc}
+         */
         public override Gvc.Node output_dot(Gvc.Graph graph) {
             var str = "%s\\nTimeout Trigger: %.2f seconds".printf (
                 this.name,

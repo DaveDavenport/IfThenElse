@@ -19,25 +19,25 @@ using GLib ;
 using Posix ;
 
 namespace IfThenElse{
-/**
- * Execute an external tool.
- *
- * This executes an external tool.
- *
- * =Example=
- *
- * {{{
- * [EAction]
- * type=ExternalToolAction
- * cmd=mpc play
- * }}}
- */
+    /**
+     * Execute an external tool.
+     *
+     * This executes an external tool.
+     *
+     * =Example=
+     *
+     * {{{
+     * [EAction]
+     * type=ExternalToolAction
+     * cmd=mpc play
+     * }}}
+     */
     public class ExternalToolAction : BaseAction, Base {
         public string cmd { get ; set ; default = "" ; }
-/**
- * If the property kill_child is set to true, it kills the
- * client when the object is de_is_active.
- */
+        /**
+         * If the property kill_child is set to true, it kills the
+         * client when the object is de_is_active.
+         */
         public bool kill_child { get ; set ; default = false ; }
 
         private GLib.Pid pid = 0 ;
@@ -92,10 +92,10 @@ namespace IfThenElse{
             stop_application () ;
         }
 
-/**
- * Generate dot output for this node
- *
- */
+        /**
+         * Generate dot output for this node
+         *
+         */
         public Gvc.Node output_dot(Gvc.Graph graph) {
             var str = "%s\\n(%s)".printf (
                 this.get_public_name (),

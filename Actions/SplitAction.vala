@@ -17,25 +17,25 @@
 
 using GLib ;
 namespace IfThenElse{
-/**
- * Split the activate and Deactivate signal into 2 branches.
- *
- * So then_action = input.
- * else_action = !input.
- *
- * basic if/then block.
- *
- * =Example=
- *
- * Invert the input,  call Action1 when Split is deactivated.
- * {{{
- * [Split]
- * type=SplitAction
- * else_action=Action1
- * }}}
- */
+    /**
+     * Split the activate and Deactivate signal into 2 branches.
+     *
+     * So then_action = input.
+     * else_action = !input.
+     *
+     * basic if/then block.
+     *
+     * =Example=
+     *
+     * Invert the input,  call Action1 when Split is deactivated.
+     * {{{
+     * [Split]
+     * type=SplitAction
+     * else_action=Action1
+     * }}}
+     */
     public class SplitAction : BaseAction, Base {
-// Then/Else actions.
+        // Then/Else actions.
         private BaseAction ? _else_action = null ;
         private BaseAction ? _then_action = null ;
         public BaseAction ? else_action {
@@ -57,11 +57,11 @@ namespace IfThenElse{
             }
         }
 
-/**
- * Activate()
- *
- * Propagate this to the children.
- */
+        /**
+         * Activate()
+         *
+         * Propagate this to the children.
+         */
         public void Activate(Base p) {
             if( _then_action != null ){
                 _then_action.Activate (this) ;
@@ -71,11 +71,11 @@ namespace IfThenElse{
             }
         }
 
-/**
- * Deactivate()
- *
- * Propagate this to the children.
- */
+        /**
+         * Deactivate()
+         *
+         * Propagate this to the children.
+         */
         public void Deactivate(Base p) {
             if( _then_action != null ){
                 _then_action.Deactivate (this) ;

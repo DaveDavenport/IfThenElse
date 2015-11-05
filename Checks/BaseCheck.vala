@@ -16,11 +16,11 @@
  */
 
 namespace IfThenElse{
-/**
- * Abstract class for Checks: Each check should inherit from.
- */
+    /**
+     * Abstract class for Checks: Each check should inherit from.
+     */
     public abstract class BaseCheck : BaseAction, Base {
-// Then/Else actions.
+        // Then/Else actions.
         private BaseAction ? _else_action = null ;
         private BaseAction ? _then_action = null ;
         public BaseAction ? else_action {
@@ -53,10 +53,10 @@ namespace IfThenElse{
 
 
 
-/**
- * Handle activation. In this case, we call the check,
- * see if it changed.
- */
+        /**
+         * Handle activation. In this case, we call the check,
+         * see if it changed.
+         */
         public void Activate(Base p) {
             BaseCheck.StateType state = this.check () ;
             GLib.message ("%s Activate: %i\n", this.name, (int) state) ;
@@ -84,9 +84,9 @@ namespace IfThenElse{
             this._is_active = true ;
         }
 
-/**
- * If we get deactivated, propagate this to the children.
- */
+        /**
+         * If we get deactivated, propagate this to the children.
+         */
         public void Deactivate(Base p) {
             GLib.message ("%s Deactivate\n", this.name) ;
             // Deactivate both.
@@ -99,10 +99,10 @@ namespace IfThenElse{
             this._is_active = false ;
         }
 
-/**
- * Generate dot file for this element.
- * Diamond square with a yes and a no out arrow.
- */
+        /**
+         * Generate dot file for this element.
+         * Diamond square with a yes and a no out arrow.
+         */
         public Gvc.Node output_dot(Gvc.Graph graph) {
             string dot_desc = this.get_dot_description () ;
             var node = graph.create_node (this.name) ;

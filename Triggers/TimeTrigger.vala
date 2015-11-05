@@ -18,37 +18,37 @@
 using GLib ;
 
 namespace IfThenElse{
-/**
- * An alarm trigger: Fire at a certain time.
- *
- * This triggers fires at a certain time each day.
- * After the trigger has fired, the alarm is reset.
- * The alarm supports being started and stopped and can be placed
- * anywhere in the chain.
- *
- * =Example=
- *
- * So if you want a certain branch (MainBranch) to fire at 6 o clock
- * Add an element like:
- * {{{
- * [AlarmTrigger]
- * type=ClockTrigger
- * minute=0
- * hour=6
- * days=mo,tu,we,th,fr,sa,su
- * action=MainBranch
- * }}}
- */
+    /**
+     * An alarm trigger: Fire at a certain time.
+     *
+     * This triggers fires at a certain time each day.
+     * After the trigger has fired, the alarm is reset.
+     * The alarm supports being started and stopped and can be placed
+     * anywhere in the chain.
+     *
+     * =Example=
+     *
+     * So if you want a certain branch (MainBranch) to fire at 6 o clock
+     * Add an element like:
+     * {{{
+     * [AlarmTrigger]
+     * type=ClockTrigger
+     * minute=0
+     * hour=6
+     * days=mo,tu,we,th,fr,sa,su
+     * action=MainBranch
+     * }}}
+     */
     public class ClockTrigger : BaseTrigger {
         private uint handler = 0 ;
         private int _hour = 8 ;
         private int _minute = 30 ;
         private string _weekdays = "" ;
 
-/**
- * The hour.
- * Valid range is 0-23.
- */
+        /**
+         * The hour.
+         * Valid range is 0-23.
+         */
         public int hour {
             get {
                 return _hour ;
@@ -60,10 +60,10 @@ namespace IfThenElse{
                 _hour = value ;
             }
         }
-/**
- * The minute.
- * Valid range is 0-59.
- */
+        /**
+         * The minute.
+         * Valid range is 0-59.
+         */
         public int minute {
             get {
                 return _minute ;
@@ -98,9 +98,9 @@ namespace IfThenElse{
             stop_timer () ;
         }
 
-/**
- *
- */
+        /**
+         *
+         */
         public override Gvc.Node output_dot(Gvc.Graph graph) {
             var str = "%s\\nTimeout Trigger: %02i:%02i".printf (
                 this.get_public_name (),
@@ -117,17 +117,17 @@ namespace IfThenElse{
             return node ;
         }
 
-/**
- * restart the timer.
- */
+        /**
+         * restart the timer.
+         */
         private void restart_timer() {
             stop_timer () ;
             start_timer () ;
         }
 
-/**
- * stop the active timer.
- */
+        /**
+         * stop the active timer.
+         */
         private void stop_timer() {
             // Remove old timeout.
             if( handler > 0 ){
@@ -136,9 +136,9 @@ namespace IfThenElse{
             }
         }
 
-/**
- * start the timer to fire at the set time.
- */
+        /**
+         * start the timer to fire at the set time.
+         */
         private void start_timer() {
             if( handler > 0 ){
                 GLib.warning ("Trying to start an allready started time") ;
@@ -159,12 +159,12 @@ namespace IfThenElse{
             handler = GLib.Timeout.add_seconds (remaining_time, timer_callback) ;
         }
 
-/**
- * Timer callback.
- *
- * Fire the trigger, and
- * restarts the timer.
- */
+        /**
+         * Timer callback.
+         *
+         * Fire the trigger, and
+         * restarts the timer.
+         */
         const string day_names[] = { "su", "mo", "tu", "we", "th", "fr", "sa" } ;
         private bool timer_callback() {
             time_t t = time_t () ;

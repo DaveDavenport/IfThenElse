@@ -17,19 +17,19 @@
 
 using GLib ;
 namespace IfThenElse{
-/**
- * Allow you to activate multiple branches from the same input.
- *
- * If you want to trigger Action1 and Action2 by one Trigger.
- * {{{
- * [Trigger]
- * ....
- * action=Multi
- *
- * [Multi]
- * action=Action1;Action2
- * }}}
- */
+    /**
+     * Allow you to activate multiple branches from the same input.
+     *
+     * If you want to trigger Action1 and Action2 by one Trigger.
+     * {{{
+     * [Trigger]
+     * ....
+     * action=Multi
+     *
+     * [Multi]
+     * action=Action1;Action2
+     * }}}
+     */
     public class MultiAction : BaseAction, Base {
         private List<BaseAction> actions ;
         public BaseAction action {
@@ -42,22 +42,22 @@ namespace IfThenElse{
             }
         }
 
-/**
- * Activate()
- *
- * Propagate this to the children.
- */
+        /**
+         * Activate()
+         *
+         * Propagate this to the children.
+         */
         public void Activate(Base p) {
             foreach( BaseAction action in actions ){
                 action.Activate (this) ;
             }
         }
 
-/**
- * Deactivate()
- *
- * Propagate this to the children.
- */
+        /**
+         * Deactivate()
+         *
+         * Propagate this to the children.
+         */
         public void Deactivate(Base p) {
             foreach( BaseAction action in actions ){
                 action.Deactivate (this) ;
@@ -68,6 +68,9 @@ namespace IfThenElse{
             var node = graph.create_node (this.name) ;
             node.set ("shape", "box") ;
             node.set ("label", this.get_public_name ()) ;
+            if( this._is_active ){
+                node.set ("color", "red") ;
+            }
             foreach( unowned BaseAction action in actions ){
                 var an = action.output_dot (graph) ;
                 graph.create_edge (node, an) ;

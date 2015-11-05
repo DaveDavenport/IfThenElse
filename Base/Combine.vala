@@ -17,14 +17,14 @@
 
 using GLib ;
 namespace IfThenElse{
-/**
- * If one or more inputs activates, it activates it child.
- *
- * This is basically an OR statement.
- * This and {@link AndCombine} are the only nodes that can be child to multiple other nodes.
- *
- * @see AndCombine
- */
+    /**
+     * If one or more inputs activates, it activates it child.
+     *
+     * This is basically an OR statement.
+     * This and {@link AndCombine} are the only nodes that can be child to multiple other nodes.
+     *
+     * @see AndCombine
+     */
     public class MultiCombine : BaseAction, Base {
         private BaseAction _action = null ;
         public BaseAction action {
@@ -40,7 +40,7 @@ namespace IfThenElse{
             }
         }
 
-// We allow multiple parents.
+        // We allow multiple parents.
         private List<unowned Base> parents ;
         public override unowned Base ? parent {
             set {
@@ -54,12 +54,12 @@ namespace IfThenElse{
             }
         }
 
-/**
- * Generate dot output for this node
- *
- * A class implementing this interface that has children nodes should propagate this
- * to its children.
- */
+        /**
+         * Generate dot output for this node
+         *
+         * A class implementing this interface that has children nodes should propagate this
+         * to its children.
+         */
         public Gvc.Node output_dot(Gvc.Graph graph) {
             var node = graph.find_node (this.name) ;
             if( node != null ){
@@ -78,20 +78,20 @@ namespace IfThenElse{
             return node ;
         }
 
-/**
- * Activate()
- *
- * Propagate this to the children.
- */
+        /**
+         * Activate()
+         *
+         * Propagate this to the children.
+         */
         public void Activate(Base p) {
             action.Activate (this) ;
         }
 
-/**
- * Deactivate()
- *
- * Propagate this to the children.
- */
+        /**
+         * Deactivate()
+         *
+         * Propagate this to the children.
+         */
         public void Deactivate(Base p) {
             action.Deactivate (this) ;
         }

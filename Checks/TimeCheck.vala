@@ -19,57 +19,57 @@ using GLib ;
 
 
 namespace IfThenElse{
-/**
- * TimeChecks: After a certain time fire one branch, before the time fire
- * the other branch.
- * A range can be specified.
- *
- * =Example=
- *
- * Action1 fires after the set time before end time, Action2 elsewhere.
- * {{{
- * [Between]
- * type=TimeCheck
- * hour=6
- * minute=30
- * end_hour = 22
- * end_minute = 30
- * then_action=Action1
- * else_action=Action2
- * }}}
- */
+    /**
+     * TimeChecks: After a certain time fire one branch, before the time fire
+     * the other branch.
+     * A range can be specified.
+     *
+     * =Example=
+     *
+     * Action1 fires after the set time before end time, Action2 elsewhere.
+     * {{{
+     * [Between]
+     * type=TimeCheck
+     * hour=6
+     * minute=30
+     * end_hour = 22
+     * end_minute = 30
+     * then_action=Action1
+     * else_action=Action2
+     * }}}
+     */
     public class TimeCheck : BaseCheck {
-/**
- * The hour, of the time.
- */
+        /**
+         * The hour, of the time.
+         */
         public uint hour                { get ; set ; default = 8 ; }
-/**
- * The minute, of the time.
- */
+        /**
+         * The minute, of the time.
+         */
         public uint minute              { get ; set ; default = 0 ; }
 
-/**
- * The hour, of the end time.
- */
+        /**
+         * The hour, of the end time.
+         */
         public uint end_hour    { get ; set ; default = 0 ; }
-/**
- * The minute, of the end time.
- */
+        /**
+         * The minute, of the end time.
+         */
         public uint end_minute { get ; set ; default = 0 ; }
-/**
- * Repeat. (fire output on each trigger)
- */
+        /**
+         * Repeat. (fire output on each trigger)
+         */
         public bool repeat { get ; set ; default = false ; }
 
 
         private bool prev_state = false ;
         private bool init = true ;
 
-// TimeCheck
+        // TimeCheck
         public TimeCheck () {
         }
 
-// Check timer.
+        // Check timer.
         public override BaseCheck.StateType check() {
             time_t t = time_t () ;
             Time now = GLib.Time.local (t) ;

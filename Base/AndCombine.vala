@@ -17,21 +17,21 @@
 
 using GLib ;
 namespace IfThenElse{
-/**
- * If all its inputs are activates, it activates it child.
- *
- * This is basically an AND statement.
- * This is and {@link MultiCombine} are only nodes that can be child to multiple other nodes.
- *
- * =Example:=
- *
- * {{{
- *  [CombineInputs]
- *  type=AndCombine
- *  action=CombinedAndAction
- * }}}
- * @see MultiCombine
- */
+    /**
+     * If all its inputs are activates, it activates it child.
+     *
+     * This is basically an AND statement.
+     * This is and {@link MultiCombine} are only nodes that can be child to multiple other nodes.
+     *
+     * =Example:=
+     *
+     * {{{
+     *  [CombineInputs]
+     *  type=AndCombine
+     *  action=CombinedAndAction
+     * }}}
+     * @see MultiCombine
+     */
     public class AndCombine : BaseAction, Base {
         private BaseAction _action = null ;
         public BaseAction action {
@@ -47,7 +47,7 @@ namespace IfThenElse{
             }
         }
 
-// We allow multiple parents.
+        // We allow multiple parents.
         private List<unowned Base> parents ;
         public override unowned Base ? parent {
             set {
@@ -61,12 +61,12 @@ namespace IfThenElse{
             }
         }
 
-/**
- * Generate dot output for this node
- *
- * A class implementing this interface that has children nodes should propagate this
- * to its children.
- */
+        /**
+         * Generate dot output for this node
+         *
+         * A class implementing this interface that has children nodes should propagate this
+         * to its children.
+         */
         public Gvc.Node output_dot(Gvc.Graph graph) {
             var node = graph.find_node (this.name) ;
             if( node != null ){
@@ -85,11 +85,11 @@ namespace IfThenElse{
             return node ;
         }
 
-/**
- * Activate()
- *
- * Propagate this to the children.
- */
+        /**
+         * Activate()
+         *
+         * Propagate this to the children.
+         */
         private List<unowned Base> active ;
         private List<unowned Base> inactive ;
 
@@ -107,11 +107,11 @@ namespace IfThenElse{
             }
         }
 
-/**
- * Deactivate()
- *
- * Propagate this to the children.
- */
+        /**
+         * Deactivate()
+         *
+         * Propagate this to the children.
+         */
         public void Deactivate(Base b) {
             // current number of activated items.
             uint cur_activated = active.length () ;

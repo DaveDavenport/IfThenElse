@@ -18,70 +18,70 @@
 using GLib ;
 
 namespace IfThenElse{
-/**
- * Checks an external tool to see what branch should fire.
- *
- * =Example=
- *
- * When Action1 should be fired when test.sh returns 1, action2 should
- * fire when test.sh returns 0 and nothing should happen
- * when another status is returns.
- *
- * {{{
- * [TestSHCheck]
- * type=ExternalToolCheck
- * cmd=test.sh
- * true_status=1
- * false_status=0
- * compare_old_state=false
- * then-action=Action1
- * else-action=Action2
- * }}}
- *
- * It is also possible to check the output string, by setting the
- * output_compare property. Setting this property will disable the return
- * status check.
- */
+    /**
+     * Checks an external tool to see what branch should fire.
+     *
+     * =Example=
+     *
+     * When Action1 should be fired when test.sh returns 1, action2 should
+     * fire when test.sh returns 0 and nothing should happen
+     * when another status is returns.
+     *
+     * {{{
+     * [TestSHCheck]
+     * type=ExternalToolCheck
+     * cmd=test.sh
+     * true_status=1
+     * false_status=0
+     * compare_old_state=false
+     * then-action=Action1
+     * else-action=Action2
+     * }}}
+     *
+     * It is also possible to check the output string, by setting the
+     * output_compare property. Setting this property will disable the return
+     * status check.
+     */
 
     public class ExternalToolCheck : BaseCheck {
-/**
- * Program to execute.
- */
+        /**
+         * Program to execute.
+         */
         public string cmd { get ; set ; default = "" ; }
-/**
- * Regex that when matches the output fires the if branch.
- *
- * Setting this property disables the status check.
- */
+        /**
+         * Regex that when matches the output fires the if branch.
+         *
+         * Setting this property disables the status check.
+         */
         public string ? output_compare { get ; set ; default = null ; }
 
-/**
- * The output status that triggers the then branch
- */
+        /**
+         * The output status that triggers the then branch
+         */
         public int true_status { get ; set ; default = 1 ; }
 
-/**
- * The output status that triggers the else branch
- */
+        /**
+         * The output status that triggers the else branch
+         */
         public int false_status { get ; set ; default = 8 ; }
 
-/**
- * If the same status result comes in a row ignore these.
- * e.g. you have a script that returns 1 when the light is on and
- * 0 when off, you only want it to trigger when it changes.
- * enabling this option enables this.
- */
+        /**
+         * If the same status result comes in a row ignore these.
+         * e.g. you have a script that returns 1 when the light is on and
+         * 0 when off, you only want it to trigger when it changes.
+         * enabling this option enables this.
+         */
         public bool compare_old_state { get ; set ; default = false ; }
         private int old_state = -99999 ;
-/**
- * Constructor
- **/
+        /**
+         * Constructor
+         **/
         public ExternalToolCheck () {
         }
 
-/*
- * Check function.
- */
+        /*
+         * Check function.
+         */
         public override BaseCheck.StateType check() {
             try {
                 string[3] argv = new string[3] ;
@@ -151,10 +151,10 @@ namespace IfThenElse{
             // return StateType.NO_CHANGE;
         }
 
-/**
- * Get a description of this class that can be used in the dot
- * diagram.
- */
+        /**
+         * Get a description of this class that can be used in the dot
+         * diagram.
+         */
         public override string get_dot_description() {
             if( output_compare != null ){
                 return "%s == %s".printf (cmd, output_compare) ;

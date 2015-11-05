@@ -19,10 +19,10 @@ using GLib ;
 using Posix ;
 
 namespace IfThenElse{
-/**
- * This trigger calls an external program.
- * When the program returns, the trigger is called.
- */
+    /**
+     * This trigger calls an external program.
+     * When the program returns, the trigger is called.
+     */
     public class ExternalToolTrigger : BaseTrigger {
         private string _cmd = null ;
         public string ? cmd {
@@ -38,9 +38,9 @@ namespace IfThenElse{
             stop_application () ;
         }
 
-/**
- * Constructor
- */
+        /**
+         * Constructor
+         */
         public ExternalToolTrigger (string command_line) {
             cmd = command_line ;
         }

@@ -25,25 +25,25 @@ namespace IfThenElse{
     }
 
     class Parser {
-// List with key, object. This to 'emulate' gtkbuilder.
+        // List with key, object. This to 'emulate' gtkbuilder.
         private GLib.HashTable<string, GLib.Object> objects =
             new HashTable<string, GLib.Object>(str_hash, str_equal) ;
-/**
- * Constructor
- */
+        /**
+         * Constructor
+         */
         public Parser () {
         }
 
-/**
- * Deconstructor
- */
+        /**
+         * Deconstructor
+         */
         ~Parser () {
             GLib.message ("Destroying parser") ;
         }
 
-/**
- * Load classes from key file
- */
+        /**
+         * Load classes from key file
+         */
         private void load_classes(string prefix, GLib.KeyFile kf)
         throws GLib.KeyFileError, ParserError {
             if( kf.has_group ("disable")){

@@ -16,12 +16,12 @@
  */
 
 namespace IfThenElse{
-/**
- * Abstract BaseTrigger class. All triggers should inherit from this.
- */
+    /**
+     * Abstract BaseTrigger class. All triggers should inherit from this.
+     */
     public abstract class BaseTrigger : BaseAction, Base {
         protected BaseAction _action = null ;
-// Make this unowned so we don't get circular dependency.
+        // Make this unowned so we don't get circular dependency.
         public BaseAction action {
             get {
                 return _action ;
@@ -36,9 +36,9 @@ namespace IfThenElse{
         public abstract void disable_trigger() ;
 
 
-/**
- * BaseAction implementation.
- */
+        /**
+         * BaseAction implementation.
+         */
         public virtual void Activate(Base p) {
             enable_trigger () ;
             _is_active = true ;
@@ -53,9 +53,9 @@ namespace IfThenElse{
             _is_active = false ;
         }
 
-/**
- * Activate the child
- */
+        /**
+         * Activate the child
+         */
         public virtual void fire() {
             GLib.message ("Fire trigger: %p\n", _action) ;
             if( _action != null ){

@@ -19,20 +19,20 @@ using GLib ;
 
 
 namespace IfThenElse{
-/**
- * Singles: Only Activate/Deactivate once in a row.
- *
- * =Example=
- *
- * Action (De)Activates only once in a row.
- * {{{
- * [single]
- * type=Single
- * action=Action
- * }}}
- */
+    /**
+     * Singles: Only Activate/Deactivate once in a row.
+     *
+     * =Example=
+     *
+     * Action (De)Activates only once in a row.
+     * {{{
+     * [single]
+     * type=Single
+     * action=Action
+     * }}}
+     */
     public class Single : BaseAction, Base {
-// Set to one if fired.
+        // Set to one if fired.
         private bool prev_state = false ;
 
         private BaseAction _action = null ;
@@ -49,7 +49,7 @@ namespace IfThenElse{
             }
         }
 
-// Single
+        // Single
         public Single () {
         }
 

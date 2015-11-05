@@ -16,21 +16,21 @@
  */
 
 namespace IfThenElse{
-/**
- * The base class used in IfThenElse. Each class should be derived from this.
- *
- * This class provides some basic functionality needed by everybody.
- * E.g. name and parent property. A has_parent and is_toplevel check.
- */
+    /**
+     * The base class used in IfThenElse. Each class should be derived from this.
+     *
+     * This class provides some basic functionality needed by everybody.
+     * E.g. name and parent property. A has_parent and is_toplevel check.
+     */
     public abstract class Base : GLib.Object {
         protected bool _is_active = false ;
-/// A pointer to the parent. This is the internal default storage.
-/// Use the parent <accessor>
+        /// A pointer to the parent. This is the internal default storage.
+        /// Use the parent <accessor>
         private unowned Base ? _parent = null ;
 
 
-/// Check if we are allready a child of node.
-/// TODO: This  might break on the combine module.
+        /// Check if we are allready a child of node.
+        /// TODO: This  might break on the combine module.
         private bool is_nested_parent(Base node) {
             unowned Base ? iter = null ;
             for( iter = node ; iter != null ; iter = iter.parent ){
@@ -41,9 +41,9 @@ namespace IfThenElse{
             return false ;
         }
 
-/// Accessors
-/// Parent object. This accepts one and only one parent.
-/// Can be overriden if you want different behaviour
+        /// Accessors
+        /// Parent object. This accepts one and only one parent.
+        /// Can be overriden if you want different behaviour
         [Description (blurb = "Pointer to the parent object (automatically set)")]
         public virtual unowned Base ? parent
         {
@@ -75,9 +75,9 @@ namespace IfThenElse{
             }
         }
 
-/**
- * Get the public name. Strip off the filename
- */
+        /**
+         * Get the public name. Strip off the filename
+         */
         public string get_public_name() {
             var index = name.last_index_of_char (':') ;
             // If no colon set.
@@ -95,16 +95,16 @@ namespace IfThenElse{
         ~Base () {
         }
 
-/**
- * Check if we have a parent.
- */
+        /**
+         * Check if we have a parent.
+         */
         public bool has_parent() {
             return parent != null ;
         }
 
-/**
- * Check if it is a toplevel object.
- */
+        /**
+         * Check if it is a toplevel object.
+         */
         public bool is_toplevel() {
             return parent == null ;
         }

@@ -19,41 +19,41 @@ using GLib ;
 using Posix ;
 
 namespace IfThenElse{
-/**
- * An MultiOutputWatch trigger: Watches the output off a program and triggers
- * when a certain condition is met.
- *
- * This trigger fires when a program outputs a certain string.
- *
- * The timer trigger supports being started and stopped and can be placed
- * anywhere in the chain.
- *
- * =Example=
- *
- * So if you want a certain branch (MainBranch) to fire when mpc idle
- * return player.
- *
- * Add an element like:
- * {{{
- * [MpcIdleWatch]
- * type=MultiOutputWatch
- * cmd=mpc idleloop player
- * fire_regex=regex1;regex2;regex3
- * action=action1;action2;action3
- * }}}
- *
- * To fire when a tool returns, e.g. inotifywatch use {@link ExternalToolTrigger}
- *
- */
+    /**
+     * An MultiOutputWatch trigger: Watches the output off a program and triggers
+     * when a certain condition is met.
+     *
+     * This trigger fires when a program outputs a certain string.
+     *
+     * The timer trigger supports being started and stopped and can be placed
+     * anywhere in the chain.
+     *
+     * =Example=
+     *
+     * So if you want a certain branch (MainBranch) to fire when mpc idle
+     * return player.
+     *
+     * Add an element like:
+     * {{{
+     * [MpcIdleWatch]
+     * type=MultiOutputWatch
+     * cmd=mpc idleloop player
+     * fire_regex=regex1;regex2;regex3
+     * action=action1;action2;action3
+     * }}}
+     *
+     * To fire when a tool returns, e.g. inotifywatch use {@link ExternalToolTrigger}
+     *
+     */
     public class MultiOutputWatch : BaseTrigger {
-/**
- * The commando to execute.
- */
+        /**
+         * The commando to execute.
+         */
         public string cmd { get ; set ; default = "" ; }
 
-/**
- * Kill the program when the node gets deactivated.
- */
+        /**
+         * Kill the program when the node gets deactivated.
+         */
         public bool kill_child { get ; set ; default = true ; }
 
 
@@ -63,9 +63,9 @@ namespace IfThenElse{
 
         private uint num_actions = 0 ;
         private BaseAction actions[8] ;
-/**
- * The regex that match  the output that triggers a fire
- */
+        /**
+         * The regex that match  the output that triggers a fire
+         */
         public string[] fire_regex {
             set {
                 for( uint i = 0 ; i < value.length ; i++ ){
@@ -86,9 +86,9 @@ namespace IfThenElse{
             }
         }
 
-/**
- * Check output.
- */
+        /**
+         * Check output.
+         */
         private bool output_data_cb(IOChannel source, IOCondition cond) {
             string retv ;
             size_t length, term_pos ;
