@@ -94,6 +94,7 @@ namespace IfThenElse{
         private List<unowned Base> inactive ;
 
         public void Activate(Base b) {
+            this._is_active = true;
             unowned List<unowned Base> item = inactive.find (b) ;
             if( item != null ){
                 inactive.remove (b) ;
@@ -113,6 +114,7 @@ namespace IfThenElse{
          * Propagate this to the children.
          */
         public void Deactivate(Base b) {
+            this._is_active = false;
             // current number of activated items.
             uint cur_activated = active.length () ;
             unowned List<unowned Base> item = active.find (b) ;
