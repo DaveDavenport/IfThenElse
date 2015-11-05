@@ -106,7 +106,7 @@ namespace IfThenElse{
         public Gvc.Node output_dot(Gvc.Graph graph) {
             string dot_desc = this.get_dot_description () ;
             var node = graph.create_node (this.name) ;
-            node.set ("shape", "diamond") ;
+            node.set ("shape", "invhouse") ;
             node.set ("label", "%s\\n%s".printf (this.get_public_name (), dot_desc)) ;
             if( this._is_active ){
                 node.set ("color", "red") ;
