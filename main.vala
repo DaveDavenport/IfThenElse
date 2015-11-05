@@ -509,14 +509,11 @@ namespace IfThenElse{
     }
 
     static bool main_thread_svg_gen(out uint8[] data) {
-        mutex.lock( ) ;
         var g = get_graph (parser) ;
         var c = new Gvc.Context () ;
         c.layout (g, "dot") ;
         c.render_data (g, "svg", out data) ;
         g = null ;
-        cond.broadcast () ;
-        mutex.unlock () ;
         return false ;
     }
 
@@ -529,16 +526,23 @@ namespace IfThenElse{
         // We execute this in the mainloop and wait for result to get back.
         // It is dirty, but should work.
         uint8[] data = null ;
+        GLib.message("send to other thread.");
         GLib.Idle.add (() => {
-            GLib.message ("send to other thread.") ;
-            return main_thread_svg_gen (out data) ;
+                mutex.lock( ) ;
+                main_thread_svg_gen (out data) ;
+                GLib.message("thread signal done.");
+                cond.broadcast () ;
+                mutex.unlock () ;
+                GLib.message("thread exit.");
+                return false;
         }) ;
         mutex.lock( ) ;
         while( data == null ){
+            GLib.message("thread cond wait");
             cond.wait (mutex) ;
         }
         mutex.unlock () ;
-
+        GLib.message("thread: send response\n");
         MHD.Response response ;
         string my_page = "<html><meta http-equiv=\"refresh\" content=\"5\"><body>" + (string) data + "</body></html>" ;
         response = MHD.create_response_from_buffer (my_page.length, my_page, MHD.ResponseMemoryMode.MUST_COPY) ;
