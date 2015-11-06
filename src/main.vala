@@ -441,9 +441,13 @@ namespace IfThenElse{
     // (builder).
     static Gvc.Graph get_graph(Parser builder) {
         var dot_graph = new Gvc.Graph ("g", Gvc.Agdirected) ;
-        dot_graph.set_attribute (Gvc.Kind.GRAPH, "pack", "true") ;
-        dot_graph.set_attribute (Gvc.Kind.GRAPH, "splines", "ortho") ;
+//        dot_graph.set_attribute (Gvc.Kind.GRAPH, "pack", "true") ;
+        dot_graph.set_attribute (Gvc.Kind.NODE, "ordering", "out") ;
         dot_graph.set_attribute (Gvc.Kind.NODE, "shape", "box") ;
+        dot_graph.set_attribute (Gvc.Kind.NODE, "style","rounded");
+        dot_graph.set_attribute (Gvc.Kind.NODE, "width","2.0");
+        dot_graph.set_attribute (Gvc.Kind.NODE, "penwidth","1.0");
+        dot_graph.set_attribute (Gvc.Kind.GRAPH, "splines", "ortho") ;
         dot_graph.set_attribute (Gvc.Kind.NODE, "color", "black") ;
         dot_graph.set_attribute (Gvc.Kind.NODE, "label", "n/a") ;
         dot_graph.set_attribute (Gvc.Kind.EDGE, "label", "") ;

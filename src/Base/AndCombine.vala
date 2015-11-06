@@ -74,7 +74,7 @@ namespace IfThenElse{
             }
             node = graph.create_node (this.name) ;
             node.set ("label", this.get_public_name ()) ;
-            node.set ("shape", "box") ;
+            node.set ("shape", "oval") ;
             if( this._is_active ){
                 node.set ("color", "red") ;
             }
