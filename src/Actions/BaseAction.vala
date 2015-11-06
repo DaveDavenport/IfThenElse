@@ -53,22 +53,5 @@ namespace IfThenElse{
         public virtual void Deactivate(Base p) {
             GLib.warning ("Deactivate action has not been implemented") ;
         }
-
-
-        public virtual string get_dot_description() {
-            return this.get_public_name();
-        }
-        /**
-         * Generate dot output for this node
-         *
-         * A class implementing this interface that has children nodes should propagate this
-         * to its children.
-         */
-        public virtual Gvc.Node output_dot(Gvc.Graph graph) {
-            var node = graph.create_node (this.name) ;
-            node.set ("label", this.get_dot_description()) ;
-            return node ;
-        }
-
     }
 }

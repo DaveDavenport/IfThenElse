@@ -66,7 +66,7 @@ namespace IfThenElse{
             }
         }
 
-        public Gvc.Node output_dot(Gvc.Graph graph) {
+        public override Gvc.Node output_dot(Gvc.Graph graph) {
             var node = graph.create_node (this.name) ;
             node.set ("label", this.get_dot_description()) ;
             foreach( BaseAction action in actions ){

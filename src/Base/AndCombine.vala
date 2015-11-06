@@ -67,7 +67,7 @@ namespace IfThenElse{
          * A class implementing this interface that has children nodes should propagate this
          * to its children.
          */
-        public Gvc.Node output_dot(Gvc.Graph graph) {
+        public override Gvc.Node output_dot(Gvc.Graph graph) {
             var node = graph.find_node (this.name) ;
             if( node != null ){
                 return node ;

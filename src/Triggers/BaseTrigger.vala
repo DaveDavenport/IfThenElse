@@ -62,11 +62,7 @@ namespace IfThenElse{
                 _action.Activate (this) ;
             }
         }
-        public virtual string get_dot_description() {
-            return this.get_public_name();
-        }
-
-        public virtual Gvc.Node output_dot(Gvc.Graph graph) {
+        public override Gvc.Node output_dot(Gvc.Graph graph) {
             var node = graph.create_node (this.name) ;
             node.set ("shape", "invhouse");
             node.set ("label", this.get_dot_description()) ;

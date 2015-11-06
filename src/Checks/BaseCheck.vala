@@ -49,10 +49,6 @@ namespace IfThenElse{
         }
         public abstract StateType check() ;
 
-        public virtual string get_dot_description() {
-            return this.get_public_name();
-        }
-
         /**
          * Handle activation. In this case, we call the check,
          * see if it changed.
@@ -103,7 +99,7 @@ namespace IfThenElse{
          * Generate dot file for this element.
          * Diamond square with a yes and a no out arrow.
          */
-        public Gvc.Node output_dot(Gvc.Graph graph) {
+        public override Gvc.Node output_dot(Gvc.Graph graph) {
             string dot_desc = this.get_dot_description () ;
             var node = graph.create_node (this.name) ;
             node.set ("shape", "invhouse") ;

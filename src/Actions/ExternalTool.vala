@@ -95,7 +95,7 @@ namespace IfThenElse{
         /**
          * Generate dot output for this node
          */
-        public string get_dot_description() {
+        public override string get_dot_description() {
             return "%s\\n(%s)".printf ( this.get_public_name (), cmd) ;
         }
     }
