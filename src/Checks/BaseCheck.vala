@@ -110,13 +110,17 @@ namespace IfThenElse{
                 var then_node = _then_action.output_dot (graph) ;
                 var edge = graph.create_edge (node, then_node) ;
                 edge.set ("label", "Yes") ;
-                edge.set ("color", "green");
+                if ( this._is_active ) {
+                    edge.set ("color", "green");
+                }
             }
             if( _else_action != null ){
                 var else_node = _else_action.output_dot (graph) ;
                 var edge = graph.create_edge (node, else_node) ;
                 edge.set ("label", "No") ;
-                edge.set ("color", "red");
+                if ( !this._is_active ) {
+                    edge.set ("color", "green");
+                }
             }
             return node ;
         }
