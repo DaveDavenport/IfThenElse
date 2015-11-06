@@ -441,8 +441,8 @@ namespace IfThenElse{
     // (builder).
     static Gvc.Graph get_graph(Parser builder) {
         var dot_graph = new Gvc.Graph ("g", Gvc.Agdirected) ;
-        dot_graph.set_attribute (Gvc.Kind.GRAPH, "pack", "true");
-        dot_graph.set_attribute (Gvc.Kind.GRAPH, "splines", "ortho");
+        dot_graph.set_attribute (Gvc.Kind.GRAPH, "pack", "true") ;
+        dot_graph.set_attribute (Gvc.Kind.GRAPH, "splines", "ortho") ;
         dot_graph.set_attribute (Gvc.Kind.NODE, "shape", "box") ;
         dot_graph.set_attribute (Gvc.Kind.NODE, "color", "black") ;
         dot_graph.set_attribute (Gvc.Kind.NODE, "label", "n/a") ;
@@ -528,23 +528,23 @@ namespace IfThenElse{
         // We execute this in the mainloop and wait for result to get back.
         // It is dirty, but should work.
         uint8[] data = null ;
-        GLib.message("send to other thread.");
+        GLib.message ("send to other thread.") ;
         GLib.Idle.add (() => {
-                mutex.lock( ) ;
-                main_thread_svg_gen (out data) ;
-                GLib.message("thread signal done.");
-                cond.broadcast () ;
-                mutex.unlock () ;
-                GLib.message("thread exit.");
-                return false;
+            mutex.lock( ) ;
+            main_thread_svg_gen (out data) ;
+            GLib.message ("thread signal done.") ;
+            cond.broadcast () ;
+            mutex.unlock () ;
+            GLib.message ("thread exit.") ;
+            return false ;
         }) ;
         mutex.lock( ) ;
         while( data == null ){
-            GLib.message("thread cond wait");
+            GLib.message ("thread cond wait") ;
             cond.wait (mutex) ;
         }
         mutex.unlock () ;
-        GLib.message("thread: send response\n");
+        GLib.message ("thread: send response\n") ;
         MHD.Response response ;
         string my_page = "<html><meta http-equiv=\"refresh\" content=\"5\"><body>" + (string) data + "</body></html>" ;
         response = MHD.create_response_from_buffer (my_page.length, my_page, MHD.ResponseMemoryMode.MUST_COPY) ;
@@ -561,8 +561,6 @@ namespace IfThenElse{
         // Checks
         registered_types.prepend (typeof (ExternalToolCheck)) ;
         registered_types.prepend (typeof (TimeCheck)) ;
-        registered_types.prepend (typeof (OutputWatch)) ;
-        registered_types.prepend (typeof (MultiOutputWatch)) ;
 
         // Actions.
         registered_types.prepend (typeof (ExternalToolAction)) ;
@@ -576,6 +574,8 @@ namespace IfThenElse{
         registered_types.prepend (typeof (InitTrigger)) ;
         registered_types.prepend (typeof (ClockTrigger)) ;
         registered_types.prepend (typeof (BetweenTrigger)) ;
+        registered_types.prepend (typeof (OutputWatch)) ;
+        registered_types.prepend (typeof (MultiOutputWatch)) ;
 
         // other
         registered_types.prepend (typeof (MultiCombine)) ;

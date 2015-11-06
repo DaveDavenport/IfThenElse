@@ -136,7 +136,7 @@ namespace IfThenElse{
                 this.hour, this.minute,
                 this.end_hour, this.end_minute
                 ) ;
-            return str;
+            return str ;
         }
 
         /**

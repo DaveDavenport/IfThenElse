@@ -98,9 +98,8 @@ namespace IfThenElse{
             stop_timer () ;
         }
 
-
         public override string get_dot_description() {
-            return "%s\\nTimeout Trigger: %02i:%02i".printf ( this.get_public_name (), this.hour, this.minute) ;
+            return "%s\\nTimeout Trigger: %02i:%02i".printf (this.get_public_name (), this.hour, this.minute) ;
         }
 
         /**

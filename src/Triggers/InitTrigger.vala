@@ -60,7 +60,8 @@ namespace IfThenElse{
         }
 
         public override string get_dot_description() {
-            return  "Init Trigger\n%s".printf (this.get_public_name ()) ;
+            return "Init Trigger\n%s".printf (this.get_public_name ()) ;
         }
+
     }
 }

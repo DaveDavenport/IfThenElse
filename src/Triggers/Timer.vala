@@ -50,7 +50,7 @@ namespace IfThenElse{
         /**
          * The interval at witch this trigger should fire in seconds.
          *
-         ********@default 5
+         *********@default 5
          */
         public uint timeout {
             get {
@@ -101,9 +101,9 @@ namespace IfThenElse{
             handler = 0 ;
         }
 
-
         public override string get_dot_description() {
-            return "%s\\nTimeout Trigger: %.2f seconds".printf ( this.name, this.timeout) ;
+            return "%s\\nTimeout Trigger: %.2f seconds".printf (this.name, this.timeout) ;
         }
+
     }
 }

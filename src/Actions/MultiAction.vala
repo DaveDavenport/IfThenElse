@@ -48,7 +48,7 @@ namespace IfThenElse{
          * Propagate this to the children.
          */
         public void Activate(Base p) {
-            this._is_active = true;
+            this._is_active = true ;
             foreach( BaseAction action in actions ){
                 action.Activate (this) ;
             }
@@ -60,7 +60,7 @@ namespace IfThenElse{
          * Propagate this to the children.
          */
         public void Deactivate(Base p) {
-            this._is_active = false;
+            this._is_active = false ;
             foreach( BaseAction action in actions ){
                 action.Deactivate (this) ;
             }
@@ -68,15 +68,16 @@ namespace IfThenElse{
 
         public override Gvc.Node output_dot(Gvc.Graph graph) {
             var node = graph.create_node (this.name) ;
-            node.set ("label", this.get_dot_description()) ;
-            if ( this._is_active ) {
-                node.set ("color", "red");
+            node.set ("label", this.get_dot_description ()) ;
+            if( this._is_active ){
+                node.set ("color", "red") ;
             }
             foreach( BaseAction action in actions ){
-                var an = action.output_dot(graph);
-                graph.create_edge(node, an);
+                var an = action.output_dot (graph) ;
+                graph.create_edge (node, an) ;
             }
             return node ;
         }
+
     }
 }

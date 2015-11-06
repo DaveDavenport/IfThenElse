@@ -199,19 +199,21 @@ namespace IfThenElse{
             }
             disable_trigger () ;
         }
+
         public override Gvc.Node output_dot(Gvc.Graph graph) {
             var node = graph.create_node (this.name) ;
-            node.set ("shape", "invhouse");
-            node.set ("label", this.get_dot_description()) ;
+            node.set ("shape", "invhouse") ;
+            node.set ("label", this.get_dot_description ()) ;
             if( this._is_active ){
                 node.set ("color", "red") ;
             }
             for( uint i = 0 ; i < num_actions ; i++ ){
-                var an = this.actions[i].output_dot(graph);
-                graph.create_edge(node, an);
+                var an = this.actions[i].output_dot (graph) ;
+                graph.create_edge (node, an) ;
             }
-            return node;
+            return node ;
         }
+
     }
 }
 

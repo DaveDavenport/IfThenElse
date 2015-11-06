@@ -156,6 +156,7 @@ namespace IfThenElse{
         public override string get_dot_description() {
             return "%s\n(%s\n==\n%s)".printf (this.get_public_name (), cmd, fire_regex) ;
         }
+
     }
 }
 

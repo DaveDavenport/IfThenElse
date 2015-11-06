@@ -53,5 +53,6 @@ namespace IfThenElse{
         public virtual void Deactivate(Base p) {
             GLib.warning ("Deactivate action has not been implemented") ;
         }
+
     }
 }

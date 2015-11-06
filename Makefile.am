@@ -55,5 +55,5 @@ ifthenelse_SOURCES=\
 
 
 .PHONY: indent
-indent: ${ifthenelse_SOURCES} ${top_srcdir}/config/config.def.c ${helper_test_SOURCES} ${textbox_test_SOURCES} ${ifthenelse_test_SOURCES}
+indent: ${ifthenelse_SOURCES} 
 	uncrustify -c ${top_srcdir}/data/uncrustify.cfg --replace $^
