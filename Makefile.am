@@ -22,8 +22,8 @@ AM_CFLAGS=\
 	-Werror=missing-prototypes
 
 ifthenelse_VALAFLAGS=\
+	--vapidir=./Vapi/\
 	--pkg=glib-2.0\
-	--vapidir=$(top_srcdir)/Vapi/\
 	--pkg=posix\
 	--pkg=fix\
 	--pkg=libgvc\
