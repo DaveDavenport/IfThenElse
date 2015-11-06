@@ -121,6 +121,9 @@ namespace IfThenElse{
         public virtual Gvc.Node output_dot(Gvc.Graph graph) {
             var node = graph.create_node (this.name) ;
             node.set ("label", this.get_dot_description()) ;
+            if ( this._is_active ) {
+                node.set ("color", "red");
+            }
             return node ;
         }
 
