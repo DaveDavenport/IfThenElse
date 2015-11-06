@@ -51,6 +51,7 @@ namespace Gvc {
 	}
     [ CCode (cheader_filename = "cgraph.h", cprefix="AG") ]
     public enum Kind {
+        [CCode (cname="AGRAPH") ]
         GRAPH,
         NODE,
         OUTEDGE,
