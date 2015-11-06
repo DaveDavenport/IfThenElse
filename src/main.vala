@@ -442,6 +442,7 @@ namespace IfThenElse{
     static Gvc.Graph get_graph(Parser builder) {
         var dot_graph = new Gvc.Graph ("g", Gvc.Agdirected) ;
 //        dot_graph.set_attribute (Gvc.Kind.GRAPH, "pack", "true") ;
+        dot_graph.set_attribute (Gvc.Kind.NODE, "fontname", "Fira Sans") ;
         dot_graph.set_attribute (Gvc.Kind.NODE, "ordering", "out") ;
         dot_graph.set_attribute (Gvc.Kind.NODE, "shape", "box") ;
         dot_graph.set_attribute (Gvc.Kind.NODE, "style","rounded");
