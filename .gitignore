@@ -4,3 +4,5 @@ Documentation/html
 .*.swp
 Test/ifthenelse-test
 *.*~
+*.o
+*.c
