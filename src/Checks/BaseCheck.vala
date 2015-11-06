@@ -48,10 +48,10 @@ namespace IfThenElse{
             FALSE
         }
         public abstract StateType check() ;
-        public abstract string get_dot_description() ;
 
-
-
+        public virtual string get_dot_description() {
+            return this.get_public_name();
+        }
 
         /**
          * Handle activation. In this case, we call the check,

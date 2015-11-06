@@ -65,20 +65,5 @@ namespace IfThenElse{
                 action.Deactivate (this) ;
             }
         }
-
-        public Gvc.Node output_dot(Gvc.Graph graph) {
-            var node = graph.create_node (this.name) ;
-            node.set ("shape", "box") ;
-            node.set ("label", this.get_public_name ()) ;
-            if( this._is_active ){
-                node.set ("color", "red") ;
-            }
-            foreach( unowned BaseAction action in actions ){
-                var an = action.output_dot (graph) ;
-                graph.create_edge (node, an) ;
-            }
-            return node ;
-        }
-
     }
 }

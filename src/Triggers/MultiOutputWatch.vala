@@ -188,21 +188,8 @@ namespace IfThenElse{
             stop_application () ;
         }
 
-        public override Gvc.Node output_dot(Gvc.Graph graph) {
-            var str = "%s\n(%s)".printf (this.get_public_name (),
-                                         cmd) ;
-
-            var node = graph.create_node (this.name) ;
-            node.set ("label", str) ;
-            node.set ("shape", "invhouse");
-            if( this._is_active ){
-                node.set ("color", "red") ;
-            }
-            for( uint i = 0 ; i < num_actions ; i++ ){
-                var action_node = this.actions[i].output_dot (graph) ;
-                graph.create_edge (node, action_node) ;
-            }
-            return node ;
+        public override string get_dot_description() {
+            return "%s\n(%s)".printf (this.get_public_name (), cmd) ;
         }
 
         public override void Deactivate(Base p) {

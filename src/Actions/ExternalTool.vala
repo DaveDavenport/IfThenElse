@@ -94,21 +94,10 @@ namespace IfThenElse{
 
         /**
          * Generate dot output for this node
-         *
          */
-        public Gvc.Node output_dot(Gvc.Graph graph) {
-            var str = "%s\\n(%s)".printf (
-                this.get_public_name (),
-                cmd
-                ) ;
-            var node = graph.create_node (this.name) ;
-            node.set ("label", str) ;
-            if( this._is_active ){
-                node.set ("color", "red") ;
-            }
-            return node ;
+        public string get_dot_description() {
+            return "%s\\n(%s)".printf ( this.get_public_name (), cmd) ;
         }
-
     }
 }
 

@@ -84,21 +84,5 @@ namespace IfThenElse{
                 _else_action.Activate (this) ;
             }
         }
-
-        public Gvc.Node output_dot(Gvc.Graph graph) {
-            var node = graph.create_node (this.name) ;
-            node.set ("label", this.get_public_name ()) ;
-            node.set ("shape", "invhouse") ;
-            if( _else_action != null ){
-                var action_node = this._else_action.output_dot (graph) ;
-                graph.create_edge (node, action_node) ;
-            }
-            if( _then_action != null ){
-                var action_node = this._then_action.output_dot (graph) ;
-                graph.create_edge (node, action_node) ;
-            }
-            return node ;
-        }
-
     }
 }

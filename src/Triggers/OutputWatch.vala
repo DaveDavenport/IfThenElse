@@ -153,23 +153,9 @@ namespace IfThenElse{
             stop_application () ;
         }
 
-        public override Gvc.Node output_dot(Gvc.Graph graph) {
-            var str = "%s\n(%s\n==\n%s)".printf (this.get_public_name (),
-                                                 cmd,
-                                                 fire_regex) ;
-
-            var node = graph.create_node (this.name) ;
-            node.set ("label", str) ;
-            if( this._is_active ){
-                node.set ("color", "red") ;
-            }
-            if( this._action != null ){
-                var action_node = this._action.output_dot (graph) ;
-                graph.create_edge (node, action_node) ;
-            }
-            return node ;
+        public override string get_dot_description() {
+            return "%s\n(%s\n==\n%s)".printf (this.get_public_name (), cmd, fire_regex) ;
         }
-
     }
 }
 

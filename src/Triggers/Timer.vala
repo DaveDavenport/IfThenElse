@@ -101,26 +101,9 @@ namespace IfThenElse{
             handler = 0 ;
         }
 
-        /**
-         * Generate dot code for this node.
-         *
-         * {@inheritDoc}
-         */
-        public override Gvc.Node output_dot(Gvc.Graph graph) {
-            var str = "%s\\nTimeout Trigger: %.2f seconds".printf (
-                this.name,
-                this.timeout) ;
-            var node = graph.create_node (this.name) ;
-            node.set ("label", str) ;
-            if( this._is_active ){
-                node.set ("color", "red") ;
-            }
-            if( this.action != null ){
-                var action_node = this._action.output_dot (graph) ;
-                graph.create_edge (node, action_node) ;
-            }
-            return node ;
-        }
 
+        public override string get_dot_description() {
+            return "%s\\nTimeout Trigger: %.2f seconds".printf ( this.name, this.timeout) ;
+        }
     }
 }

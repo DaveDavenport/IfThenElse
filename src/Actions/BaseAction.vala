@@ -54,6 +54,10 @@ namespace IfThenElse{
             GLib.warning ("Deactivate action has not been implemented") ;
         }
 
+
+        public virtual string get_dot_description() {
+            return this.get_public_name();
+        }
         /**
          * Generate dot output for this node
          *
@@ -62,7 +66,7 @@ namespace IfThenElse{
          */
         public virtual Gvc.Node output_dot(Gvc.Graph graph) {
             var node = graph.create_node (this.name) ;
-            node.set ("label", this.get_public_name ()) ;
+            node.set ("label", this.get_dot_description()) ;
             return node ;
         }
 

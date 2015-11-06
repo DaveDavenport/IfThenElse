@@ -130,22 +130,13 @@ namespace IfThenElse{
         /**
          *
          */
-        public override Gvc.Node output_dot(Gvc.Graph graph) {
+        public override string get_dot_description() {
             var str = "%s\\nTimeout Trigger: %02i:%02i-%02i:%02i".printf (
                 this.get_public_name (),
                 this.hour, this.minute,
                 this.end_hour, this.end_minute
                 ) ;
-            var node = graph.create_node (this.name) ;
-            node.set ("label", str) ;
-            if( this._is_active ){
-                node.set ("color", "red") ;
-            }
-            if( this.action != null ){
-                var action_node = this._action.output_dot (graph) ;
-                graph.create_edge (node, action_node) ;
-            }
-            return node ;
+            return str;
         }
 
         /**
