@@ -451,6 +451,7 @@ namespace IfThenElse{
         dot_graph.set_attribute (Gvc.Kind.NODE, "color", "black") ;
         dot_graph.set_attribute (Gvc.Kind.NODE, "label", "n/a") ;
         dot_graph.set_attribute (Gvc.Kind.EDGE, "label", "") ;
+        dot_graph.set_attribute (Gvc.Kind.EDGE, "color", "black") ;
         // Iterates over all input files.
         // Find the root item(s) and make them generate the rest
         // off the dot file.
