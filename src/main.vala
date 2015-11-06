@@ -443,8 +443,8 @@ namespace IfThenElse{
         var dot_graph = new Gvc.Graph ("g", Gvc.Agdirected) ;
         dot_graph.set_attribute (Gvc.Kind.GRAPH, "pack", "true");
         dot_graph.set_attribute (Gvc.Kind.GRAPH, "splines", "ortho");
+        dot_graph.set_attribute (Gvc.Kind.NODE, "shape", "box") ;
         dot_graph.set_attribute (Gvc.Kind.NODE, "color", "black") ;
-        dot_graph.set_attribute (Gvc.Kind.NODE, "shape", "oval") ;
         dot_graph.set_attribute (Gvc.Kind.NODE, "label", "n/a") ;
         dot_graph.set_attribute (Gvc.Kind.EDGE, "label", "") ;
         // Iterates over all input files.
