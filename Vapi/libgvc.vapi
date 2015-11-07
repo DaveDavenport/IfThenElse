@@ -24,6 +24,8 @@
 
 [CCode (cprefix = "", lower_case_cprefix = "", cheader_filename = "graphviz/gvc.h")]
 namespace Gvc {
+    [CCode (cname = "gvFreeRenderData")]
+    public void free_render_data([CCode (array_length = false)] uint8[] data);
 
 	[CCode (cname = "aginitlib", cheader_filename="gvc.h")]
 	public void initlib ( size_t graphinfo, size_t nodeinfo, size_t  edgeinfo);
@@ -90,7 +92,7 @@ namespace Gvc {
 		public int render_jobs (Graph graph);
 
 		[CCode (cname = "gvRenderData")]
-		public int render_data (Graph graph, [CCode (type = "char*")] string file_type, [CCode (type = "char**")] out uint8[] output_data);
+		public int render_data (Graph graph, [CCode (type = "char*")] string file_type, [CCode (type = "char**")] out unowned uint8[] output_data);
 	}
 
 	[Compact]

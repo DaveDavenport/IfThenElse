@@ -517,7 +517,7 @@ namespace IfThenElse{
         }
     }
 
-    static bool main_thread_svg_gen(out uint8[] data) {
+    static bool main_thread_svg_gen(out unowned uint8[] data) {
         var g = get_graph (parser) ;
         var c = new Gvc.Context () ;
         c.layout (g, "dot") ;
@@ -536,7 +536,7 @@ namespace IfThenElse{
         // Because generating the SVG is not thread safe (both graphviz as ifthenelse)
         // We execute this in the mainloop and wait for result to get back.
         // It is dirty, but should work.
-        uint8[] data = null ;
+        unowned uint8[] data = null ;
         GLib.message ("send to other thread.") ;
         GLib.Idle.add (() => {
             mutex.lock( ) ;
@@ -558,7 +558,7 @@ namespace IfThenElse{
         string my_page = "<html><meta http-equiv=\"refresh\" content=\"5\"><body>" + (string) data + "</body></html>" ;
         response = MHD.create_response_from_buffer (my_page.length, my_page, MHD.ResponseMemoryMode.MUST_COPY) ;
         response.add_response_header ("Content-Type", "text/html") ;
-        data = null ;
+        Gvc.free_render_data(data); 
         return connection.queue_response (MHD.HTTP_OK, response) ;
 
     }
