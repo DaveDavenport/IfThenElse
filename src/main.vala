@@ -327,6 +327,7 @@ namespace IfThenElse{
         var c = new Gvc.Context () ;
         c.layout (g, "dot") ;
         c.render_filename (g, "svg", "state.svg") ;
+        c.Finalize();
         g = null ;
         return false ;
     }
@@ -522,6 +523,8 @@ namespace IfThenElse{
         c.layout (g, "dot") ;
         c.render_data (g, "svg", out data) ;
         g = null ;
+        c.Finalize();
+        c = null;
         return false ;
     }
 

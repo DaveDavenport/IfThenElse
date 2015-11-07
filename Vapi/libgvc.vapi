@@ -65,6 +65,9 @@ namespace Gvc {
 		[CCode (cname = "gvContext")]
 		public Context ();
 
+        [CCode (cname = "gvFinalize")]
+        public void Finalize();
+
 		[CCode (cname = "gvParseArgs")]
 		public int parse_args ( [CCode (array_length_pos = 0.9)] string[] argv );
 
