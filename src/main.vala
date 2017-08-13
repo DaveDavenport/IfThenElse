@@ -590,7 +590,7 @@ namespace IfThenElse{
         // other
         registered_types.prepend (typeof (MultiCombine)) ;
         registered_types.prepend (typeof (AndCombine)) ;
-        registered_types.prepend (typeof (MultiCombine)) ;
+        registered_types.prepend (typeof (ToggleCombine)) ;
 
         // reverse list.
         registered_types.reverse () ;
