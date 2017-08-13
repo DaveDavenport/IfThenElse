@@ -50,6 +50,7 @@ namespace IfThenElse{
         public void Activate(Base p) {
             this._is_active = true ;
             foreach( BaseAction action in actions ){
+                GLib.message("%s: Active: %s\n", this.name, action.name);
                 action.Activate (this) ;
             }
         }

@@ -94,7 +94,6 @@ namespace IfThenElse{
         private List<unowned Base> inactive ;
 
         public void Activate(Base b) {
-            this._is_active = true ;
             unowned List<unowned Base> item = inactive.find (b) ;
             if( item != null ){
                 inactive.remove (b) ;
@@ -104,6 +103,7 @@ namespace IfThenElse{
                 active.prepend (b) ;
             }
             if( active.length () == parents.length ()){
+                this._is_active = true ;
                 action.Activate (this) ;
             }
         }
@@ -114,7 +114,6 @@ namespace IfThenElse{
          * Propagate this to the children.
          */
         public void Deactivate(Base b) {
-            this._is_active = false ;
             // current number of activated items.
             uint cur_activated = active.length () ;
             unowned List<unowned Base> item = active.find (b) ;
@@ -128,6 +127,7 @@ namespace IfThenElse{
             // If in previous state everybody was activated,
             // Deactivated.
             if( cur_activated == parents.length ()){
+                this._is_active = false ;
                 action.Deactivate (this) ;
             }
         }

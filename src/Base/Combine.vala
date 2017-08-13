@@ -182,6 +182,7 @@ namespace IfThenElse{
          */
         public void Activate(Base p) {
             this._is_active = true ;
+            GLib.message("%s: %s\n", this.name, action.name);
             action.Activate (this) ;
         }
 
@@ -192,6 +193,7 @@ namespace IfThenElse{
          */
         public void Deactivate(Base p) {
             this._is_active = false ;
+            GLib.message("%s: %s\n", this.name, action.name);
             action.Deactivate (this) ;
         }
 
