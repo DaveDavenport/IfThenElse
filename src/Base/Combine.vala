@@ -171,13 +171,21 @@ namespace IfThenElse{
          * Propagate this to the children.
          */
         public void Activate(Base p) {
-            if ( p.name != activate_parent) {
-                return;
+            GLib.message(" Activate |%s| {%s}\n", p.get_public_name(), activate_parent);
+            GLib.message(" DeActivate |%s| {%s}\n", p.get_public_name(), deactivate_parent);
+            if ( p.get_public_name() == activate_parent) {
+                if ( ! this._is_active ) {
+                    this._is_active = true ;
+                    GLib.message("%s: %s\n", this.name, action.name);
+                    action.Activate (this) ;
+                }
             }
-            if ( ! this._is_active ) {
-                this._is_active = true ;
-                GLib.message("%s: %s\n", this.name, action.name);
-                action.Activate (this) ;
+            if ( p.get_public_name() == deactivate_parent) {
+                if ( this._is_active ) {
+                    this._is_active = false ;
+                    GLib.message("%s: %s\n", this.name, action.name);
+                    action.Deactivate (this) ;
+                }
             }
         }
 
@@ -187,14 +195,7 @@ namespace IfThenElse{
          * Propagate this to the children.
          */
         public void Deactivate(Base p) {
-            if ( p.name != deactivate_parent) {
-                return;
-            }
-            if ( this._is_active ) {
-                this._is_active = false ;
-                GLib.message("%s: %s\n", this.name, action.name);
-                action.Deactivate (this) ;
-            }
+            /** This is ignored, we deactivate on a parents activation. */
         }
 
     }
